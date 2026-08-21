@@ -82,6 +82,7 @@
           <button class="sample-chip" data-msg="Congrats! Aapne 50000 rs ka lottry jeeta hai. Apna prize claim karne ke liye call karein: +919876543210 ya visit karein: www.prize-claim.xyz">Lottery Scam</button>
           <button class="sample-chip" data-msg="Aapka bijli ka bill overdue hai. Aaj raat blck ho jayega. Imdtly pay karein: http://pay-bijli.fake/now">Utility Scam</button>
           <button class="sample-chip" data-msg="Hi, meeting kal 3 baje hai office mein. Please time pe aa jana.">Safe Message</button>
+          <button class="sample-chip" data-msg="Hi bhai, ye phone available hai?\nHaanji available hai\nKitne ka hai?\n12000 final price\nOk bhai, UPI se payment kar deta hu. GPay pe bhej do amount\nHaanji, 12000 bhej do is number pe">OLX Chat (Safe)</button>
         </div>
       </div>
 
@@ -89,19 +90,27 @@
       <div class="loading-overlay" id="loadingOverlay">
         <div class="loader">
           <div class="loader-ring"></div>
-          <div class="loader-text">Analyzing message...</div>
+          <div class="loader-text">Running Multi-Agent Pipeline...</div>
           <div class="loader-steps">
             <div class="step active" id="step1">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Normalizing text
+              Layer 1-2: Normalizing &amp; scoring heuristics
             </div>
             <div class="step" id="step2">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Extracting entities
+              Agent 1: Scanning for exploit payloads...
             </div>
             <div class="step" id="step3">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              AI classification
+              Agent 2: Evaluating social context...
+            </div>
+            <div class="step" id="step4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Layer 4: Domain verification cross-check
+            </div>
+            <div class="step" id="step5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+              Agent 3: Reaching final consensus...
             </div>
           </div>
         </div>
@@ -124,6 +133,9 @@
             </div>
           </div>
         </div>
+
+        <!-- Consensus Reasoning Badge -->
+        <div class="consensus-badge" id="consensusBadge"></div>
 
         <!-- Detail Cards Row -->
         <div class="detail-grid">

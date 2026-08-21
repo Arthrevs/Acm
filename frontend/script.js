@@ -14,16 +14,19 @@ const verdictLabel = document.getElementById('verdictLabel');
 const verdictCategory = document.getElementById('verdictCategory');
 const riskValue = document.getElementById('riskValue');
 const riskFill = document.getElementById('riskFill');
+const consensusBadge = document.getElementById('consensusBadge');
 
 // Detail elements
 const normalizedText = document.getElementById('normalizedText');
 const entitiesList = document.getElementById('entitiesList');
 const highlightsList = document.getElementById('highlightsList');
 
-// Loading steps
+// Loading steps (5 steps now)
 const step1 = document.getElementById('step1');
 const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
+const step4 = document.getElementById('step4');
+const step5 = document.getElementById('step5');
 
 // Character counter
 smsInput.addEventListener('input', () => {
@@ -71,9 +74,12 @@ async function handleScan() {
   loadingOverlay.classList.add('active');
   resetSteps();
 
-  // Animate steps
-  setTimeout(() => markStepDone(step1, step2), 400);
-  setTimeout(() => markStepDone(step2, step3), 900);
+  // Animate steps to simulate pipeline progress
+  setTimeout(() => markStepDone(step1, step2), 300);
+  setTimeout(() => { markStepDone(step2, null); step3.classList.add('active'); }, 600);
+  // step2 and step3 go "active" together (parallel agents)
+  setTimeout(() => { markStepDone(step3, step4); }, 900);
+  setTimeout(() => markStepDone(step4, step5), 1200);
 
   try {
     const response = await fetch(API_URL, {
@@ -89,14 +95,16 @@ async function handleScan() {
 
     const data = await response.json();
 
-    // Mark final step done
-    markStepDone(step3, null);
+    // Mark all steps done
+    [step1, step2, step3, step4, step5].forEach(s => {
+      s.classList.remove('active');
+      s.classList.add('done');
+    });
 
-    // Small delay for visual polish
     setTimeout(() => {
       loadingOverlay.classList.remove('active');
       renderResults(data);
-    }, 500);
+    }, 400);
 
   } catch (err) {
     loadingOverlay.classList.remove('active');
@@ -107,7 +115,7 @@ async function handleScan() {
 }
 
 function resetSteps() {
-  [step1, step2, step3].forEach(s => {
+  [step1, step2, step3, step4, step5].forEach(s => {
     s.classList.remove('done');
     s.classList.remove('active');
   });
@@ -151,6 +159,9 @@ function renderResults(data) {
       riskFill.style.width = `${score}%`;
     });
   });
+
+  // Consensus reasoning badge
+  renderConsensusBadge(c, data.pipeline);
 
   // Normalized text
   normalizedText.textContent = data.normalized_message || '';
@@ -214,6 +225,52 @@ function renderResults(data) {
   resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/**
+ * Renders the "Cleared by Consensus" or "Confirmed by Consensus" badge.
+ */
+function renderConsensusBadge(classification, pipeline) {
+  const consensus = pipeline?.layer3_consensus;
+  const reasoning = classification.consensus_reasoning || '';
+  const overruled = classification.overruled_agent;
+  const verdict = (classification.verdict || 'SAFE').toUpperCase();
+
+  if (!reasoning) {
+    consensusBadge.innerHTML = '';
+    return;
+  }
+
+  let badgeClass, icon, title;
+
+  if (verdict === 'SAFE' && overruled === 'paranoiac') {
+    badgeClass = 'consensus-cleared';
+    icon = '🛡️';
+    title = 'Cleared by Consensus';
+  } else if (verdict === 'SCAM') {
+    badgeClass = 'consensus-strike';
+    icon = '⚔️';
+    title = 'Confirmed by Consensus';
+  } else if (verdict === 'SUSPICIOUS') {
+    badgeClass = 'consensus-caution';
+    icon = '⚖️';
+    title = 'Split Consensus';
+  } else {
+    badgeClass = 'consensus-cleared';
+    icon = '✅';
+    title = 'Consensus Reached';
+  }
+
+  consensusBadge.innerHTML = `
+    <div class="consensus-card ${badgeClass}">
+      <div class="consensus-icon">${icon}</div>
+      <div class="consensus-content">
+        <div class="consensus-title">${title}</div>
+        <div class="consensus-reason">${escapeHtml(reasoning)}</div>
+        ${overruled ? `<div class="consensus-overrule">Agent overruled: <strong>${overruled === 'paranoiac' ? 'The Paranoiac (Threat Extractor)' : 'The Context Arbiter (Social Analyst)'}</strong></div>` : ''}
+      </div>
+    </div>
+  `;
+}
+
 function renderPipeline(pipeline) {
   const container = document.getElementById('pipelineBreakdown');
   if (!pipeline) {
@@ -223,7 +280,7 @@ function renderPipeline(pipeline) {
 
   const l1 = pipeline.layer1_context || {};
   const l2 = pipeline.layer2_heuristics || {};
-  const l3 = pipeline.layer3_llm || {};
+  const l3 = pipeline.layer3_consensus || {};
   const l4 = pipeline.layer4_verification || {};
 
   let html = '<div class="pipeline-layers">';
@@ -233,7 +290,7 @@ function renderPipeline(pipeline) {
     <div class="pipeline-layer">
       <div class="layer-badge layer-1">L1</div>
       <div class="layer-info">
-        <div class="layer-name">Context Normalizer</div>
+        <div class="layer-name">Context Normalizer <span class="layer-time">${l1.timeMs || 0}ms</span></div>
         <div class="layer-detail">${l1.originalLines || 0} lines → ${l1.filteredLines || 0} after filler strip (${l1.fillerStripped || 0} removed) · ${l1.highRiskChunks || 0} high-risk chunk(s)</div>
       </div>
     </div>`;
@@ -244,7 +301,7 @@ function renderPipeline(pipeline) {
     <div class="pipeline-layer">
       <div class="layer-badge layer-2">L2</div>
       <div class="layer-info">
-        <div class="layer-name">Heuristic Scorer <span class="layer-score ${scoreClass}">${l2.totalScore || 0} pts</span></div>
+        <div class="layer-name">Heuristic Scorer <span class="layer-score ${scoreClass}">${l2.totalScore || 0} pts</span> <span class="layer-time">${l2.timeMs || 0}ms</span></div>
         <div class="layer-detail">${l2.exceedsThreshold ? '⚠️ Exceeds threshold (' + l2.threshold + ')' : '✅ Below threshold (' + l2.threshold + ')'}</div>
         ${(l2.breakdown || []).map(b =>
           `<div class="layer-rule">+${b.points} — ${escapeHtml(b.rule)}: <span class="rule-match">"${escapeHtml(b.match)}"</span></div>`
@@ -252,22 +309,62 @@ function renderPipeline(pipeline) {
       </div>
     </div>`;
 
-  // Layer 3
+  // Layer 3 — Multi-Agent Consensus
+  const agentsInvoked = l3.invoked;
   html += `
-    <div class="pipeline-layer">
+    <div class="pipeline-layer layer-3-consensus">
       <div class="layer-badge layer-3">L3</div>
       <div class="layer-info">
-        <div class="layer-name">LLM Gateway <span class="layer-tag">${l3.invoked ? '🔥 Invoked' : '⏭️ Skipped'}</span></div>
-        <div class="layer-detail">${l3.invoked ? 'High-risk chunks sent to Gemini for semantic analysis' : 'Heuristic score too low — LLM call skipped for speed'}</div>
-      </div>
-    </div>`;
+        <div class="layer-name">Multi-Agent Consensus <span class="layer-tag">${agentsInvoked ? '🔥 3 Agents Invoked' : '⏭️ Skipped'}</span></div>`;
+
+  if (agentsInvoked) {
+    // Agent 1 sub-section
+    const a1 = l3.agent1_paranoiac;
+    if (a1) {
+      html += `
+        <div class="agent-block agent-1-block">
+          <div class="agent-header"><span class="agent-label">🔍 Agent 1: Paranoiac</span> <span class="agent-stat">${a1.threats_found || 0} threat(s)</span></div>
+          ${(a1.threat_entities || []).slice(0, 5).map(t =>
+            `<div class="agent-finding">[${t.severity}] <span class="rule-match">"${escapeHtml(t.text)}"</span> → ${escapeHtml(t.category)}</div>`
+          ).join('')}
+        </div>`;
+    }
+
+    // Agent 2 sub-section
+    const a2 = l3.agent2_arbiter;
+    if (a2) {
+      html += `
+        <div class="agent-block agent-2-block">
+          <div class="agent-header"><span class="agent-label">🧠 Agent 2: Context Arbiter</span></div>
+          <div class="agent-finding">Scenario: <strong>${escapeHtml(a2.scenario || '')}</strong></div>
+          <div class="agent-finding">Power: ${escapeHtml(a2.power_dynamic || '')} · Trust: ${escapeHtml(a2.trust_pattern || '')} · Pressure: ${escapeHtml(a2.social_pressure_level || '')}</div>
+        </div>`;
+    }
+
+    // Agent 3 sub-section
+    const a3 = l3.agent3_judge;
+    if (a3) {
+      html += `
+        <div class="agent-block agent-3-block">
+          <div class="agent-header"><span class="agent-label">⚖️ Agent 3: Chief Judge</span></div>
+          <div class="agent-finding">${escapeHtml(a3.consensus_reasoning || '')}</div>
+          ${a3.overruled_agent ? `<div class="agent-finding overruled">Overruled: <strong>${a3.overruled_agent}</strong></div>` : ''}
+        </div>`;
+    }
+
+    html += `<div class="layer-detail" style="margin-top:8px">Phase 1 (parallel): ${l3.phase1TimeMs || 0}ms · Phase 2 (serial): ${l3.phase2TimeMs || 0}ms</div>`;
+  } else {
+    html += '<div class="layer-detail">Heuristic score too low — multi-agent analysis skipped for speed</div>';
+  }
+
+  html += `</div></div>`;
 
   // Layer 4
   html += `
     <div class="pipeline-layer">
       <div class="layer-badge layer-4">L4</div>
       <div class="layer-info">
-        <div class="layer-name">Verification Gate <span class="layer-tag">${l4.totalFindings || 0} finding(s)</span></div>
+        <div class="layer-name">Verification Gate <span class="layer-tag">${l4.totalFindings || 0} finding(s)</span> <span class="layer-time">${l4.timeMs || 0}ms</span></div>
         ${(l4.findings || []).length > 0
           ? (l4.findings || []).map(f =>
               `<div class="layer-rule verification-finding">🚩 [${escapeHtml(f.severity)}] ${escapeHtml(f.reason)}: <span class="rule-match">${escapeHtml(f.domain)}</span></div>`
@@ -279,7 +376,7 @@ function renderPipeline(pipeline) {
 
   // Processing time
   if (pipeline.processingTimeMs) {
-    html += `<div class="pipeline-time">⚡ Pipeline completed in ${pipeline.processingTimeMs}ms</div>`;
+    html += `<div class="pipeline-time">⚡ Full pipeline completed in ${pipeline.processingTimeMs}ms</div>`;
   }
 
   html += '</div>';

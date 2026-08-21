@@ -826,6 +826,136 @@ header {
   margin-top: 4px;
 }
 
+.layer-time {
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+  margin-left: 4px;
+}
+
+/* ============================================
+   Consensus Badge
+   ============================================ */
+.consensus-badge {
+  margin-bottom: 16px;
+}
+
+.consensus-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid;
+  animation: fadeSlideUp 0.4s ease-out;
+}
+
+.consensus-cleared {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.consensus-strike {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.consensus-caution {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.consensus-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.consensus-content {
+  flex: 1;
+}
+
+.consensus-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.consensus-cleared .consensus-title { color: var(--accent-green); }
+.consensus-strike .consensus-title { color: var(--accent-red); }
+.consensus-caution .consensus-title { color: var(--accent-amber); }
+
+.consensus-reason {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.consensus-overrule {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ============================================
+   Agent Blocks (inside Pipeline)
+   ============================================ */
+.agent-block {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid;
+}
+
+.agent-1-block {
+  background: rgba(6, 182, 212, 0.05);
+  border-left-color: var(--accent-cyan);
+}
+
+.agent-2-block {
+  background: rgba(139, 92, 246, 0.05);
+  border-left-color: var(--accent-purple);
+}
+
+.agent-3-block {
+  background: rgba(245, 158, 11, 0.05);
+  border-left-color: var(--accent-amber);
+}
+
+.agent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.agent-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.agent-stat {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.agent-finding {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+.agent-finding.overruled {
+  color: var(--accent-amber);
+}
+
+.agent-finding strong {
+  color: var(--text-primary);
+}
+
 /* ============================================
    Footer
    ============================================ */
