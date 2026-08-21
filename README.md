@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://unpkg.com/lucide-static@latest/icons/shield-check.svg" width="80" alt="Shield Logo" />
+  <img src="https://api.iconify.design/lucide/shield-check.svg?color=%2360a5fa" width="80" alt="Shield Logo" />
   <h1>VG — VanniGuard</h1>
   <p><strong>Multi-Agent AI Security Pipeline · Hackathon Build</strong></p>
   <br/>
@@ -11,36 +11,36 @@
 
 ---
 
-## <img src="https://unpkg.com/lucide-static@latest/icons/crosshair.svg" width="20" /> &nbsp;What It Is
+## <img src="https://api.iconify.design/lucide/crosshair.svg?color=%2360a5fa" width="20" /> &nbsp;What It Is
 
 A next-generation security tool designed to detect **vernacular phishing and smishing attempts** — Hinglish, regional dialects, OLX marketplace scams, KYC fraud. Traditional regex-based scanners fail against transliterated conversational text (e.g., *"paise bhej do"* or *"QR scan karo"*). This project solves that using a **Multi-Agent Consensus Pipeline** powered by Google Gemini AI.
 
 ---
 
-## <img src="https://unpkg.com/lucide-static@latest/icons/brain-circuit.svg" width="20" /> &nbsp;How It Works (The 4-Layer Architecture)
+## <img src="https://api.iconify.design/lucide/brain-circuit.svg?color=%2360a5fa" width="20" /> &nbsp;How It Works (The 4-Layer Architecture)
 
 Instead of sending raw text directly to an LLM (which is slow and expensive), the system uses a highly deterministic 4-layer funnel:
 
-### <img src="https://unpkg.com/lucide-static@latest/icons/eraser.svg" width="16" /> Layer 1: Context Normalizer
+### <img src="https://api.iconify.design/lucide/eraser.svg?color=white" width="16" /> Layer 1: Context Normalizer
 Strips out conversational filler ("Ok", "Haanji") and isolates high-risk chunks using a sliding window.
 
-### <img src="https://unpkg.com/lucide-static@latest/icons/calculator.svg" width="16" /> Layer 2: Heuristic Scorer
+### <img src="https://api.iconify.design/lucide/calculator.svg?color=white" width="16" /> Layer 2: Heuristic Scorer
 Runs rapid, deterministic rule checks (URLs, QR mentions, urgency). If the score is low, it marks the message as **SAFE** instantly. If high, it triggers the AI.
 
-### <img src="https://unpkg.com/lucide-static@latest/icons/bot.svg" width="16" /> Layer 3: Multi-Agent Consensus (The Core)
+### <img src="https://api.iconify.design/lucide/bot.svg?color=white" width="16" /> Layer 3: Multi-Agent Consensus (The Core)
 
 | Agent | Role | Behavior |
 |-------|------|----------|
-| <img src="https://unpkg.com/lucide-static@latest/icons/scan-eye.svg" width="14" /> **Agent 1: The Paranoiac** | Threat Extractor | Blind to nuance. Only extracts raw exploit vectors. |
-| <img src="https://unpkg.com/lucide-static@latest/icons/users.svg" width="14" /> **Agent 2: The Context Arbiter** | Social Analyst | Blind to threats. Only evaluates power dynamics & trust patterns. |
-| <img src="https://unpkg.com/lucide-static@latest/icons/scale.svg" width="14" /> **Agent 3: The Chief Judge** | Consensus Engine | Weighs Agent 1 vs Agent 2. Applies **Overrule** or **Strike** framework. |
+| <img src="https://api.iconify.design/lucide/scan-eye.svg?color=white" width="14" /> **Agent 1: The Paranoiac** | Threat Extractor | Blind to nuance. Only extracts raw exploit vectors. |
+| <img src="https://api.iconify.design/lucide/users.svg?color=white" width="14" /> **Agent 2: The Context Arbiter** | Social Analyst | Blind to threats. Only evaluates power dynamics & trust patterns. |
+| <img src="https://api.iconify.design/lucide/scale.svg?color=white" width="14" /> **Agent 3: The Chief Judge** | Consensus Engine | Weighs Agent 1 vs Agent 2. Applies **Overrule** or **Strike** framework. |
 
-### <img src="https://unpkg.com/lucide-static@latest/icons/shield-alert.svg" width="16" /> Layer 4: Verification Gate
+### <img src="https://api.iconify.design/lucide/shield-alert.svg?color=white" width="16" /> Layer 4: Verification Gate
 Cross-references extracted URLs against a domain blacklist and uses Levenshtein distance to detect typosquatting against known Indian brands (Paytm, SBI, HDFC, etc.).
 
 ---
 
-## <img src="https://unpkg.com/lucide-static@latest/icons/folder-tree.svg" width="20" /> &nbsp;Project Structure
+## <img src="https://api.iconify.design/lucide/folder-tree.svg?color=%2360a5fa" width="20" /> &nbsp;Project Structure
 
 ```text
 📦 project-root
@@ -60,40 +60,7 @@ Cross-references extracted URLs against a domain blacklist and uses Levenshtein 
 
 ---
 
-## <img src="https://unpkg.com/lucide-static@latest/icons/rocket.svg" width="20" /> &nbsp;Localhost Setup
-
-### <img src="https://unpkg.com/lucide-static@latest/icons/download.svg" width="16" /> Prerequisites
-- [Node.js](https://nodejs.org/) v16+ installed
-- Gemini API Keys (from [Google AI Studio](https://aistudio.google.com/))
-
-### <img src="https://unpkg.com/lucide-static@latest/icons/terminal.svg" width="16" /> 1. Install Dependencies
-```bash
-cd backend
-npm install
-```
-
-### <img src="https://unpkg.com/lucide-static@latest/icons/key-round.svg" width="16" /> 2. Configure API Keys
-Create a `.env` file inside `backend/`. The system uses round-robin key rotation across 3 keys to prevent rate-limiting during parallel agent execution:
-```env
-PORT=3000
-GEMINI_API_KEY_1=your_first_key
-GEMINI_API_KEY_2=your_second_key
-GEMINI_API_KEY_3=your_third_key
-```
-
-### <img src="https://unpkg.com/lucide-static@latest/icons/play.svg" width="16" /> 3. Start the Server
-```bash
-npm run dev
-```
-
-### <img src="https://unpkg.com/lucide-static@latest/icons/globe.svg" width="16" /> 4. Open the App
-The Express server serves the frontend automatically. Navigate to:
-
-> **http://localhost:3000**
-
----
-
-## <img src="https://unpkg.com/lucide-static@latest/icons/cloud-upload.svg" width="20" /> &nbsp;Vercel Deployment
+## <img src="https://api.iconify.design/lucide/cloud-upload.svg?color=%2360a5fa" width="20" /> &nbsp;Vercel Deployment
 
 This project is pre-configured for instant serverless deployment on Vercel. The included `vercel.json` automatically routes `/api` traffic to the Node.js Express backend and serves the `frontend` statically.
 
@@ -107,12 +74,45 @@ This project is pre-configured for instant serverless deployment on Vercel. The 
 
 ---
 
-## <img src="https://unpkg.com/lucide-static@latest/icons/monitor-check.svg" width="20" /> &nbsp;Frontend Features
+## <img src="https://api.iconify.design/lucide/rocket.svg?color=%2360a5fa" width="20" /> &nbsp;Localhost Setup
 
-- <img src="https://unpkg.com/lucide-static@latest/icons/loader.svg" width="14" /> **5-Step Pipeline Tracker** — Live loading animation showing each agent's progress
-- <img src="https://unpkg.com/lucide-static@latest/icons/shield-check.svg" width="14" /> **Consensus Badge** — "Cleared by Consensus" / "Confirmed by Consensus" / "Split Consensus"
-- <img src="https://unpkg.com/lucide-static@latest/icons/test-tubes.svg" width="14" /> **Sample Chips** — One-click test messages (KYC Scam, Lottery Scam, Safe OLX Chat)
-- <img src="https://unpkg.com/lucide-static@latest/icons/layers.svg" width="14" /> **Pipeline Breakdown** — Full transparency into every layer's decision
+### <img src="https://api.iconify.design/lucide/download.svg?color=white" width="16" /> Prerequisites
+- [Node.js](https://nodejs.org/) v16+ installed
+- Gemini API Keys (from [Google AI Studio](https://aistudio.google.com/))
+
+### <img src="https://api.iconify.design/lucide/terminal.svg?color=white" width="16" /> 1. Install Dependencies
+```bash
+cd backend
+npm install
+```
+
+### <img src="https://api.iconify.design/lucide/key-round.svg?color=white" width="16" /> 2. Configure API Keys
+Create a `.env` file inside `backend/`. The system uses round-robin key rotation across 3 keys to prevent rate-limiting during parallel agent execution:
+```env
+PORT=3000
+GEMINI_API_KEY_1=your_first_key
+GEMINI_API_KEY_2=your_second_key
+GEMINI_API_KEY_3=your_third_key
+```
+
+### <img src="https://api.iconify.design/lucide/play.svg?color=white" width="16" /> 3. Start the Server
+```bash
+npm run dev
+```
+
+### <img src="https://api.iconify.design/lucide/globe.svg?color=white" width="16" /> 4. Open the App
+The Express server serves the frontend automatically. Navigate to:
+
+> **http://localhost:3000**
+
+---
+
+## <img src="https://api.iconify.design/lucide/monitor-check.svg?color=%2360a5fa" width="20" /> &nbsp;Frontend Features
+
+- <img src="https://api.iconify.design/lucide/loader.svg?color=white" width="14" /> **5-Step Pipeline Tracker** — Live loading animation showing each agent's progress
+- <img src="https://api.iconify.design/lucide/shield-check.svg?color=white" width="14" /> **Consensus Badge** — "Cleared by Consensus" / "Confirmed by Consensus" / "Split Consensus"
+- <img src="https://api.iconify.design/lucide/test-tubes.svg?color=white" width="14" /> **Sample Chips** — One-click test messages (KYC Scam, Lottery Scam, Safe OLX Chat)
+- <img src="https://api.iconify.design/lucide/layers.svg?color=white" width="14" /> **Pipeline Breakdown** — Full transparency into every layer's decision
 
 ---
 
