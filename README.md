@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://unpkg.com/lucide-static@latest/icons/shield-check.svg" width="80" alt="Shield Logo" />
-  <h1>VG — Vernacular Guard</h1>
+  <h1>VG — VanniGuard</h1>
   <p><strong>Multi-Agent AI Security Pipeline · Hackathon Build</strong></p>
   <br/>
   <img src="https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white" />
