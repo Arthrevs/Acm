@@ -39,8 +39,13 @@ app.post('/api/scan', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Vernacular Phishing Classifier API running on http://localhost:${PORT}`);
-  console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
-  console.log(`   Endpoint ready: POST http://localhost:${PORT}/api/scan`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Vernacular Phishing Classifier API running on http://localhost:${PORT}`);
+    console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
+    console.log(`   Endpoint ready: POST http://localhost:${PORT}/api/scan`);
+  });
+}
+
+// Export the Express API for Vercel Serverless Functions
+module.exports = app;

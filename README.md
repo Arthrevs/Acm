@@ -93,6 +93,20 @@ The Express server serves the frontend automatically. Navigate to:
 
 ---
 
+## <img src="https://unpkg.com/lucide-static@latest/icons/cloud-upload.svg" width="20" /> &nbsp;Vercel Deployment
+
+This project is pre-configured for instant serverless deployment on Vercel. The included `vercel.json` automatically routes `/api` traffic to the Node.js Express backend and serves the `frontend` statically.
+
+1. **Push to GitHub**: Ensure your latest code is pushed to your GitHub repository.
+2. **Import on Vercel**: Log into [Vercel](https://vercel.com/) and create a new project by importing your GitHub repo.
+3. **Environment Variables**: During the Vercel setup, open the **Environment Variables** tab and add your 3 API keys:
+   - `GEMINI_API_KEY_1`
+   - `GEMINI_API_KEY_2`
+   - `GEMINI_API_KEY_3`
+4. **Deploy**: Click Deploy. Vercel will automatically build the backend as a Serverless Function and host the frontend. No build command is required.
+
+---
+
 ## <img src="https://unpkg.com/lucide-static@latest/icons/monitor-check.svg" width="20" /> &nbsp;Frontend Features
 
 - <img src="https://unpkg.com/lucide-static@latest/icons/loader.svg" width="14" /> **5-Step Pipeline Tracker** — Live loading animation showing each agent's progress
