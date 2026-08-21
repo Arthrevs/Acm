@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const { normalizeText } = require('./utils/normalizer');
@@ -11,9 +12,10 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Basic health check
-app.get('/', (req, res) => {
+// Health check
+app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'Vernacular SMS Phishing Classifier API' });
 });
 
