@@ -32,7 +32,7 @@ You MUST respond with ONLY a valid JSON object matching this schema exactly, no 
 
   try {
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
+      model: 'gemini-3.6-flash',
       generationConfig: {
         responseMimeType: 'application/json',
         temperature: 0.1,
