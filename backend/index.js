@@ -3,9 +3,7 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-const { normalizeText } = require('./utils/normalizer');
-const { extractEntities } = require('./utils/extractor');
-const { classifyMessage } = require('./services/llm');
+const { runPipeline } = require('./services/pipeline');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,12 +14,12 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Vernacular SMS Phishing Classifier API' });
+  res.json({ status: 'ok', service: 'Vernacular SMS Phishing Classifier API', layers: 4 });
 });
 
 /**
  * POST /api/scan
- * Receives raw SMS text, normalizes it, extracts entities, and calls the LLM.
+ * Receives raw SMS/chat text and runs it through the full 4-layer pipeline.
  */
 app.post('/api/scan', async (req, res) => {
   try {
@@ -31,27 +29,9 @@ app.post('/api/scan', async (req, res) => {
       return res.status(400).json({ error: 'Missing or invalid "message" field in request body.' });
     }
 
-    // 1. Normalize the phonetic vernacular misspellings
-    const normalizedMessage = normalizeText(message);
-
-    // 2. Extract URLs and Phone Numbers
-    const entities = extractEntities(message);
-
-    // 3. Call the LLM with forced JSON output
-    let classificationResult;
-    try {
-      classificationResult = await classifyMessage(message, normalizedMessage, entities);
-    } catch (llmError) {
-      return res.status(502).json({ error: 'Error connecting to classification engine.' });
-    }
-
-    // Return the combined response
-    res.json({
-      original_message: message,
-      normalized_message: normalizedMessage,
-      extracted_entities: entities,
-      classification: classificationResult
-    });
+    // Run the full 4-layer pipeline
+    const result = await runPipeline(message);
+    res.json(result);
 
   } catch (err) {
     console.error('Scan endpoint error:', err);
@@ -61,5 +41,6 @@ app.post('/api/scan', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Vernacular Phishing Classifier API running on http://localhost:${PORT}`);
-  console.log(`Endpoint ready: POST http://localhost:${PORT}/api/scan`);
+  console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
+  console.log(`   Endpoint ready: POST http://localhost:${PORT}/api/scan`);
 });

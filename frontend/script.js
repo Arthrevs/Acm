@@ -207,8 +207,83 @@ function renderResults(data) {
     });
   }
 
+  // Pipeline breakdown
+  renderPipeline(data.pipeline);
+
   resultsSection.style.display = 'block';
   resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderPipeline(pipeline) {
+  const container = document.getElementById('pipelineBreakdown');
+  if (!pipeline) {
+    container.innerHTML = '<div class="no-entities">Pipeline data not available</div>';
+    return;
+  }
+
+  const l1 = pipeline.layer1_context || {};
+  const l2 = pipeline.layer2_heuristics || {};
+  const l3 = pipeline.layer3_llm || {};
+  const l4 = pipeline.layer4_verification || {};
+
+  let html = '<div class="pipeline-layers">';
+
+  // Layer 1
+  html += `
+    <div class="pipeline-layer">
+      <div class="layer-badge layer-1">L1</div>
+      <div class="layer-info">
+        <div class="layer-name">Context Normalizer</div>
+        <div class="layer-detail">${l1.originalLines || 0} lines → ${l1.filteredLines || 0} after filler strip (${l1.fillerStripped || 0} removed) · ${l1.highRiskChunks || 0} high-risk chunk(s)</div>
+      </div>
+    </div>`;
+
+  // Layer 2
+  const scoreClass = l2.exceedsThreshold ? 'score-high' : 'score-low';
+  html += `
+    <div class="pipeline-layer">
+      <div class="layer-badge layer-2">L2</div>
+      <div class="layer-info">
+        <div class="layer-name">Heuristic Scorer <span class="layer-score ${scoreClass}">${l2.totalScore || 0} pts</span></div>
+        <div class="layer-detail">${l2.exceedsThreshold ? '⚠️ Exceeds threshold (' + l2.threshold + ')' : '✅ Below threshold (' + l2.threshold + ')'}</div>
+        ${(l2.breakdown || []).map(b =>
+          `<div class="layer-rule">+${b.points} — ${escapeHtml(b.rule)}: <span class="rule-match">"${escapeHtml(b.match)}"</span></div>`
+        ).join('')}
+      </div>
+    </div>`;
+
+  // Layer 3
+  html += `
+    <div class="pipeline-layer">
+      <div class="layer-badge layer-3">L3</div>
+      <div class="layer-info">
+        <div class="layer-name">LLM Gateway <span class="layer-tag">${l3.invoked ? '🔥 Invoked' : '⏭️ Skipped'}</span></div>
+        <div class="layer-detail">${l3.invoked ? 'High-risk chunks sent to Gemini for semantic analysis' : 'Heuristic score too low — LLM call skipped for speed'}</div>
+      </div>
+    </div>`;
+
+  // Layer 4
+  html += `
+    <div class="pipeline-layer">
+      <div class="layer-badge layer-4">L4</div>
+      <div class="layer-info">
+        <div class="layer-name">Verification Gate <span class="layer-tag">${l4.totalFindings || 0} finding(s)</span></div>
+        ${(l4.findings || []).length > 0
+          ? (l4.findings || []).map(f =>
+              `<div class="layer-rule verification-finding">🚩 [${escapeHtml(f.severity)}] ${escapeHtml(f.reason)}: <span class="rule-match">${escapeHtml(f.domain)}</span></div>`
+            ).join('')
+          : '<div class="layer-detail">✅ No blacklisted domains or typosquatting detected</div>'
+        }
+      </div>
+    </div>`;
+
+  // Processing time
+  if (pipeline.processingTimeMs) {
+    html += `<div class="pipeline-time">⚡ Pipeline completed in ${pipeline.processingTimeMs}ms</div>`;
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
 }
 
 function escapeHtml(str) {
