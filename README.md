@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" width="120" alt="React Logo" />
+  <h1>VG</h1>
   <h1>Vernacular Phishing Classifier</h1>
   <p><strong>A Multi-Agent AI Security Pipeline — Hackathon Build</strong></p>
 </div>
