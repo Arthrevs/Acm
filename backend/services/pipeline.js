@@ -47,18 +47,60 @@ async function runPipeline(rawText, customThreshold = 30) {
   timestamps.layer4 = Date.now() - l4Start;
 
   // ──────────────────────────────────────────────
-  // LAYER 3: Multi-Agent Consensus Pipeline
+  // DECISION GATE: Escalate to LLM only when needed
   // ──────────────────────────────────────────────
+  // Three paths:
+  //   A) Score === 0 → pure noise, fast-path SAFE (0 LLM calls)
+  //   B) Score >= 50 → strong heuristic signal, deterministic verdict (0 LLM calls)
+  //   C) Score 1-49  → ambiguous, escalate to multi-agent consensus (3 LLM calls)
+  
   let classification;
   let agentResults = { agent1: null, agent2: null, agent3: null };
 
-  // The tripwire decides escalation, NOT verdicts.
-  // If ANY structural friction was detected (score > 0), the LLM agents
-  // must evaluate the full context. Only pure conversational noise
-  // (score === 0, no URLs, no money, no identity claims) gets fast-pathed.
-  const needsLLM = heuristicResult.needsEscalation || verificationResult.hasCriticalFindings;
+  const STRONG_SIGNAL_THRESHOLD = 50;
+  const needsLLM = (heuristicResult.totalScore > 0 && heuristicResult.totalScore < STRONG_SIGNAL_THRESHOLD)
+    && !verificationResult.hasCriticalFindings;
 
-  if (needsLLM) {
+  if (heuristicResult.totalScore >= STRONG_SIGNAL_THRESHOLD || verificationResult.hasCriticalFindings) {
+    // ── PATH B: Strong heuristic signal — deterministic verdict ──
+    // Enough structural friction (identity + pressure + extraction) to classify
+    // without burning 3 LLM calls. The heuristic breakdown IS the evidence.
+    const dims = heuristicResult.dimensions;
+    const hasIdentity = dims.identity > 0;
+    const hasPressure = dims.pressure > 0;
+    const hasExtraction = dims.extraction > 0;
+
+    // Map dimension combinations to threat categories
+    let category = 'Social Engineering';
+    if (hasExtraction && hasIdentity) category = 'Financial Fraud / Phishing';
+    else if (hasPressure && hasIdentity) category = 'Impersonation Scam';
+    else if (hasExtraction) category = 'Credential Theft';
+
+    // Compute risk score from heuristic total (capped at 95 — leave room for LLM nuance)
+    let riskScore = Math.min(95, Math.round(heuristicResult.totalScore * 1.2));
+
+    // If verification also flagged (typosquatting/blacklist), this is definitive
+    if (verificationResult.hasCriticalFindings) {
+      riskScore = Math.max(riskScore, 90);
+      if (category === 'Social Engineering') category = 'Financial Fraud / Phishing';
+    }
+
+    const verificationNote = verificationResult.hasCriticalFindings
+      ? ` Domain verification: ${verificationResult.findings.map(f => f.reason).join('; ')}.`
+      : '';
+
+    classification = {
+      verdict: riskScore >= 60 ? 'SCAM' : 'SUSPICIOUS',
+      risk_score: riskScore,
+      threat_category: category,
+      confidence: verificationResult.hasCriticalFindings ? 0.95 : 0.88,
+      consensus_reasoning: `Deterministic fast-path: ${heuristicResult.breakdown.map(b => b.rule + ' ("' + b.match + '")').join('; ')}.${verificationNote} Strong structural friction detected across ${[hasIdentity && 'Identity', hasPressure && 'Pressure', hasExtraction && 'Extraction'].filter(Boolean).join('+')} dimensions — no LLM escalation needed.`,
+      overruled_agent: null,
+      highlighted_spans: heuristicResult.breakdown
+        .filter(b => b.match && b.points > 0)
+        .map(b => ({ text: b.match, reason: b.rule })),
+    };
+  } else if (needsLLM) {
     // ── PHASE 1: Parallel Investigation ──
     // Agent 1 and Agent 2 run simultaneously, isolated from each other
     const phase1Start = Date.now();

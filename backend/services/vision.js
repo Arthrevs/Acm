@@ -12,7 +12,11 @@ const FALLBACK_MODELS = [
   'gemini-3.6-flash',
   'gemini-3.7-flash',
   'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
   'gemini-flash-latest',
+  'gemini-flash-lite-latest',
+  'gemini-3.1-flash-lite',
+  'gemini-2.5-flash-lite',
   'gemini-2.5-flash',
   'gemini-2.0-flash',
   'gemini-1.5-flash'
@@ -60,14 +64,9 @@ async function extractTextFromImage(imageBase64, mimeType = 'image/png') {
         return extractedText;
       } catch (err) {
         lastError = err;
-        if (err.status === 429 || err.status === 503) {
-          console.warn(`[Vision] Key ${i + 1}, Model ${modelName} hit limit. Degrading...`);
-          continue; // Try next model for this key
-        }
-        // If it's a 400 or 404 (model not found for this key), we also continue to next model
-        if (err.status === 400 || err.status === 404) {
+        if (err.status === 429 || err.status === 503 || err.status === 400 || err.status === 404) {
           console.warn(`[Vision] Key ${i + 1}, Model ${modelName} returned ${err.status}. Degrading...`);
-          continue;
+          continue; // Try next model for this key
         }
         
         throw err; // For other unexpected errors, throw immediately

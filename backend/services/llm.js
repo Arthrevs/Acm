@@ -24,7 +24,15 @@ async function callGemini(systemPrompt, userPrompt) {
   const genAI = new GoogleGenerativeAI(apiKey);
 
   // Automatic model degradation fallback
-  const fallbackModels = [
+  const FALLBACK_MODELS = [
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.5-flash',
+    'gemini-3.5-flash-lite',
+    'gemini-flash-latest',
+    'gemini-flash-lite-latest',
+    'gemini-3.1-flash-lite',
+    'gemini-2.5-flash-lite',
     'gemini-2.5-flash',
     'gemini-2.0-flash',
     'gemini-1.5-flash',
@@ -33,7 +41,7 @@ async function callGemini(systemPrompt, userPrompt) {
 
   let lastError;
 
-  for (const modelName of fallbackModels) {
+  for (const modelName of FALLBACK_MODELS) {
     try {
       const model = genAI.getGenerativeModel({
         model: modelName,

@@ -477,8 +477,6 @@ body {
 
 .uiverse-card .content {
   padding: 24px 24px 14px 24px;
-  transform: translate3d(0, 0, 24px);
-  transform-style: preserve-3d;
   position: relative;
   z-index: 10;
   flex: 1;
@@ -505,9 +503,9 @@ body {
 }
 
 
-/* Card 3D Hover Expansion */
+/* Card 3D Hover Expansion — only on non-interactive cards */
 .uiverse-parent:hover .uiverse-card {
-  transform: rotate3d(1, -0.3, 0, 4deg) translateY(-2px);
+  transform: translateY(-2px);
   box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.85), 0 0 20px rgba(239, 68, 68, 0.15);
 }
 
