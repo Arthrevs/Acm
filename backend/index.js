@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -55,6 +55,11 @@ app.post('/api/scan', async (req, res) => {
     console.error('Scan endpoint error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
+});
+
+// React Catch-All Route
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 app.listen(PORT, () => {
