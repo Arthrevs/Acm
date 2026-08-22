@@ -47,6 +47,21 @@ function escapeHtml(str) {
 }
 
 // Elements
+const themeToggle = document.getElementById('themeToggle');
+let isDark = false;
+
+themeToggle.addEventListener('click', () => {
+  isDark = !isDark;
+  if (isDark) {
+    document.body.setAttribute('data-theme', 'dark');
+    themeToggle.innerHTML = '<i data-lucide="sun"></i>';
+  } else {
+    document.body.removeAttribute('data-theme');
+    themeToggle.innerHTML = '<i data-lucide="moon"></i>';
+  }
+  lucide.createIcons();
+});
+
 const smsInput = document.getElementById('smsInput');
 const charCount = document.getElementById('charCount');
 const btnScan = document.getElementById('btnScan');
