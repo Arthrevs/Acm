@@ -7,24 +7,27 @@
   <meta name="description" content="AI Vernacular SMS Phishing Classifier with Multi-Agent Consensus">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  
-  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
   
   <div class="app-container">
+
     <!-- Header -->
     <header class="app-header">
-      <div class="header-logo">
-        <div class="logo-vg">VG</div>
-        <div>
-          <h1>VaaniGuard</h1>
-        </div>
+      <div class="header-left">
+        <span class="header-indicator"></span>
+        <h1>VAANIGUARD</h1>
+        <span class="header-tag">v2.0</span>
       </div>
-
+      <div class="header-right">
+        <a href="https://cybercrime.gov.in" target="_blank" rel="noopener" class="header-link">
+          <i data-lucide="phone-call"></i>
+          <span>1930 HELPLINE</span>
+        </a>
+      </div>
     </header>
 
     <main class="dashboard-grid">
@@ -32,59 +35,52 @@
       <!-- LEFT COLUMN: Input -->
       <section class="panel input-panel">
         
-        <div class="panel-header">
-          <h2><i data-lucide="message-square-text"></i> Analyze Message</h2>
+        <div class="panel-label">SCAN SUBJECT</div>
+
+        <!-- Image Upload Zone -->
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="imageInput" accept="image/*" hidden>
+          <div class="upload-content" id="uploadZoneContent">
+            <i data-lucide="image-plus" class="upload-icon"></i>
+            <p>Drop screenshot or <span>browse</span></p>
+            <p class="upload-hint">Gemini Vision OCR extracts text automatically</p>
+          </div>
+          <div class="upload-preview hidden" id="uploadPreview">
+            <img id="previewImg" src="" alt="Screenshot Preview">
+            <button class="btn-remove-image" id="btnRemoveImage" title="Remove image">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="input-methods">
-          
-          <!-- Image Upload Zone -->
-          <div class="upload-zone" id="uploadZone">
-            <input type="file" id="imageInput" accept="image/*" hidden>
-            <div class="upload-content" id="uploadZoneContent">
-              <i data-lucide="image-plus" class="upload-icon"></i>
-              <p>Drag & drop a screenshot, or <span>browse</span></p>
-              <p class="upload-hint">Gemini Vision OCR will extract text automatically</p>
-            </div>
-            <div class="upload-preview hidden" id="uploadPreview">
-              <img id="previewImg" src="" alt="Screenshot Preview">
-              <button class="btn-remove-image" id="btnRemoveImage" title="Remove image">
-                <i data-lucide="x"></i>
-              </button>
-            </div>
-          </div>
+        <div class="divider"><span>OR PASTE TEXT</span></div>
 
-          <div class="divider"><span>OR PASTE TEXT</span></div>
-
-          <!-- Text Area -->
-          <div class="textarea-wrapper">
-            <textarea 
-              id="smsInput" 
-              placeholder="Paste suspicious vernacular SMS or chat text here..."
-              rows="5"
-            ></textarea>
-            <div class="char-count" id="charCount">0 characters</div>
-          </div>
-          
+        <!-- Text Area -->
+        <div class="textarea-wrapper">
+          <textarea 
+            id="smsInput" 
+            placeholder="Paste suspicious SMS or chat message here..."
+            rows="5"
+          ></textarea>
+          <div class="char-count" id="charCount">0 characters</div>
         </div>
 
-        <!-- Presets -->
+        <!-- Presets as Function Keys -->
         <div class="presets-section">
-          <span class="presets-label">Try a sample:</span>
           <div class="presets-grid">
-            <button class="btn-preset" data-preset="KYC Scam" data-msg="Dear customer, aapka baink acount blck ho jayega agar aap turant kycc update nahi karte. Click here: http://secure-bnk.co/verify">KYC Scam</button>
-            <button class="btn-preset" data-preset="Lottery Scam" data-msg="Congrats! Aapne 50000 rs ka lottry jeeta hai. Apna prize claim karne ke liye call karein: +919876543210 ya visit karein: www.prize-claim.xyz">Lottery Scam</button>
-            <button class="btn-preset" data-preset="Utility Scam" data-msg="Aapka bijli ka bill overdue hai. Aaj raat blck ho jayega. Imdtly pay karein: http://pay-bijli.fake/now">Utility Scam</button>
-            <button class="btn-preset" data-preset="Safe Message" data-msg="Hi, meeting kal 3 baje hai office mein. Please time pe aa jana.">Safe Message</button>
-            <button class="btn-preset" data-preset="OLX Chat (Safe)" data-msg="Hi bhai, ye phone available hai?&#10;Haanji available hai&#10;Kitne ka hai?&#10;12000 final price&#10;Ok bhai, UPI se payment kar deta hu. GPay pe bhej do amount&#10;Haanji, 12000 bhej do is number pe">OLX Chat (Safe)</button>
+            <button class="btn-preset" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in"><span class="key-label">F1</span> KYC SCAM</button>
+            <button class="btn-preset" data-preset="Electricity Scam" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544"><span class="key-label">F2</span> ELECTRICITY</button>
+            <button class="btn-preset" data-preset="FedEx Scam" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in"><span class="key-label">F3</span> FEDEX</button>
+            <button class="btn-preset" data-preset="Safe Message" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna."><span class="key-label">F4</span> SAFE</button>
+            <button class="btn-preset" data-preset="Safe OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP."><span class="key-label">F5</span> OTP</button>
           </div>
         </div>
 
         <div class="action-row">
-          <button class="btn-secondary" id="btnClear">Clear</button>
+          <button class="btn-secondary" id="btnClear">CLEAR</button>
           <button class="btn-primary" id="btnScan">
             <i data-lucide="scan-line"></i>
-            <span id="scanButtonText">Scan Message</span>
+            <span id="scanButtonText">SCAN MESSAGE</span>
           </button>
         </div>
       </section>
@@ -94,19 +90,21 @@
         
         <!-- Empty State -->
         <div class="empty-state" id="resultsEmptyState">
-          <i data-lucide="shield-question" class="empty-icon"></i>
-          <h3>Awaiting Analysis</h3>
-          <p>Submit a message or screenshot to see the multi-agent consensus report.</p>
+          <div class="empty-terminal">
+            <span class="terminal-line">$ vaaniguard --scan</span>
+            <span class="terminal-line dim">awaiting input...</span>
+            <span class="terminal-cursor">█</span>
+          </div>
         </div>
 
         <!-- Loading State -->
         <div class="loading-state hidden" id="resultsLoadingState">
-          <div class="spinner"></div>
+          <div class="sweep-line"></div>
           <div class="pipeline-steps">
-            <div class="step" id="step1"><span>1</span> Normalizing context & removing noise...</div>
-            <div class="step" id="step2"><span>2</span> Evaluating heuristic thresholds...</div>
-            <div class="step" id="step3"><span>3</span> Multi-agent consensus debate...</div>
-            <div class="step" id="step4"><span>4</span> Finalizing risk verdict...</div>
+            <div class="step" id="step1"><span>01</span> Normalizing context & removing noise</div>
+            <div class="step" id="step2"><span>02</span> Evaluating heuristic thresholds</div>
+            <div class="step" id="step3"><span>03</span> Multi-agent consensus debate</div>
+            <div class="step" id="step4"><span>04</span> Finalizing risk verdict</div>
           </div>
         </div>
 
@@ -130,7 +128,7 @@
             </div>
           </div>
 
-          <!-- OCR Extracted Text (Only shows if image uploaded) -->
+          <!-- OCR Extracted Text -->
           <div class="result-card hidden" id="extractedTextBox">
             <div class="card-header">
               <i data-lucide="camera"></i>
@@ -157,9 +155,7 @@
                 <i data-lucide="link"></i>
                 <h3>Extracted Entities</h3>
               </div>
-              <div class="card-body" id="entitiesList">
-                <!-- Entities go here -->
-              </div>
+              <div class="card-body" id="entitiesList"></div>
             </div>
           </div>
 
@@ -169,9 +165,7 @@
               <h3>Threat Highlights</h3>
             </div>
             <div class="card-body">
-              <div id="spansList" class="spans-container">
-                <!-- Spans go here -->
-              </div>
+              <div id="spansList" class="spans-container"></div>
             </div>
           </div>
 
@@ -202,7 +196,6 @@
   </div>
 
   <script>
-    // Initialize Lucide icons
     lucide.createIcons();
   </script>
   <script src="script.js"></script>
