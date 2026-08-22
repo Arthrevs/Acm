@@ -35,7 +35,7 @@ app.post('/api/scan', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Scan endpoint error:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: err.message, stack: err.stack });
   }
 });
 
@@ -77,7 +77,7 @@ app.post('/api/scan-image', async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Scan image endpoint error:', err);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', details: err.message, stack: err.stack });
   }
 });
 

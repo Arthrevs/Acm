@@ -206,7 +206,7 @@ btnScan.addEventListener('click', async () => {
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || `Server error (${response.status})`);
+      throw new Error(err.details || err.error || `Server error (${response.status})`);
     }
 
     const data = await response.json();
