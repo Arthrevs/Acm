@@ -628,9 +628,61 @@ function initCascadingCarousel() {
   requestAnimationFrame(renderFrame);
 }
 
+// ═════════════════════════════════════════════════════════════
+// Top Action Deck (Interactive Fan-out Controls)
+// ═════════════════════════════════════════════════════════════
+function initTopActionDeck() {
+  const touchLeft = document.getElementById('touchLeft');
+  const touchMiddle = document.getElementById('touchMiddle');
+  const touchRight = document.getElementById('touchRight');
+  const btnSample = document.getElementById('btnQuickSample');
+  const btnRadar = document.getElementById('btnRadarTop');
+  const btnHelpline = document.getElementById('btnHelplineTop');
+  const smsInput = document.getElementById('smsInput');
+
+  const SAMPLE_SCAMS = [
+    'Dear SBI customer, your YONO NetBanking account has been suspended due to pending KYC. Click http://sbi-kyc-pan.co.in to update PAN now.',
+    'MAHAVITARAN ALERT: Dear consumer your electricity power will be disconnected tonight at 9:30 PM from power house. Please contact our officer 9876543210.',
+    'CBI NOTICE: Your Aadhaar has been linked to a FedEx courier seized in Mumbai Customs containing illegal narcotics. Join Skype interrogation urgently.',
+    'TRAI Alert: Your SIM card will be deactivated in 2 hours. Send PORT 9876543210 to 1900 to retain services.'
+  ];
+  let sampleIndex = 0;
+
+  function triggerSample() {
+    if (!smsInput) return;
+    smsInput.value = SAMPLE_SCAMS[sampleIndex % SAMPLE_SCAMS.length];
+    sampleIndex++;
+    smsInput.focus();
+    smsInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const countEl = document.getElementById('charCount');
+    if (countEl) countEl.textContent = `${smsInput.value.length} chars`;
+  }
+
+  function triggerRadar() {
+    const radar = document.querySelector('.skewed-carousel-section');
+    if (radar) {
+      radar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function triggerHelpline() {
+    window.open('https://cybercrime.gov.in', '_blank');
+  }
+
+  if (touchLeft) touchLeft.addEventListener('click', triggerSample);
+  if (btnSample) btnSample.addEventListener('click', triggerSample);
+
+  if (touchMiddle) touchMiddle.addEventListener('click', triggerRadar);
+  if (btnRadar) btnRadar.addEventListener('click', triggerRadar);
+
+  if (touchRight) touchRight.addEventListener('click', triggerHelpline);
+  if (btnHelpline) btnHelpline.addEventListener('click', triggerHelpline);
+}
+
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initCascadingCarousel();
+  initTopActionDeck();
   lucide.createIcons();
 });
 
@@ -638,6 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
   setTimeout(() => {
     initCascadingCarousel();
+    initTopActionDeck();
     lucide.createIcons();
   }, 100);
 }
