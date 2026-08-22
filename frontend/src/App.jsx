@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Shield, AlertTriangle, CheckCircle2, ChevronRight, Copy, Search, ScanLine, X, FileText, Smartphone, Image as ImageIcon, Check } from 'lucide-react';
+import { Volume2, VolumeX, Shield, AlertTriangle, CheckCircle2, ChevronRight, Copy, Search, ScanLine, X, FileText, Smartphone, Check } from 'lucide-react';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import ParallaxPills from './components/ParallaxPills';
+import SkewedCarousel from './components/SkewedCarousel';
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -318,6 +320,31 @@ export default function App() {
 
           </div>
         </div>
+      </motion.div>
+
+      {/* React Bits Pro: Parallax Pills Threat Stream */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.15 }}
+        className="w-full max-w-6xl mt-8 z-10"
+      >
+        <ParallaxPills 
+          onPillClick={(pill) => {
+            playClick(1000);
+            if (pill.sampleText) setText(pill.sampleText);
+          }}
+        />
+      </motion.div>
+
+      {/* 3D Cascading Coverflow Intel Carousel */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.25 }}
+        className="w-full max-w-6xl mt-8 z-10"
+      >
+        <SkewedCarousel />
       </motion.div>
     </main>
   );

@@ -1351,3 +1351,184 @@ textarea::placeholder { color: var(--text-dim); }
   .skewed-viewport { padding: 24px 0 32px 0; }
   .carousel-filter-group { overflow-x: auto; max-width: 100%; }
 }
+
+/* ═══════════════════════════════════════════════
+   React Bits Pro: Parallax Pills Threat Stream
+   ═══════════════════════════════════════════════ */
+.parallax-pills-section {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  margin-bottom: 24px;
+  overflow: hidden;
+  perspective: 1000px;
+  user-select: none;
+  box-shadow: var(--shadow);
+}
+
+.parallax-bg-pill {
+  position: absolute;
+  border-radius: 100px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  pointer-events: none;
+  filter: blur(0.5px);
+  transition: transform 0.15s ease-out;
+}
+
+.parallax-center-intel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.parallax-intel-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.parallax-intel-tag i {
+  width: 13px;
+  height: 13px;
+  color: var(--coral);
+  animation: beaconPulse 2s infinite ease-in-out;
+}
+
+.parallax-intel-hint {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.parallax-pills-wrapper {
+  position: absolute;
+  inset: 0;
+  pointer-events: auto;
+}
+
+.parallax-pill {
+  position: absolute;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  border: 1.5px solid transparent;
+  font-family: var(--font);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s ease-out, box-shadow 0.3s ease, border-radius 0.3s ease;
+  user-select: none;
+}
+
+.parallax-pill i {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.3s ease;
+}
+
+.parallax-pill:hover {
+  transform: scale(1.12) !important;
+  z-index: 40;
+  border-radius: 12px;
+}
+
+.parallax-pill:hover i {
+  transform: scale(1.2) rotate(4deg);
+}
+
+.parallax-pill:active {
+  transform: scale(0.94) !important;
+}
+
+/* Pill Themes */
+.pill-danger {
+  background: rgba(255, 77, 79, 0.12);
+  border-color: rgba(255, 77, 79, 0.32);
+  color: #ff7875;
+}
+.pill-danger:hover {
+  box-shadow: 0 8px 25px rgba(255, 77, 79, 0.45);
+  border-color: #ff4d4f;
+  color: #ffffff;
+}
+
+.pill-warning {
+  background: rgba(250, 173, 20, 0.12);
+  border-color: rgba(250, 173, 20, 0.32);
+  color: #ffc53d;
+}
+.pill-warning:hover {
+  box-shadow: 0 8px 25px rgba(250, 173, 20, 0.45);
+  border-color: #faad14;
+  color: #ffffff;
+}
+
+.pill-success {
+  background: rgba(82, 196, 26, 0.14);
+  border-color: rgba(82, 196, 26, 0.35);
+  color: #73d13d;
+}
+.pill-success:hover {
+  box-shadow: 0 8px 25px rgba(82, 196, 26, 0.45);
+  border-color: #52c41a;
+  color: #ffffff;
+}
+
+.pill-cyan {
+  background: rgba(19, 194, 194, 0.12);
+  border-color: rgba(19, 194, 194, 0.32);
+  color: #36cfc9;
+}
+.pill-cyan:hover {
+  box-shadow: 0 8px 25px rgba(19, 194, 194, 0.45);
+  border-color: #13c2c2;
+  color: #ffffff;
+}
+
+.pill-purple {
+  background: rgba(247, 89, 171, 0.12);
+  border-color: rgba(247, 89, 171, 0.32);
+  color: #ff85c0;
+}
+.pill-purple:hover {
+  box-shadow: 0 8px 25px rgba(247, 89, 171, 0.45);
+  border-color: #f759ab;
+  color: #ffffff;
+}
+
+.pill-indigo {
+  background: rgba(146, 84, 222, 0.12);
+  border-color: rgba(146, 84, 222, 0.32);
+  color: #b37feb;
+}
+.pill-indigo:hover {
+  box-shadow: 0 8px 25px rgba(146, 84, 222, 0.45);
+  border-color: #9254de;
+  color: #ffffff;
+}

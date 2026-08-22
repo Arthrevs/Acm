@@ -833,11 +833,107 @@ function initDotDistortionShader() {
   requestAnimationFrame(renderShader);
 }
 
+// ═════════════════════════════════════════════════════════════
+// React Bits Pro: Parallax Pills Threat Stream Engine
+// ═════════════════════════════════════════════════════════════
+function initParallaxPills() {
+  const container = document.getElementById('parallaxPillsContainer');
+  if (!container) return;
+
+  const foregroundPills = container.querySelectorAll('.parallax-pill');
+  const backgroundPills = container.querySelectorAll('.parallax-bg-pill');
+  const smsInput = document.getElementById('smsInput');
+  const charCount = document.getElementById('charCount');
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+
+  const STRENGTH = 32;
+
+  container.addEventListener('mousemove', (e) => {
+    const rect = container.getBoundingClientRect();
+    targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    targetY = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  });
+
+  container.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  // Touch support
+  container.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+      const rect = container.getBoundingClientRect();
+      targetX = ((e.touches[0].clientX - rect.left) / rect.width - 0.5) * 2;
+      targetY = ((e.touches[0].clientY - rect.top) / rect.height - 0.5) * 2;
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchend', () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  // Pill click injection
+  foregroundPills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      const sampleMsg = pill.getAttribute('data-msg');
+      if (sampleMsg && smsInput) {
+        smsInput.value = sampleMsg;
+        smsInput.focus();
+        smsInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (charCount) {
+          charCount.textContent = `${smsInput.value.length} characters`;
+        }
+      }
+    });
+  });
+
+  let time = 0;
+
+  function renderParallax() {
+    time += 0.02;
+
+    // Smooth spring lerp
+    mouseX += (targetX - mouseX) * 0.1;
+    mouseY += (targetY - mouseY) * 0.1;
+
+    // Animate foreground pills
+    foregroundPills.forEach((pill, idx) => {
+      const depth = parseFloat(pill.getAttribute('data-depth')) || 1;
+      const idleFloatX = Math.sin(time + idx * 1.3) * 2.5;
+      const idleFloatY = Math.cos(time + idx * 1.7) * 2.5;
+
+      const px = mouseX * STRENGTH * depth + idleFloatX;
+      const py = mouseY * STRENGTH * depth + idleFloatY;
+      const tilt = mouseX * 6 * depth;
+
+      pill.style.transform = `translate3d(${px.toFixed(2)}px, ${py.toFixed(2)}px, 0) rotate(${tilt.toFixed(1)}deg)`;
+    });
+
+    // Animate background decorative depth pills
+    backgroundPills.forEach((bgPill) => {
+      const depth = parseFloat(bgPill.getAttribute('data-depth')) || 0.4;
+      const px = mouseX * STRENGTH * depth * -0.6;
+      const py = mouseY * STRENGTH * depth * -0.6;
+      bgPill.style.transform = `translate3d(${px.toFixed(2)}px, ${py.toFixed(2)}px, 0)`;
+    });
+
+    requestAnimationFrame(renderParallax);
+  }
+
+  requestAnimationFrame(renderParallax);
+}
+
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initCascadingCarousel();
   initTopActionDeck();
   initDotDistortionShader();
+  initParallaxPills();
   lucide.createIcons();
 });
 
@@ -847,6 +943,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     initCascadingCarousel();
     initTopActionDeck();
     initDotDistortionShader();
+    initParallaxPills();
     lucide.createIcons();
   }, 100);
 }
