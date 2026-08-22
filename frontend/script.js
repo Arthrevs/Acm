@@ -679,10 +679,177 @@ function initTopActionDeck() {
   if (btnHelpline) btnHelpline.addEventListener('click', triggerHelpline);
 }
 
+// ═════════════════════════════════════════════════════════════
+// Aceternity-Style Interactive Dot Distortion Shader Engine
+// ═════════════════════════════════════════════════════════════
+function initDotDistortionShader() {
+  const canvas = document.getElementById('dotDistortionCanvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let dpr = 1;
+  let dots = [];
+  const GAP = 26; // Dot matrix spacing
+
+  const mouse = {
+    x: -1000,
+    y: -1000,
+    targetX: -1000,
+    targetY: -1000,
+    radius: 140, // Cursor influence radius
+    strength: 38  // Push force
+  };
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.scale(dpr, dpr);
+
+    createDots();
+  }
+
+  function createDots() {
+    dots = [];
+    const cols = Math.ceil(width / GAP) + 2;
+    const rows = Math.ceil(height / GAP) + 2;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const ox = (c - 0.5) * GAP;
+        const oy = (r - 0.5) * GAP;
+        dots.push({
+          originX: ox,
+          originY: oy,
+          x: ox,
+          y: oy,
+          vx: 0,
+          vy: 0,
+          baseRadius: 1.15,
+          radius: 1.15,
+          baseAlpha: 0.18 + Math.random() * 0.16,
+          alpha: 0.2,
+          pulseSpeed: 0.02 + Math.random() * 0.03,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Mouse & Touch Tracking
+  window.addEventListener('mousemove', (e) => {
+    mouse.targetX = e.clientX;
+    mouse.targetY = e.clientY;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.targetX = -1000;
+    mouse.targetY = -1000;
+  });
+
+  window.addEventListener('touchmove', (e) => {
+    if (e.touches.length > 0) {
+      mouse.targetX = e.touches[0].clientX;
+      mouse.targetY = e.touches[0].clientY;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    mouse.targetX = -1000;
+    mouse.targetY = -1000;
+  });
+
+  let time = 0;
+
+  function renderShader() {
+    time += 0.025;
+
+    // Smooth mouse lerp
+    mouse.x += (mouse.targetX - mouse.x) * 0.15;
+    mouse.y += (mouse.targetY - mouse.y) * 0.15;
+
+    ctx.clearRect(0, 0, width, height);
+
+    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+
+    for (let i = 0; i < dots.length; i++) {
+      const dot = dots[i];
+
+      // Multi-frequency wave ambient motion
+      const waveX = Math.sin(dot.originY * 0.01 + time * 1.2) * 3.5;
+      const waveY = Math.cos(dot.originX * 0.01 + time * 0.9) * 3.5;
+      const targetX = dot.originX + waveX;
+      const targetY = dot.originY + waveY;
+
+      // Mouse interactive distortion
+      const dx = mouse.x - dot.x;
+      const dy = mouse.y - dot.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < mouse.radius && dist > 0) {
+        const factor = Math.pow(1 - dist / mouse.radius, 1.5);
+        const force = factor * mouse.strength;
+        dot.vx -= (dx / dist) * force;
+        dot.vy -= (dy / dist) * force;
+        dot.radius = dot.baseRadius + factor * 2.2;
+        dot.alpha = Math.min(0.95, dot.baseAlpha + factor * 0.7);
+      } else {
+        dot.radius += (dot.baseRadius - dot.radius) * 0.1;
+        // Twinkling breathing pulse
+        const pulse = Math.sin(time * 2 + dot.phase) * 0.08;
+        dot.alpha += (Math.max(0.1, dot.baseAlpha + pulse) - dot.alpha) * 0.08;
+      }
+
+      // Spring physics back to target
+      dot.vx += (targetX - dot.x) * 0.08;
+      dot.vy += (targetY - dot.y) * 0.08;
+      dot.vx *= 0.86;
+      dot.vy *= 0.86;
+      dot.x += dot.vx;
+      dot.y += dot.vy;
+
+      // Render dot with glow
+      ctx.beginPath();
+      ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
+
+      if (isDark) {
+        // Cyan / Electric Blue / Coral glow near mouse
+        if (dist < mouse.radius) {
+          ctx.fillStyle = `rgba(0, 229, 255, ${dot.alpha})`;
+        } else {
+          ctx.fillStyle = `rgba(140, 180, 255, ${dot.alpha})`;
+        }
+      } else {
+        if (dist < mouse.radius) {
+          ctx.fillStyle = `rgba(255, 99, 71, ${dot.alpha})`;
+        } else {
+          ctx.fillStyle = `rgba(30, 41, 59, ${dot.alpha})`;
+        }
+      }
+
+      ctx.fill();
+    }
+
+    requestAnimationFrame(renderShader);
+  }
+
+  requestAnimationFrame(renderShader);
+}
+
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initCascadingCarousel();
   initTopActionDeck();
+  initDotDistortionShader();
   lucide.createIcons();
 });
 
@@ -691,6 +858,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
   setTimeout(() => {
     initCascadingCarousel();
     initTopActionDeck();
+    initDotDistortionShader();
     lucide.createIcons();
   }, 100);
 }
