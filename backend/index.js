@@ -4,13 +4,13 @@ const path = require('path');
 require('dotenv').config();
 
 const { runPipeline } = require('./services/pipeline');
-const { extractTextFromImage } = require('./services/llm');
+const { extractTextFromImage } = require('./services/vision');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Health check
@@ -24,35 +24,44 @@ app.get('/api/health', (req, res) => {
  */
 app.post('/api/scan', async (req, res) => {
   try {
-    let { message, image, threshold } = req.body;
-
-    if (!message && !image) {
-      return res.status(400).json({ error: 'Missing message or image in request body.' });
+    const { message, threshold } = req.body;
+    if (!message) {
+      return res.status(400).json({ error: 'Missing message in request body.' });
     }
     
-    // Ensure message is a string
-    message = message || "";
-
-    // If an image is provided, extract text using Gemini OCR
-    if (image && image.data && image.mimeType) {
-      console.log(`Processing image payload (${image.mimeType}) using OCR...`);
-      const extractedText = await extractTextFromImage(image.data, image.mimeType);
-      console.log(`Extracted text: "${extractedText.substring(0, 50)}..."`);
-      
-      // Combine extracted text with any user-provided message
-      if (message.trim()) {
-        message = `[User Note: ${message}]\n\n[Extracted from Image]:\n${extractedText}`;
-      } else {
-        message = extractedText;
-      }
-    }
-
     // Run the full 4-layer pipeline with optional custom threshold
     const result = await runPipeline(message, threshold ? parseInt(threshold, 10) : 30);
     res.json(result);
-
   } catch (err) {
     console.error('Scan endpoint error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+/**
+ * POST /api/scan-image
+ * Receives a base64 screenshot, extracts text with Gemini Vision, and runs it through the pipeline.
+ */
+app.post('/api/scan-image', async (req, res) => {
+  try {
+    const { image_base64, mime_type, threshold } = req.body;
+    if (!image_base64) {
+      return res.status(400).json({ error: 'Missing image_base64 in request body.' });
+    }
+
+    console.log(`Processing image payload (${mime_type}) using OCR...`);
+    const extractedText = await extractTextFromImage(image_base64, mime_type);
+    console.log(`Extracted text: "${extractedText.substring(0, 50)}..."`);
+    
+    // Run the extracted text through the full 4-layer pipeline
+    const result = await runPipeline(extractedText, threshold ? parseInt(threshold, 10) : 30);
+    
+    // Attach the raw extracted text so the frontend can display it
+    result.extracted_text = extractedText;
+    
+    res.json(result);
+  } catch (err) {
+    console.error('Scan image endpoint error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
