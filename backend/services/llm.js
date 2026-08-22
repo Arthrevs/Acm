@@ -25,13 +25,10 @@ async function callGemini(systemPrompt, userPrompt) {
 
   // Automatic model degradation fallback
   const fallbackModels = [
-    'gemini-3.6-flash',
-    'gemini-3.7-flash',
-    'gemini-3.5-flash',
-    'gemini-flash-latest',
     'gemini-2.5-flash',
     'gemini-2.0-flash',
-    'gemini-1.5-flash'
+    'gemini-1.5-flash',
+    'gemini-1.5-pro'
   ];
 
   let lastError;
@@ -48,20 +45,15 @@ async function callGemini(systemPrompt, userPrompt) {
       });
 
       const result = await model.generateContent(userPrompt);
-      return JSON.parse(result.response.text());
+      const text = result.response.text();
+      return JSON.parse(text);
     } catch (err) {
       lastError = err;
-      // If it's a quota or rate-limiting error, continue to the next model
-      if (err.status === 429 || err.status === 503) {
-        console.warn(`[LLM] Model ${modelName} hit limit. Degrading to next model...`);
-        continue;
-      }
-      // If it's another error (like 404 or auth), throw it
-      throw err;
+      console.warn(`[LLM] Model ${modelName} failed (${err.message}). Trying next fallback...`);
     }
   }
 
-  throw new Error(`All fallback models exhausted due to rate limits. Last error: ${lastError.message}`);
+  throw new Error(`All fallback models exhausted. Last error: ${lastError?.message || 'Unknown error'}`);
 }
 
 /**
