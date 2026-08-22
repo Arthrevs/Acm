@@ -102,156 +102,255 @@
       <!-- Dashboard Grid -->
       <div class="bento-grid">
 
-        <!-- Card: Greeting / Hero -->
-        <div class="bento-card card-hero">
-          <div class="hero-text">
-            <h2>Scan any message 🛡️</h2>
-            <p>Paste a suspicious SMS or drop a screenshot. Our multi-agent AI will classify it in seconds.</p>
-          </div>
-        </div>
-
-        <!-- Card: Input -->
-        <div class="bento-card card-input">
-          <div class="card-label">ANALYZE MESSAGE</div>
-
-          <!-- Upload -->
-          <div class="upload-zone" id="uploadZone">
-            <input type="file" id="imageInput" accept="image/*" hidden>
-            <div class="upload-content" id="uploadZoneContent">
-              <i data-lucide="image-plus" class="upload-icon"></i>
-              <p>Drop screenshot or <span>browse</span></p>
-              <p class="upload-hint">Gemini Vision OCR</p>
+        <!-- Card 1: Greeting / Hero (Uiverse 3D Glass) -->
+        <div class="uiverse-parent card-hero-parent">
+          <div class="uiverse-card card-hero-3d">
+            <div class="logo">
+              <span class="circle circle1"></span>
+              <span class="circle circle2"></span>
+              <span class="circle circle3"></span>
+              <span class="circle circle4"></span>
+              <span class="circle circle5">
+                <i data-lucide="shield-check" class="svg-icon"></i>
+              </span>
             </div>
-            <div class="upload-preview hidden" id="uploadPreview">
-              <img id="previewImg" src="" alt="Preview">
-              <button class="btn-remove-image" id="btnRemoveImage"><i data-lucide="x"></i></button>
+            <div class="glass"></div>
+            <div class="content">
+              <span class="title">VAANIGUARD (3D AI)</span>
+              <span class="text">Multi-agent heuristic and LLM vision engine scanning SMS, phishing links, and APK threats in real-time.</span>
             </div>
-          </div>
-
-          <div class="divider"><span>OR</span></div>
-
-          <div class="textarea-wrapper">
-            <textarea id="smsInput" placeholder="Paste suspicious message here..." rows="4"></textarea>
-            <div class="char-count" id="charCount">0 characters</div>
-          </div>
-        </div>
-
-        <!-- Card: Presets -->
-        <div class="bento-card card-presets">
-          <div class="card-label">QUICK TEST PRESETS</div>
-          <div class="presets-grid">
-            <button class="btn-preset scam" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in">
-              <span>⚠️</span>
-              <span>KYC Scam</span>
-            </button>
-            <button class="btn-preset scam" data-preset="Electricity" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544">
-              <span>⚡</span>
-              <span>Electricity Bill</span>
-            </button>
-            <button class="btn-preset scam" data-preset="FedEx" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in">
-              <span>📦</span>
-              <span>FedEx Customs</span>
-            </button>
-            <button class="btn-preset safe" data-preset="Safe Msg" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna.">
-              <span>💬</span>
-              <span>Family Chat (Safe)</span>
-            </button>
-            <button class="btn-preset safe" data-preset="OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP.">
-              <span>🔑</span>
-              <span>Bank/App OTP</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Card: Action -->
-        <div class="bento-card card-action">
-          <button class="btn btn-clear-main" id="btnClear">
-            <span class="btn-text">CLEAR</span>
-          </button>
-
-          <button class="btn btn-scan-main" id="btnScan">
-            <span class="btn-text" id="scanButtonText">SCAN MESSAGE</span>
-          </button>
-        </div>
-
-        <!-- Card: Verdict (spans 2 cols) -->
-        <div class="bento-card card-verdict">
-
-          <!-- Empty -->
-          <div class="empty-state" id="resultsEmptyState">
-            <i data-lucide="shield-question" class="empty-icon"></i>
-            <h3>Awaiting scan</h3>
-            <p>Submit a message to get started</p>
-          </div>
-
-          <!-- Loading -->
-          <div class="loading-state hidden" id="resultsLoadingState">
-            <div class="sweep-bar"></div>
-            <div class="pipeline-steps">
-              <div class="step" id="step1"><span>1</span> Normalizing context</div>
-              <div class="step" id="step2"><span>2</span> Heuristic evaluation</div>
-              <div class="step" id="step3"><span>3</span> Multi-agent debate</div>
-              <div class="step" id="step4"><span>4</span> Final verdict</div>
-            </div>
-          </div>
-
-          <!-- Results -->
-          <div class="results-content hidden" id="resultsContent">
-            <div class="verdict-banner" id="verdictBanner">
-              <div class="verdict-info">
-                <h2 id="verdictLabel">SCAM</h2>
-                <p id="verdictCategory">Financial Fraud</p>
-              </div>
-              <div class="risk-score">
-                <span class="risk-label">RISK</span>
-                <div class="risk-value"><span id="riskValue">92</span></div>
-                <div class="risk-bar-container"><div class="risk-bar-fill" id="riskFill"></div></div>
-              </div>
-            </div>
-
-            <!-- OCR -->
-            <div class="result-card hidden" id="extractedTextBox">
-              <div class="card-header"><i data-lucide="camera"></i><h3>Gemini Vision OCR</h3></div>
-              <div class="card-body"><p id="extractedTextContent" class="mono-text"></p></div>
-            </div>
-
-            <div class="results-grid">
-              <div class="result-card">
-                <div class="card-header"><i data-lucide="file-text"></i><h3>Normalized Text</h3></div>
-                <div class="card-body"><p id="normalizedText" class="mono-text"></p></div>
-              </div>
-              <div class="result-card">
-                <div class="card-header"><i data-lucide="link"></i><h3>Extracted Entities</h3></div>
-                <div class="card-body" id="entitiesList"></div>
-              </div>
-            </div>
-
-            <div class="result-card full-width">
-              <div class="card-header"><i data-lucide="alert-triangle"></i><h3>Threat Highlights</h3></div>
-              <div class="card-body"><div id="spansList" class="spans-container"></div></div>
-            </div>
-
-            <!-- Dossier -->
-            <div class="result-card full-width dossier-card hidden" id="dossierCard">
-              <div class="card-header dossier-header">
-                <div class="dossier-title-group">
-                  <i data-lucide="file-warning"></i>
-                  <h3>I4C Threat Dossier</h3>
-                </div>
-                <button class="animated-button btn-copy-dossier" id="btnCopyDossier">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
-                  <span class="text" id="copyBtnText">COPY DOSSIER</span>
-                  <span class="circle"></span>
-                  <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
+            <div class="bottom">
+              <div class="social-buttons-container">
+                <button class="social-button" id="btnHeroQuickSample" title="Quick Sample">
+                  <i data-lucide="sparkles" class="social-icon"></i>
+                </button>
+                <button class="social-button" id="btnHeroHelpline" title="Emergency 1930">
+                  <i data-lucide="phone-call" class="social-icon"></i>
+                </button>
+                <button class="social-button" id="btnHeroRadar" title="Live Threat Radar">
+                  <i data-lucide="radar" class="social-icon"></i>
                 </button>
               </div>
-              <div class="card-body">
-                <pre id="dossierContent" class="dossier-text"></pre>
-                <p class="dossier-hint"><i data-lucide="phone-call"></i> File at <strong>1930</strong> or <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a></p>
+              <div class="view-more">
+                <button class="view-more-button" id="btnViewDocs">System online</button>
+                <i data-lucide="chevron-right" class="svg-arrow"></i>
               </div>
             </div>
           </div>
+        </div>
 
+        <!-- Card 2: Quick Presets (Uiverse 3D Glass) -->
+        <div class="uiverse-parent card-presets-parent">
+          <div class="uiverse-card card-presets-3d">
+            <div class="logo logo-amber">
+              <span class="circle circle1"></span>
+              <span class="circle circle2"></span>
+              <span class="circle circle3"></span>
+              <span class="circle circle4"></span>
+              <span class="circle circle5">
+                <i data-lucide="zap" class="svg-icon"></i>
+              </span>
+            </div>
+            <div class="glass"></div>
+            <div class="content">
+              <span class="title">QUICK THREAT VECTORS</span>
+              <span class="text">Select live telemetry presets to inject instant cyber test vectors into the multi-agent scanner.</span>
+
+              <div class="presets-grid mt-4">
+                <button class="btn-preset scam" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in">
+                  <span>⚠️</span>
+                  <span>KYC Scam</span>
+                </button>
+                <button class="btn-preset scam" data-preset="Electricity" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544">
+                  <span>⚡</span>
+                  <span>Electricity Bill</span>
+                </button>
+                <button class="btn-preset scam" data-preset="FedEx" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in">
+                  <span>📦</span>
+                  <span>FedEx Customs</span>
+                </button>
+                <button class="btn-preset safe" data-preset="Safe Msg" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna.">
+                  <span>💬</span>
+                  <span>Family Chat (Safe)</span>
+                </button>
+                <button class="btn-preset safe" data-preset="OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP.">
+                  <span>🔑</span>
+                  <span>Bank/App OTP</span>
+                </button>
+              </div>
+            </div>
+            <div class="bottom">
+              <div class="social-buttons-container">
+                <button class="social-button" title="Scam Filters">
+                  <i data-lucide="alert-triangle" class="social-icon text-red"></i>
+                </button>
+                <button class="social-button" title="Safe Filters">
+                  <i data-lucide="check-circle" class="social-icon text-green"></i>
+                </button>
+              </div>
+              <div class="view-more">
+                <button class="view-more-button">5 vectors ready</button>
+                <i data-lucide="chevron-right" class="svg-arrow"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3: Input & Analyze (Uiverse 3D Glass - spans row) -->
+        <div class="uiverse-parent card-input-parent">
+          <div class="uiverse-card card-input-3d">
+            <div class="logo logo-cyan">
+              <span class="circle circle1"></span>
+              <span class="circle circle2"></span>
+              <span class="circle circle3"></span>
+              <span class="circle circle4"></span>
+              <span class="circle circle5">
+                <i data-lucide="scan-line" class="svg-icon"></i>
+              </span>
+            </div>
+            <div class="glass"></div>
+            <div class="content">
+              <span class="title">ANALYZE MESSAGE // OCR</span>
+              <span class="text">Upload screenshots or paste text to run NLP heuristics, Gemini Vision OCR, and threat extraction.</span>
+
+              <!-- Upload Zone -->
+              <div class="upload-zone mt-4" id="uploadZone">
+                <input type="file" id="imageInput" accept="image/*" hidden>
+                <div class="upload-content" id="uploadZoneContent">
+                  <i data-lucide="image-plus" class="upload-icon"></i>
+                  <p>Drop screenshot or <span>browse</span></p>
+                  <p class="upload-hint">Gemini Vision OCR</p>
+                </div>
+                <div class="upload-preview hidden" id="uploadPreview">
+                  <img id="previewImg" src="" alt="Preview">
+                  <button class="btn-remove-image" id="btnRemoveImage"><i data-lucide="x"></i></button>
+                </div>
+              </div>
+
+              <div class="divider"><span>OR PASTE TEXT</span></div>
+
+              <div class="textarea-wrapper">
+                <textarea id="smsInput" placeholder="Paste suspicious message here..." rows="4"></textarea>
+                <div class="char-count" id="charCount">0 characters</div>
+              </div>
+
+              <!-- Kinetic Action Buttons -->
+              <div class="card-action-btns mt-4">
+                <button class="btn btn-clear-main" id="btnClear">
+                  <span class="btn-text">CLEAR</span>
+                </button>
+
+                <button class="btn btn-scan-main" id="btnScan">
+                  <span class="btn-text" id="scanButtonText">SCAN MESSAGE</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4: Verdict & Evidentiary Dossier (Uiverse 3D Glass - spans 2 cols) -->
+        <div class="uiverse-parent card-verdict-parent">
+          <div class="uiverse-card card-verdict-3d">
+            <div class="logo logo-purple">
+              <span class="circle circle1"></span>
+              <span class="circle circle2"></span>
+              <span class="circle circle3"></span>
+              <span class="circle circle4"></span>
+              <span class="circle circle5">
+                <i data-lucide="shield-alert" class="svg-icon"></i>
+              </span>
+            </div>
+            <div class="glass"></div>
+            <div class="content">
+              <span class="title">THREAT RADAR // VERDICT</span>
+
+              <!-- Empty State -->
+              <div class="empty-state" id="resultsEmptyState">
+                <i data-lucide="shield-question" class="empty-icon"></i>
+                <h3>Awaiting scan</h3>
+                <p>Submit a message or screenshot to initiate analysis</p>
+              </div>
+
+              <!-- Loading State -->
+              <div class="loading-state hidden" id="resultsLoadingState">
+                <div class="sweep-bar"></div>
+                <div class="pipeline-steps">
+                  <div class="step" id="step1"><span>1</span> Normalizing context</div>
+                  <div class="step" id="step2"><span>2</span> Heuristic evaluation</div>
+                  <div class="step" id="step3"><span>3</span> Multi-agent debate</div>
+                  <div class="step" id="step4"><span>4</span> Final verdict</div>
+                </div>
+              </div>
+
+              <!-- Results Content -->
+              <div class="results-content hidden" id="resultsContent">
+                <div class="verdict-banner" id="verdictBanner">
+                  <div class="verdict-info">
+                    <h2 id="verdictLabel">SCAM</h2>
+                    <p id="verdictCategory">Financial Fraud</p>
+                  </div>
+                  <div class="risk-score">
+                    <span class="risk-label">RISK</span>
+                    <div class="risk-value"><span id="riskValue">92</span></div>
+                    <div class="risk-bar-container"><div class="risk-bar-fill" id="riskFill"></div></div>
+                  </div>
+                </div>
+
+                <!-- OCR -->
+                <div class="result-card hidden" id="extractedTextBox">
+                  <div class="card-header"><i data-lucide="camera"></i><h3>Gemini Vision OCR</h3></div>
+                  <div class="card-body"><p id="extractedTextContent" class="mono-text"></p></div>
+                </div>
+
+                <div class="results-grid">
+                  <div class="result-card">
+                    <div class="card-header"><i data-lucide="file-text"></i><h3>Normalized Text</h3></div>
+                    <div class="card-body"><p id="normalizedText" class="mono-text"></p></div>
+                  </div>
+                  <div class="result-card">
+                    <div class="card-header"><i data-lucide="link"></i><h3>Extracted Entities</h3></div>
+                    <div class="card-body" id="entitiesList"></div>
+                  </div>
+                </div>
+
+                <div class="result-card full-width">
+                  <div class="card-header"><i data-lucide="alert-triangle"></i><h3>Threat Highlights</h3></div>
+                  <div class="card-body"><div id="spansList" class="spans-container"></div></div>
+                </div>
+
+                <!-- Dossier -->
+                <div class="result-card full-width dossier-card hidden" id="dossierCard">
+                  <div class="card-header dossier-header">
+                    <div class="dossier-title-group">
+                      <i data-lucide="file-warning"></i>
+                      <h3>I4C Threat Dossier</h3>
+                    </div>
+                    <button class="btn btn-copy-dossier-3d" id="btnCopyDossier">
+                      <span class="btn-text" id="copyBtnText">COPY DOSSIER</span>
+                    </button>
+                  </div>
+                  <div class="card-body">
+                    <pre id="dossierContent" class="dossier-text"></pre>
+                    <p class="dossier-hint"><i data-lucide="phone-call"></i> File at <strong>1930</strong> or <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bottom">
+              <div class="social-buttons-container">
+                <button class="social-button" id="btnBottomHelpline" title="Call 1930">
+                  <i data-lucide="phone-outgoing" class="social-icon text-amber"></i>
+                </button>
+                <button class="social-button" id="btnBottomGov" title="I4C Portal">
+                  <i data-lucide="landmark" class="social-icon text-cyan"></i>
+                </button>
+              </div>
+              <div class="view-more">
+                <button class="view-more-button">I4C Framework Active</button>
+                <i data-lucide="shield" class="svg-arrow"></i>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>

@@ -372,75 +372,394 @@ body {
   background: var(--green);
 }
 
-/* ═══ Bento Grid ═══ */
+/* ═════════════════════════════════════════════════
+   Uiverse 3D Glass Morph Card Architecture
+   ═════════════════════════════════════════════════ */
 .bento-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: 24px;
   flex: 1;
 }
 
-/* ═══ Bento Cards ═══ */
-.bento-card {
-  background: #111218;
-  border: 1px solid #282a3a;
-  border-radius: var(--radius);
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+.uiverse-parent {
+  perspective: 1200px;
+  width: 100%;
+  display: flex;
+}
+
+.card-hero-parent {
+  grid-column: 1;
+}
+
+.card-presets-parent {
+  grid-column: 1;
+}
+
+.card-input-parent {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+.card-verdict-parent {
+  grid-column: 1 / span 2;
+}
+
+.uiverse-card {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  position: relative;
+  border-radius: 44px;
+  background: linear-gradient(135deg, rgba(0, 255, 214, 0.1) 0%, rgba(8, 226, 96, 0.05) 100%), #111218;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transform-style: preserve-3d;
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  overflow: visible;
+  padding-bottom: 60px;
 }
 
-.bento-card:hover {
-  border-color: #3b3e52;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65);
+.uiverse-card .glass {
+  transform-style: preserve-3d;
+  position: absolute;
+  inset: 8px;
+  border-radius: 38px;
+  border-top-right-radius: 120px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  transform: translate3d(0px, 0px, 25px);
+  border-left: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.5s ease-in-out;
+  pointer-events: none;
 }
 
-.card-label {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #94a3b8; /* High-contrast slate */
-  letter-spacing: 0.08em;
-  margin-bottom: 14px;
+.uiverse-card .content {
+  padding: 30px 28px 16px 28px;
+  transform: translate3d(0, 0, 28px);
+  transform-style: preserve-3d;
+  position: relative;
+  z-index: 10;
+  flex: 1;
+}
+
+.uiverse-card .content .title {
+  display: block;
+  color: #00ffd6;
+  font-weight: 900;
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  text-shadow: 0 0 20px rgba(0, 255, 214, 0.35);
+}
+
+.uiverse-card .content .text {
+  display: block;
+  color: #d1d5db;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+/* Floating Concentric Glass Lenses (Top Right) */
+.uiverse-card .logo {
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.uiverse-card .logo .circle {
+  display: block;
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  top: 0;
+  right: 0;
+  box-shadow: -8px 8px 25px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  background: rgba(0, 249, 203, 0.12);
+  border: 1px solid rgba(0, 249, 203, 0.25);
+  transition: all 0.5s ease-in-out;
+}
+
+.uiverse-card .logo .circle1 {
+  width: 170px;
+  transform: translate3d(0, 0, 20px);
+  top: 8px;
+  right: 8px;
+}
+
+.uiverse-card .logo .circle2 {
+  width: 140px;
+  transform: translate3d(0, 0, 40px);
+  top: 10px;
+  right: 10px;
+  transition-delay: 0.1s;
+}
+
+.uiverse-card .logo .circle3 {
+  width: 110px;
+  transform: translate3d(0, 0, 60px);
+  top: 17px;
+  right: 17px;
+  transition-delay: 0.2s;
+}
+
+.uiverse-card .logo .circle4 {
+  width: 80px;
+  transform: translate3d(0, 0, 80px);
+  top: 23px;
+  right: 23px;
+  transition-delay: 0.3s;
+}
+
+.uiverse-card .logo .circle5 {
+  width: 50px;
+  transform: translate3d(0, 0, 100px);
+  top: 30px;
+  right: 30px;
+  display: grid;
+  place-content: center;
+  transition-delay: 0.4s;
+  background: rgba(0, 249, 203, 0.35);
+  border: 1.5px solid rgba(0, 249, 203, 0.6);
+  box-shadow: 0 0 20px rgba(0, 249, 203, 0.5);
+}
+
+.uiverse-card .logo .circle5 .svg-icon {
+  width: 22px;
+  height: 22px;
+  color: #ffffff;
+}
+
+/* Card 3D Hover Expansion */
+.uiverse-parent:hover .uiverse-card {
+  transform: rotate3d(1, -0.4, 0, 8deg) translateY(-4px);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 255, 214, 0.15);
+}
+
+.uiverse-parent:hover .uiverse-card .bottom .social-buttons-container .social-button {
+  transform: translate3d(0, 0, 50px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.uiverse-parent:hover .uiverse-card .logo .circle2 {
+  transform: translate3d(0, 0, 60px);
+}
+
+.uiverse-parent:hover .uiverse-card .logo .circle3 {
+  transform: translate3d(0, 0, 80px);
+}
+
+.uiverse-parent:hover .uiverse-card .logo .circle4 {
+  transform: translate3d(0, 0, 100px);
+}
+
+.uiverse-parent:hover .uiverse-card .logo .circle5 {
+  transform: translate3d(0, 0, 120px);
+}
+
+/* Bottom 3D Action Bar */
+.uiverse-card .bottom {
+  padding: 10px 24px;
+  transform-style: preserve-3d;
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  transform: translate3d(0, 0, 30px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Hero */
-.card-hero {
-  background: linear-gradient(135deg, #13151c 0%, #0d0e13 100%);
-  border: 1px solid #282a38;
-  color: #ffffff;
-  justify-content: center;
+.uiverse-card .bottom .view-more {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 
-.hero-text h2 {
-  font-size: 1.65rem;
+.uiverse-card .bottom .view-more:hover {
+  transform: translate3d(0, 0, 10px);
+}
+
+.uiverse-card .bottom .view-more .view-more-button {
+  background: none;
+  border: none;
+  color: #00c37b;
   font-weight: 800;
-  letter-spacing: -0.02em;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.uiverse-card .bottom .view-more .svg-arrow {
+  width: 14px;
+  height: 14px;
+  color: #00c37b;
+  stroke-width: 2.5px;
+}
+
+.uiverse-card .bottom .social-buttons-container {
+  display: flex;
+  gap: 10px;
+  transform-style: preserve-3d;
+}
+
+.uiverse-card .bottom .social-buttons-container .social-button {
+  width: 32px;
+  height: 32px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+  user-select: none;
+}
+
+.uiverse-card .bottom .social-buttons-container .social-button .social-icon {
+  width: 15px;
+  height: 15px;
+  color: #00ffd6;
+  transition: color 0.25s ease;
+}
+
+.uiverse-card .bottom .social-buttons-container .social-button:hover {
+  background: #00ffd6;
+  border-color: #00ffd6;
+  box-shadow: 0 0 16px rgba(0, 255, 214, 0.6);
+}
+
+.uiverse-card .bottom .social-buttons-container .social-button:hover .social-icon {
+  color: #111218;
+}
+
+.uiverse-card .bottom .social-buttons-container .social-button:active {
+  transform: scale(0.9);
+}
+
+/* ════ Color Variations ════ */
+
+/* Amber Theme (Presets Card) */
+.card-presets-3d {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.06) 100%), #111218;
+}
+.card-presets-3d .content .title {
+  color: #fbbf24;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+}
+.logo-amber .circle {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+.logo-amber .circle5 {
+  background: rgba(245, 158, 11, 0.35);
+  border-color: rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+}
+.card-presets-3d .bottom .view-more .view-more-button,
+.card-presets-3d .bottom .view-more .svg-arrow {
+  color: #fbbf24;
+}
+
+/* Cyan / Azure Theme (Input Card) */
+.card-input-3d {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.06) 100%), #111218;
+}
+.card-input-3d .content .title {
+  color: #38bdf8;
+  text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+}
+.logo-cyan .circle {
+  background: rgba(6, 182, 212, 0.12);
+  border-color: rgba(6, 182, 212, 0.25);
+}
+.logo-cyan .circle5 {
+  background: rgba(6, 182, 212, 0.35);
+  border-color: rgba(6, 182, 212, 0.6);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+}
+
+/* Purple Theme (Verdict Card) */
+.card-verdict-3d {
+  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.06) 100%), #111218;
+}
+.card-verdict-3d .content .title {
+  color: #c084fc;
+  text-shadow: 0 0 20px rgba(192, 132, 252, 0.35);
+}
+.logo-purple .circle {
+  background: rgba(168, 85, 247, 0.12);
+  border-color: rgba(168, 85, 247, 0.25);
+}
+.logo-purple .circle5 {
+  background: rgba(168, 85, 247, 0.35);
+  border-color: rgba(168, 85, 247, 0.6);
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+}
+.card-verdict-3d .bottom .view-more .view-more-button,
+.card-verdict-3d .bottom .view-more .svg-arrow {
+  color: #c084fc;
+}
+
+.btn-copy-dossier-3d {
+  padding: 0.7em 1.4em;
+  font-size: 13px;
+  background-color: #06b6d4;
+  color: #111218;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 2px 0 1.5px #000;
+}
+.btn-copy-dossier-3d:before {
+  background-color: #a855f7;
+}
+.btn-copy-dossier-3d:hover {
+  background-color: #3b82f6;
   color: #ffffff;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 2px 0 1.5px #1e3a8a, 0 0 18px rgba(59, 130, 246, 0.5);
 }
 
-.hero-text p {
-  color: #d1d5db; /* High-contrast crisp light silver */
-  font-size: 0.94rem;
-  line-height: 1.6;
-  max-width: 440px;
-  font-weight: 400;
+.card-action-btns {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
 }
 
-/* Input */
-.card-input {
-  grid-row: span 2;
-  background: #111217;
-  border: 1px solid #282a38;
+.mt-4 {
+  margin-top: 14px;
 }
 
-/* Upload */
+.text-red {
+  color: #ef4444 !important;
+}
+
+.text-green {
+  color: #10b981 !important;
+}
+
+.text-amber {
+  color: #f59e0b !important;
+}
+
+.text-cyan {
+  color: #06b6d4 !important;
+}
+
 .upload-zone {
   border: 2px dashed #383b4c;
   border-radius: var(--radius-sm);

@@ -948,12 +948,58 @@ function initInteractiveParallaxElements() {
   requestAnimationFrame(renderParallaxElements);
 }
 
+// ═════════════════════════════════════════════════════════════
+// Uiverse 3D Card Interactive Quick Action Listeners
+// ═════════════════════════════════════════════════════════════
+function initUiverseCardActions() {
+  const heroSample = document.getElementById('btnHeroQuickSample');
+  const heroHelpline = document.getElementById('btnHeroHelpline');
+  const heroRadar = document.getElementById('btnHeroRadar');
+  const bottomHelpline = document.getElementById('btnBottomHelpline');
+  const bottomGov = document.getElementById('btnBottomGov');
+
+  if (heroSample && smsInput) {
+    heroSample.addEventListener('click', () => {
+      smsInput.value = 'Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in';
+      if (charCount) charCount.textContent = `${smsInput.value.length} characters`;
+      smsInput.focus();
+      smsInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  }
+
+  if (heroHelpline) {
+    heroHelpline.addEventListener('click', () => {
+      window.open('tel:1930', '_self');
+    });
+  }
+
+  if (heroRadar) {
+    heroRadar.addEventListener('click', () => {
+      const radarSection = document.querySelector('.skewed-carousel-section');
+      if (radarSection) radarSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
+
+  if (bottomHelpline) {
+    bottomHelpline.addEventListener('click', () => {
+      window.open('tel:1930', '_self');
+    });
+  }
+
+  if (bottomGov) {
+    bottomGov.addEventListener('click', () => {
+      window.open('https://cybercrime.gov.in', '_blank', 'noopener');
+    });
+  }
+}
+
 // Initialize on DOM ready
 document.addEventListener('DOMContentLoaded', () => {
   initCascadingCarousel();
   initTopActionDeck();
   initDotDistortionShader();
   initInteractiveParallaxElements();
+  initUiverseCardActions();
   lucide.createIcons();
 });
 
@@ -964,6 +1010,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     initTopActionDeck();
     initDotDistortionShader();
     initInteractiveParallaxElements();
+    initUiverseCardActions();
     lucide.createIcons();
   }, 100);
 }
