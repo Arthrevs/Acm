@@ -3,205 +3,313 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ShieldSMS — Vernacular Phishing Classifier</title>
-  <meta name="description" content="AI-powered SMS phishing detection for vernacular and transliterated messages">
+  <title>ShieldSMS — S-4 Vernacular Phishing Classifier Console</title>
+  <meta name="description" content="Hardware-inspired Vernacular SMS Phishing Classifier with 4-Layer Multi-Agent Consensus">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="scan-line"></div>
+  <!-- Studio Desk Background -->
+  <div class="studio-bg"></div>
 
-  <header id="header">
-    <div class="header-inner">
-      <div class="logo">
-        <div class="logo-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-        </div>
-        <div class="logo-text">
-          <span class="logo-name">ShieldSMS</span>
-          <span class="logo-sub">Vernacular Phishing Classifier</span>
-        </div>
+  <!-- Hardware Sampler Console Chassis -->
+  <div class="sampler-chassis" id="samplerChassis">
+    
+    <!-- Top Header Bar -->
+    <header class="sampler-header">
+      <div class="header-left">
+        <span class="status-led" id="statusLed"></span>
+        <span class="brand-title">SHIELDSMS</span>
+        <span class="model-subtitle">S-4 VERNACULAR SMS CLASSIFIER</span>
       </div>
-      <div class="status-badge" id="statusBadge">
-        <span class="status-dot"></span>
-        <span>Engine Online</span>
+      <div class="header-right">
+        <button class="btn-audio-toggle" id="btnAudioToggle" title="Toggle Hardware Synth Audio Clicks">🔊 SFX ON</button>
+        <span class="unit-id" id="unitStatusText">PIPELINE·ONLINE [4-LAYER]</span>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main>
-    <!-- Hero Section -->
-    <section class="hero">
-      <h1>Detect <span class="gradient-text">Vernacular SMS Scams</span> Instantly</h1>
-      <p class="hero-sub">AI-powered analysis that catches phishing attempts hidden in Hinglish, transliterated text, and deliberate misspellings.</p>
-    </section>
-
-    <!-- Scanner Section -->
-    <section class="scanner-section">
-      <div class="scanner-card" id="scannerCard">
-        <div class="card-header">
-          <div class="card-title">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
-              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-            </svg>
-            <span>Message Scanner</span>
+    <!-- Main Workspace (Left Input Console + Right 8-Pad Security Matrix) -->
+    <div class="sampler-body">
+      
+      <!-- LEFT COLUMN: Input Screen & Telemetry Console -->
+      <div class="sampler-left-col">
+        
+        <!-- Main Message Screen (Dot Matrix Canvas) -->
+        <div class="screen-box" id="screenBox">
+          <div class="screen-dot-grid"></div>
+          <div class="drop-overlay" id="dropOverlay">
+            <span>DROP SCREENSHOT FOR OCR</span>
           </div>
-          <button class="btn-clear" id="btnClear" title="Clear">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-              <path d="M18 6 6 18M6 6l12 12"/>
-            </svg>
+          
+          <div class="screen-inner-header">
+            <span class="screen-tag">[ VERNACULAR SMS SCANNER ]</span>
+            <span class="screen-counter" id="charCount">0 chars · 0 tokens</span>
+          </div>
+
+          <div class="screen-input-wrapper">
+            <textarea 
+              id="smsInput" 
+              class="sms-textarea"
+              placeholder="hinglish · transliteration · phonetics · social dynamics&#10;&#10;Paste suspicious vernacular SMS or chat text here..."
+              rows="6"
+            ></textarea>
+            
+            <div class="image-preview-container" id="imagePreviewContainer" style="display: none;">
+              <img id="imagePreview" src="" alt="Screenshot">
+              <button class="btn-remove-image" id="btnRemoveImage" title="Remove screenshot">✕</button>
+            </div>
+          </div>
+
+          <!-- Bottom Screen Controls (Tactile Presets + OCR / Reset) -->
+          <div class="screen-toolbar">
+            <div class="preset-group">
+              <span class="preset-label">PRESETS:</span>
+              <button class="color-dot dot-orange" data-preset="KYC SCAM" data-msg="Dear customer, aapka baink acount blck ho jayega agar aap turant kycc update nahi karte. Click here: http://secure-bnk.co/verify" title="KYC Scam [Key 1]"></button>
+              <button class="color-dot dot-blue" data-preset="LOTTERY SCAM" data-msg="Congrats! Aapne 50000 rs ka lottry jeeta hai. Apna prize claim karne ke liye call karein: +919876543210 ya visit karein: www.prize-claim.xyz" title="Lottery Scam [Key 2]"></button>
+              <button class="color-dot dot-cyan" data-preset="UTILITY SCAM" data-msg="Aapka bijli ka bill overdue hai. Aaj raat blck ho jayega. Imdtly pay karein: http://pay-bijli.fake/now" title="Utility Scam [Key 3]"></button>
+              <button class="color-dot dot-green" data-preset="SAFE CHAT" data-msg="Hi, meeting kal 3 baje hai office mein. Please time pe aa jana." title="Safe Message [Key 4]"></button>
+              <button class="color-dot dot-pink" data-preset="OLX PAYMENT (SAFE)" data-msg="Hi bhai, ye phone available hai?&#10;Haanji available hai&#10;Kitne ka hai?&#10;12000 final price&#10;Ok bhai, UPI se payment kar deta hu. GPay pe bhej do amount&#10;Haanji, 12000 bhej do is number pe" title="OLX Marketplace Chat [Key 5]"></button>
+              <span class="preset-active-tag" id="presetLabel">SELECT PRESET</span>
+            </div>
+            
+            <div class="screen-actions">
+              <input type="file" id="imageInput" accept="image/*" style="display: none;">
+              <button class="btn-tool" id="btnUpload" title="Upload SMS Screenshot for OCR">OCR</button>
+              <button class="btn-tool" id="btnClear" title="Clear message and reset console">CLR</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Telemetry Readout & Main Action Button -->
+        <div class="prompt-box">
+          <div class="prompt-readout">
+            <div class="prompt-tag">PIPELINE TELEMETRY</div>
+            <div class="prompt-status-text" id="promptStatus">
+              ENGINE: 3-AGENT CONSENSUS (GEMINI)<br>
+              PIPELINE: L1 NORM → L2 HEUR → L3 AGENTS → L4 GATE
+            </div>
+          </div>
+          <button class="btn-generate" id="btnScan" title="Run Multi-Agent Analysis (Ctrl+Enter)">
+            <span class="btn-generate-text" id="scanButtonText">SCAN SMS</span>
           </button>
         </div>
 
-        <div class="input-area">
-          <textarea
-            id="smsInput"
-            placeholder="Paste a suspicious SMS message here...&#10;&#10;Example: Dear customer, aapka acount blck ho jayega. Turant click karein: http://scam.link/kyc"
-            rows="5"
-          ></textarea>
-          <div class="input-footer">
-            <span class="char-count" id="charCount">0 chars</span>
-            <button class="btn-scan" id="btnScan">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-              <span>Scan Message</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Sample Messages -->
-        <div class="samples">
-          <span class="samples-label">Try a sample:</span>
-          <button class="sample-chip" data-msg="Dear customer, aapka baink acount blck ho jayega agar aap turant kycc update nahi karte. Click here: http://secure-bnk.co/verify">KYC Scam</button>
-          <button class="sample-chip" data-msg="Congrats! Aapne 50000 rs ka lottry jeeta hai. Apna prize claim karne ke liye call karein: +919876543210 ya visit karein: www.prize-claim.xyz">Lottery Scam</button>
-          <button class="sample-chip" data-msg="Aapka bijli ka bill overdue hai. Aaj raat blck ho jayega. Imdtly pay karein: http://pay-bijli.fake/now">Utility Scam</button>
-          <button class="sample-chip" data-msg="Hi, meeting kal 3 baje hai office mein. Please time pe aa jana.">Safe Message</button>
-          <button class="sample-chip" data-msg="Hi bhai, ye phone available hai?\nHaanji available hai\nKitne ka hai?\n12000 final price\nOk bhai, UPI se payment kar deta hu. GPay pe bhej do amount\nHaanji, 12000 bhej do is number pe">OLX Chat (Safe)</button>
-        </div>
       </div>
 
-      <!-- Loading State -->
-      <div class="loading-overlay" id="loadingOverlay">
-        <div class="loader">
-          <div class="loader-ring"></div>
-          <div class="loader-text">Running Multi-Agent Pipeline...</div>
-          <div class="loader-steps">
-            <div class="step active" id="step1">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Layer 1-2: Normalizing &amp; scoring heuristics
+      <!-- RIGHT COLUMN: 8 Security Pads Matrix + Sensitivity Fader + Vector Sequencer -->
+      <div class="sampler-right-col">
+        
+        <!-- 8-Pad Security Matrix (4 columns x 2 rows) -->
+        <div class="pads-grid">
+          
+          <!-- Pad 1: Context Normalizer -->
+          <div class="sampler-pad pad-p1" id="pad1" data-pad="1" title="Click to inspect Layer 1: Context Normalization">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP1">
+                  <div class="matrix-dots">
+                    <span>● ● ● ●</span>
+                    <span>● ◌ ◌ ●</span>
+                    <span>● ● ● ●</span>
+                  </div>
+                  <div class="matrix-val" id="valP1">0 FILTERED</div>
+                </div>
+              </div>
             </div>
-            <div class="step" id="step2">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Agent 1: Scanning for exploit payloads...
-            </div>
-            <div class="step" id="step3">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Agent 2: Evaluating social context...
-            </div>
-            <div class="step" id="step4">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Layer 4: Domain verification cross-check
-            </div>
-            <div class="step" id="step5">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
-              Agent 3: Reaching final consensus...
+            <div class="pad-footer">
+              <span class="pad-led led-orange">■ L1</span>
+              <span class="pad-name">NORM</span>
             </div>
           </div>
+
+          <!-- Pad 2: Heuristic Scorer -->
+          <div class="sampler-pad pad-p2" id="pad2" data-pad="2" title="Click to inspect Layer 2: Deterministic Heuristic Scoring">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP2">
+                  <div class="matrix-dots">
+                    <span>◌ ● ● ◌</span>
+                    <span>● ● ● ●</span>
+                    <span>◌ ● ● ◌</span>
+                  </div>
+                  <div class="matrix-val" id="valP2">0 PTS</div>
+                </div>
+              </div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-cyan">■ L2</span>
+              <span class="pad-name">HEUR</span>
+            </div>
+          </div>
+
+          <!-- Pad 3: Multi-Agent Debate -->
+          <div class="sampler-pad pad-p3" id="pad3" data-pad="3" title="Click to inspect Layer 3: Multi-Agent Consensus Debate">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP3">
+                  <div class="matrix-dots">
+                    <span>● ◌ ◌ ◌</span>
+                    <span>● ● ◌ ◌</span>
+                    <span>● ● ● ●</span>
+                  </div>
+                  <div class="matrix-val" id="valP3">3 AGENTS</div>
+                </div>
+              </div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-blue">■ L3</span>
+              <span class="pad-name">DEBATE</span>
+            </div>
+          </div>
+
+          <!-- Pad 4: Master Classification Verdict (High Contrast Inverted Pad) -->
+          <div class="sampler-pad pad-p4 pad-active" id="pad4" data-pad="4" title="Master Classification Verdict & Risk Score">
+            <div class="pad-display master-display" id="masterDisplay">
+              <div class="master-lines">
+                <div class="dot-line">● ● ● ● ● ● ● ●</div>
+                <div class="dot-line">● ● ● ● ● ● ● ●</div>
+              </div>
+              <div class="master-status-text" id="verdictLabel">READY</div>
+              <div class="master-sub-text" id="verdictCategory">STANDBY</div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-white" id="pad4Led">■ P4</span>
+              <span class="pad-name" id="pad4Name">VERDICT</span>
+            </div>
+          </div>
+
+          <!-- Pad 5: Agent 1 - The Paranoiac (Threat Extractor) -->
+          <div class="sampler-pad pad-p5" id="pad5" data-pad="5" title="Click to inspect Agent 1 (Paranoiac: Threat Entity Extractor)">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP5">
+                  <div class="matrix-empty">AGENT 1</div>
+                  <div class="matrix-val-sub">PARANOIAC</div>
+                </div>
+              </div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-gray" id="pad5Led">□ P5</span>
+              <span class="pad-name">EXPLOIT</span>
+            </div>
+          </div>
+
+          <!-- Pad 6: Agent 2 - Context Arbiter (Social Analyst) -->
+          <div class="sampler-pad pad-p6" id="pad6" data-pad="6" title="Click to inspect Agent 2 (Context Arbiter: Social Dynamics & Pressure)">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP6">
+                  <div class="matrix-empty">AGENT 2</div>
+                  <div class="matrix-val-sub">ARBITER</div>
+                </div>
+              </div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-gray" id="pad6Led">□ P6</span>
+              <span class="pad-name">SOCIAL</span>
+            </div>
+          </div>
+
+          <!-- Pad 7: Layer 4 Verification Gate (Domain Cross-Check) -->
+          <div class="sampler-pad pad-p7" id="pad7" data-pad="7" title="Click to inspect Layer 4: Verification Gate (Domain & Entity Checks)">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP7">
+                  <div class="matrix-empty">LAYER 4</div>
+                  <div class="matrix-val-sub">GATE</div>
+                </div>
+              </div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-gray" id="pad7Led">□ P7</span>
+              <span class="pad-name">GATE</span>
+            </div>
+          </div>
+
+          <!-- Pad 8: Highlighted Vernacular Threat Spans -->
+          <div class="sampler-pad pad-p8" id="pad8" data-pad="8" title="Click to inspect Vernacular Threat Spans & Reasoning">
+            <div class="pad-display">
+              <div class="pad-dot-matrix">
+                <div class="matrix-canvas" id="matrixP8">
+                  <div class="matrix-empty">SPANS</div>
+                  <div class="matrix-val-sub">0 DETECTED</div>
+                </div>
+              </div>
+            </div>
+            <div class="pad-footer">
+              <span class="pad-led led-gray" id="pad8Led">□ P8</span>
+              <span class="pad-name">SPANS</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Threat Risk Fader & Sensitivity Control -->
+        <div class="fader-row">
+          <div class="fader-label">
+            <span class="fader-pad-id" id="faderPadId">P4</span>
+            <span class="fader-name">RISK SCORE</span>
+          </div>
+          <div class="fader-track-container">
+            <input type="range" min="0" max="100" value="0" class="hardware-fader" id="riskSlider" title="Drag to test risk score sensitivity">
+          </div>
+          <div class="fader-value-box">
+            <span id="sliderValueText">0%</span>
+            <button class="btn-fader-del" id="btnResetSlider" title="Reset score fader">RST</button>
+          </div>
+        </div>
+
+        <!-- Transport Bar & 16-Vector Threat Sequencer -->
+        <div class="sequencer-bar">
+          <button class="btn-transport" id="btnPlay" title="Run Scan Pipeline">SCAN</button>
+          <button class="btn-transport btn-inspect-toggle" id="btnInspectToggle" title="Toggle Full Telemetry Inspector">INSPECT</button>
+          <div class="bpm-box" title="Heuristic Trigger Threshold: Adjust to tune sensitivity">
+            <button class="btn-bpm-step" id="btnThresholdMinus">-</button>
+            <span class="bpm-val" id="thresholdText">30 <small>PTS</small></span>
+            <button class="btn-bpm-step" id="btnThresholdPlus">+</button>
+          </div>
+          <div class="led-sequencer" id="ledSequencer" title="16 Security Verification Check Vectors">
+            <div class="led-step" data-vector="Transliteration De-obfuscation" data-step="0"></div>
+            <div class="led-step" data-vector="Urgency & Pressure Language" data-step="1"></div>
+            <div class="led-step" data-vector="Financial Authority Impersonation" data-step="2"></div>
+            <div class="led-step" data-vector="Suspicious URL / QR Payload" data-step="3"></div>
+            <div class="led-step" data-vector="Unregistered Phone Harvest" data-step="4"></div>
+            <div class="led-step" data-vector="Coercive Deadline Pressure" data-step="5"></div>
+            <div class="led-step" data-vector="Manufactured Social Dynamics" data-step="6"></div>
+            <div class="led-step" data-vector="Data Exfiltration Vectors" data-step="7"></div>
+            <div class="led-step" data-vector="Agent 1 Paranoiac Scan" data-step="8"></div>
+            <div class="led-step" data-vector="Agent 2 Arbiter Analysis" data-step="9"></div>
+            <div class="led-step" data-vector="Agent 3 Chief Judge Debate" data-step="10"></div>
+            <div class="led-step" data-vector="Multi-Agent Consensus Resolution" data-step="11"></div>
+            <div class="led-step" data-vector="Domain Typosquatting Check" data-step="12"></div>
+            <div class="led-step" data-vector="Brand Keyword Cross-Check" data-step="13"></div>
+            <div class="led-step" data-vector="Threat Spans Extraction" data-step="14"></div>
+            <div class="led-step" data-vector="Final Risk Classification" data-step="15"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Inspector Drawer / Detailed Breakdown Panel (Opens when clicking pads or after scan) -->
+    <div class="inspector-drawer" id="inspectorDrawer">
+      <div class="drawer-header">
+        <div class="drawer-title" id="drawerTitle">TELEMETRY INSPECTOR</div>
+        <div class="drawer-actions">
+          <button class="btn-drawer-action" id="btnCopyReport" title="Copy Markdown Report">📋 REPORT</button>
+          <button class="btn-drawer-action" id="btnCopyJson" title="Copy Raw JSON Output">💾 JSON</button>
+          <button class="drawer-close" id="drawerClose" title="Close inspector (Esc)">✕</button>
         </div>
       </div>
-
-      <!-- Results Section -->
-      <div class="results-section" id="resultsSection">
-        <!-- Verdict Banner -->
-        <div class="verdict-banner" id="verdictBanner">
-          <div class="verdict-icon" id="verdictIcon"></div>
-          <div class="verdict-info">
-            <div class="verdict-label" id="verdictLabel">SCAM</div>
-            <div class="verdict-category" id="verdictCategory">Financial Fraud</div>
-          </div>
-          <div class="risk-meter">
-            <div class="risk-label">Risk Score</div>
-            <div class="risk-value" id="riskValue">92</div>
-            <div class="risk-bar">
-              <div class="risk-fill" id="riskFill"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Consensus Reasoning Badge -->
-        <div class="consensus-badge" id="consensusBadge"></div>
-
-        <!-- Detail Cards Row -->
-        <div class="detail-grid">
-          <!-- Normalized Text Card -->
-          <div class="detail-card">
-            <div class="detail-card-header">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </svg>
-              <span>Normalized Text</span>
-            </div>
-            <div class="detail-card-body">
-              <div class="normalized-text" id="normalizedText"></div>
-            </div>
-          </div>
-
-          <!-- Extracted Entities Card -->
-          <div class="detail-card">
-            <div class="detail-card-header">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-              </svg>
-              <span>Extracted Entities</span>
-            </div>
-            <div class="detail-card-body">
-              <div id="entitiesList" class="entities-list"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Threat Highlights Card -->
-        <div class="detail-card full-width">
-          <div class="detail-card-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-              <line x1="12" x2="12" y1="9" y2="13"/><line x1="12" x2="12.01" y1="17" y2="17"/>
-            </svg>
-            <span>Threat Highlights</span>
-          </div>
-          <div class="detail-card-body">
-            <div id="highlightsList" class="highlights-list"></div>
-          </div>
-        </div>
-
-        <!-- Pipeline Breakdown Card -->
-        <div class="detail-card full-width">
-          <div class="detail-card-header">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
-            <span>Pipeline Breakdown</span>
-          </div>
-          <div class="detail-card-body">
-            <div id="pipelineBreakdown" class="pipeline-breakdown"></div>
-          </div>
-        </div>
+      <div class="drawer-content" id="drawerContent">
+        <!-- Dynamic content filled by script -->
       </div>
-    </section>
-  </main>
+    </div>
 
-  <footer>
-    <p>Built for ACM Hackathon — Problem 14: AI-Powered Vernacular SMS Phishing Classifier</p>
-  </footer>
+  </div>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>

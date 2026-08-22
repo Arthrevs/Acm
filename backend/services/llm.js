@@ -36,4 +36,30 @@ async function callGemini(systemPrompt, userPrompt) {
   return JSON.parse(result.response.text());
 }
 
-module.exports = { callGemini };
+/**
+ * Extracts text precisely from an image using Gemini Flash.
+ */
+async function extractTextFromImage(base64Data, mimeType) {
+  if (API_KEYS.length === 0) {
+    throw new Error('No Gemini API keys found in .env');
+  }
+
+  const apiKey = API_KEYS[currentKeyIndex];
+  currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: 'gemini-3.6-flash' });
+
+  const prompt = "Extract all text from this image precisely as it appears. Do not summarize, describe the image, or add any other conversational text. Just output the text found in the image.";
+  const imagePart = {
+    inlineData: {
+      data: base64Data,
+      mimeType
+    },
+  };
+
+  const result = await model.generateContent([prompt, imagePart]);
+  return result.response.text().trim();
+}
+
+module.exports = { callGemini, extractTextFromImage };

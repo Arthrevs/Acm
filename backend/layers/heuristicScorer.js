@@ -61,7 +61,7 @@ const ADVANCE_PAYMENT_PATTERNS = [
  * Scores a set of Layer 1 chunks using deterministic heuristics.
  * Returns the total score, a breakdown, and whether it crosses the threshold.
  */
-function scoreHeuristics(chunks, extractedEntities) {
+function scoreHeuristics(chunks, extractedEntities, customThreshold = 30) {
   let totalScore = 0;
   const breakdown = [];
   const allText = chunks.map(c => c.text).join(' ');
@@ -137,8 +137,7 @@ function scoreHeuristics(chunks, extractedEntities) {
     }
   }
 
-  // Threshold: if score >= 30, flag for deep analysis
-  const THRESHOLD = 30;
+  const THRESHOLD = typeof customThreshold === 'number' && !isNaN(customThreshold) ? customThreshold : 30;
 
   return {
     totalScore,
@@ -149,3 +148,4 @@ function scoreHeuristics(chunks, extractedEntities) {
 }
 
 module.exports = { scoreHeuristics };
+

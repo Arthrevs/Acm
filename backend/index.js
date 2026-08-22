@@ -4,6 +4,7 @@ const path = require('path');
 require('dotenv').config();
 
 const { runPipeline } = require('./services/pipeline');
+const { extractTextFromImage } = require('./services/llm');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,14 +24,31 @@ app.get('/api/health', (req, res) => {
  */
 app.post('/api/scan', async (req, res) => {
   try {
-    const { message } = req.body;
+    let { message, image, threshold } = req.body;
 
-    if (!message || typeof message !== 'string') {
-      return res.status(400).json({ error: 'Missing or invalid "message" field in request body.' });
+    if (!message && !image) {
+      return res.status(400).json({ error: 'Missing message or image in request body.' });
+    }
+    
+    // Ensure message is a string
+    message = message || "";
+
+    // If an image is provided, extract text using Gemini OCR
+    if (image && image.data && image.mimeType) {
+      console.log(`Processing image payload (${image.mimeType}) using OCR...`);
+      const extractedText = await extractTextFromImage(image.data, image.mimeType);
+      console.log(`Extracted text: "${extractedText.substring(0, 50)}..."`);
+      
+      // Combine extracted text with any user-provided message
+      if (message.trim()) {
+        message = `[User Note: ${message}]\n\n[Extracted from Image]:\n${extractedText}`;
+      } else {
+        message = extractedText;
+      }
     }
 
-    // Run the full 4-layer pipeline
-    const result = await runPipeline(message);
+    // Run the full 4-layer pipeline with optional custom threshold
+    const result = await runPipeline(message, threshold ? parseInt(threshold, 10) : 30);
     res.json(result);
 
   } catch (err) {
