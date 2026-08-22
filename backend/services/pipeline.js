@@ -36,7 +36,7 @@ async function runPipeline(rawText, customThreshold = 30) {
   // LAYER 2: Deterministic Heuristic Scoring
   // ──────────────────────────────────────────────
   const l2Start = Date.now();
-  const heuristicResult = scoreHeuristics(contextResult.chunks, entities, customThreshold);
+  const heuristicResult = scoreHeuristics(normalizedText, entities);
   timestamps.layer2 = Date.now() - l2Start;
 
   // ──────────────────────────────────────────────
@@ -52,7 +52,13 @@ async function runPipeline(rawText, customThreshold = 30) {
   let classification;
   let agentResults = { agent1: null, agent2: null, agent3: null };
 
-  if (heuristicResult.exceedsThreshold || verificationResult.hasCriticalFindings) {
+  // The tripwire decides escalation, NOT verdicts.
+  // If ANY structural friction was detected (score > 0), the LLM agents
+  // must evaluate the full context. Only pure conversational noise
+  // (score === 0, no URLs, no money, no identity claims) gets fast-pathed.
+  const needsLLM = heuristicResult.needsEscalation || verificationResult.hasCriticalFindings;
+
+  if (needsLLM) {
     // ── PHASE 1: Parallel Investigation ──
     // Agent 1 and Agent 2 run simultaneously, isolated from each other
     const phase1Start = Date.now();
@@ -67,7 +73,8 @@ async function runPipeline(rawText, customThreshold = 30) {
     agentResults.agent2 = arbiterResult;
 
     // ── PHASE 2: Serial Resolution ──
-    // Agent 3 receives both outputs and renders the final consensus
+    // Agent 3 receives both outputs and renders the final consensus.
+    // The Judge sees the heuristic dimensions as context, not as a verdict.
     const phase2Start = Date.now();
 
     const judgeResult = await runChiefJudge(
@@ -91,13 +98,14 @@ async function runPipeline(rawText, customThreshold = 30) {
     }
 
   } else {
-    // Low heuristic score — skip all agents for speed
+    // Score === 0: Pure conversational noise. No URLs, no money, no identity
+    // claims, no pressure, no extraction signals. Nothing for the LLM to evaluate.
     classification = {
       verdict: 'SAFE',
-      risk_score: Math.min(heuristicResult.totalScore, 25),
+      risk_score: 0,
       threat_category: 'None',
-      confidence: 0.9,
-      consensus_reasoning: 'No significant threat indicators detected by heuristic or verification layers. Multi-agent analysis skipped.',
+      confidence: 0.95,
+      consensus_reasoning: 'No structural friction detected. Message contains no institutional claims, financial references, pressure language, or action requests.',
       overruled_agent: null,
       highlighted_spans: [],
     };
@@ -120,13 +128,13 @@ async function runPipeline(rawText, customThreshold = 30) {
       },
       layer2_heuristics: {
         totalScore: heuristicResult.totalScore,
-        threshold: heuristicResult.threshold,
-        exceedsThreshold: heuristicResult.exceedsThreshold,
+        dimensions: heuristicResult.dimensions,
+        needsEscalation: heuristicResult.needsEscalation,
         breakdown: heuristicResult.breakdown,
         timeMs: timestamps.layer2,
       },
       layer3_consensus: {
-        invoked: heuristicResult.exceedsThreshold || verificationResult.hasCriticalFindings,
+        invoked: needsLLM,
         agent1_paranoiac: agentResults.agent1 ? {
           threats_found: agentResults.agent1.threats_found,
           threat_entities: agentResults.agent1.threat_entities,

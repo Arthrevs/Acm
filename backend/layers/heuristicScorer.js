@@ -1,151 +1,146 @@
+const { fuzzyMatchPhrase } = require('../utils/normalizer');
+
 /**
- * Layer 2: Deterministic Risk Scoring Engine (Heuristics)
+ * Layer 2: Structural Tripwire (NOT a classifier)
  * 
- * Runs purely rule-based checks BEFORE touching the AI.
- * Adds raw structural score points based on pattern matches.
+ * This layer does NOT make verdicts. It computes a suspicion score
+ * that determines whether the message should be escalated to the
+ * Multi-Agent LLM pipeline for contextual analysis.
+ * 
+ * If suspicion_score === 0, the message is pure conversational noise
+ * and can be fast-pathed as SAFE without burning an API call.
+ * If suspicion_score > 0, the message MUST go to the LLM agents.
  */
 
-// Suspicious URL shorteners and risky TLDs
-const SUSPICIOUS_DOMAINS = [
-  'bit.ly', 'tinyurl.com', 'is.gd', 'rb.gy', 'cutt.ly', 'shorturl.at',
-  't.co', 'ow.ly', 'goo.gl', 'buff.ly',
-];
+// Structural friction signals (not verdicts — just tripwires)
+const FRICTION_SIGNALS = {
+  // Identity claims — someone claiming to be from an institution
+  identity: [
+    'bank', 'customer support', 'delivery partner', 'department', 'executive',
+    'sbi', 'hdfc', 'icici', 'axis', 'paytm', 'phonepe', 'police', 'cbi', 'customs', 'fedex', 'narcotics',
+    'electricity', 'discom', 'officer'
+  ],
+  // Pressure language — urgency or threat
+  pressure: [
+    'immediately', 'urgent', 'hurry', 'last chance', 'today only', 'now only',
+    'block', 'blocked', 'suspend', 'suspended', 'deactivate', 'cancel', 'cancelled', 'terminate', 'freeze',
+    'arrest', 'arrested', 'illegal', 'disconnect', 'disconnected', 'detain', 'detained', 'penalty',
+    'expire', 'expires', 'expired'
+  ],
+  // Extraction language — requests to hand over something or perform an action
+  extraction: [
+    'share otp', 'tell otp', 'send otp',
+    'share pin', 'tell pin', 'send pin',
+    'share cvv', 'tell cvv', 'send cvv',
+    'share password', 'tell password',
+    'share card number', 'tell card number',
+    'advance payment', 'token amount', 'deposit fee', 'registration fee',
+    'download apk', 'install apk', 'quicksupport',
+    'update pan', 'update kyc', 'open upi', 'approve request', 'enter pin'
+  ]
+};
 
-const RISKY_TLDS = [
-  '.xyz', '.tk', '.ml', '.ga', '.cf', '.gq', '.buzz', '.top', '.pw',
-  '.click', '.link', '.info', '.club', '.online', '.site', '.space',
-];
+const NEGATION_TOKENS = ['not', 'nahi', 'mat', 'dont', 'never', 'kabhi', 'if'];
 
-// APK / executable patterns
-const APK_PATTERN = /\.(apk|exe|msi|dmg|deb|rpm)\b/i;
-
-// QR code mention patterns (Hindi/English)
-const QR_PATTERNS = [
-  /qr\s*code/i,
-  /scan\s*kar(ein|o|na)?/i,
-  /scan\s*kijiye/i,
-  /qr\s*bhej/i,
-  /qr\s*send/i,
-  /\bscan\b.*\b(pay|payment|upi)\b/i,
-  /\b(pay|payment|upi)\b.*\bscan\b/i,
-];
-
-// Off-platform diversion patterns
-const OFF_PLATFORM_PATTERNS = [
-  /whatsapp\s*(par|pe|pr|p)\s*(aa|aao|aajao|contact|msg|message|baat)/i,
-  /watsapp\s*(par|pe|pr|p)/i,
-  /telegram\s*(par|pe|pr|p)/i,
-  /call\s*(kar|karo|karein|kijiye|me)/i,
-  /direct\s*(contact|call|message|baat)/i,
-  /personal\s*number/i,
-  /\b(msg|dm|inbox)\s*(kar|karo|me)\b/i,
-];
-
-// Urgency / pressure tactics
-const URGENCY_PATTERNS = [
-  /\b(turant|jaldi|abhi|immediately|urgent|hurry|last\s*chance|expir|limit(ed)?)\b/i,
-  /\b(aaj\s*hi|today\s*only|now\s*only|offer\s*end|jaldi\s*kar)\b/i,
-  /\b(block|suspend|deactivat|cancel|terminat)\b/i,
-  /\b(blck|blok|suspnd|sspnd|delet)\b/i,
-];
-
-// Advance payment / deposit demands
-const ADVANCE_PAYMENT_PATTERNS = [
-  /\b(advance|token|booking\s*amount|deposit|registration\s*fee)\b/i,
-  /\b(pehle|pahle)\s*(pay|paisa|paise|pyse|bhej|send|transfer)\b/i,
-  /\b(pay|send|transfer)\s*(first|pehle|pahle)\b/i,
-  /\b(shipping|delivery)\s*(charge|fee|cost)\b.*\b(pay|bhej|send)\b/i,
-];
+function checkNegation(textTokens, matchIndex, windowSize = 8) {
+  const start = Math.max(0, matchIndex - windowSize);
+  const precedingTokens = textTokens.slice(start, matchIndex);
+  for (const rawToken of precedingTokens) {
+    const token = rawToken.replace(/[^\w]/g, '').toLowerCase();
+    if (NEGATION_TOKENS.includes(token)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 /**
- * Scores a set of Layer 1 chunks using deterministic heuristics.
- * Returns the total score, a breakdown, and whether it crosses the threshold.
+ * Computes a suspicion score across D/P/A dimensions.
+ * Returns the score and breakdown. Does NOT return a verdict.
  */
-function scoreHeuristics(chunks, extractedEntities, customThreshold = 30) {
-  let totalScore = 0;
+function scoreHeuristics(normalizedText, extractedEntities) {
+  let identityScore = 0;
+  let pressureScore = 0;
+  let extractionScore = 0;
   const breakdown = [];
-  const allText = chunks.map(c => c.text).join(' ');
 
-  // --- Check 1: External/Suspicious Links (+40) ---
+  const textTokens = normalizedText.split(/\s+/);
+
+  const applyPatterns = (patterns, points, dimensionName) => {
+    let dimScore = 0;
+    for (const pattern of patterns) {
+      const matchObj = fuzzyMatchPhrase(normalizedText, pattern, 1);
+      if (matchObj.matched) {
+        const isNegated = checkNegation(textTokens, matchObj.index);
+        if (isNegated) {
+          breakdown.push({ rule: `${dimensionName} neutralized by negation`, points: 0, match: pattern });
+        } else {
+          dimScore += points;
+          breakdown.push({ rule: `${dimensionName} signal detected`, points, match: pattern });
+          break;
+        }
+      }
+    }
+    return dimScore;
+  };
+
+  identityScore += applyPatterns(FRICTION_SIGNALS.identity, 10, 'Identity');
+  pressureScore += applyPatterns(FRICTION_SIGNALS.pressure, 15, 'Pressure');
+  extractionScore += applyPatterns(FRICTION_SIGNALS.extraction, 25, 'Extraction');
+
+  // Structural friction: URLs and domains
   const urls = extractedEntities.urls || [];
   for (const url of urls) {
     const lowerUrl = url.toLowerCase();
-
-    // Check shorteners
-    if (SUSPICIOUS_DOMAINS.some(d => lowerUrl.includes(d))) {
-      totalScore += 40;
-      breakdown.push({ rule: 'Suspicious URL shortener detected', points: 40, match: url });
-      continue;
+    if (lowerUrl.match(/\.(xyz|tk|ml|ga|cf|gq|pw)$/i) || lowerUrl.match(/(bit\.ly|tinyurl\.com|is\.gd|cutt\.ly|rb\.gy)/i)) {
+      extractionScore += 40;
+      breakdown.push({ rule: 'Suspicious URL structure', points: 40, match: url });
+      break;
     }
-
-    // Check risky TLDs
-    if (RISKY_TLDS.some(tld => lowerUrl.includes(tld))) {
-      totalScore += 40;
-      breakdown.push({ rule: 'Risky TLD in URL', points: 40, match: url });
-      continue;
-    }
-
-    // Check APK / executable download
-    if (APK_PATTERN.test(lowerUrl)) {
-      totalScore += 40;
-      breakdown.push({ rule: 'Executable/APK download link', points: 40, match: url });
-      continue;
-    }
-
-    // Generic external link (not a known safe domain)
-    totalScore += 15;
-    breakdown.push({ rule: 'External link detected', points: 15, match: url });
-  }
-
-  // --- Check 2: QR Code Mention (+30) ---
-  for (const pattern of QR_PATTERNS) {
-    const match = allText.match(pattern);
-    if (match) {
-      totalScore += 30;
-      breakdown.push({ rule: 'QR code scan request', points: 30, match: match[0] });
-      break; // only count once
-    }
-  }
-
-  // --- Check 3: Off-Platform Diversion (+20) ---
-  for (const pattern of OFF_PLATFORM_PATTERNS) {
-    const match = allText.match(pattern);
-    if (match) {
-      totalScore += 20;
-      breakdown.push({ rule: 'Attempt to move off-platform', points: 20, match: match[0] });
+    if (lowerUrl.match(/\.(apk|exe)$/i)) {
+      extractionScore += 40;
+      breakdown.push({ rule: 'Executable download link', points: 40, match: url });
       break;
     }
   }
 
-  // --- Check 4: Urgency / Pressure Tactics (+15) ---
-  for (const pattern of URGENCY_PATTERNS) {
-    const match = allText.match(pattern);
-    if (match) {
-      totalScore += 15;
-      breakdown.push({ rule: 'Urgency/pressure language', points: 15, match: match[0] });
-      break;
-    }
+  // Structural friction: money symbols (₹, Rs, rupees, etc.)
+  if (/₹|rs\.?\s*\d|rupees?\s*\d|\d+\s*rupees?/i.test(normalizedText)) {
+    breakdown.push({ rule: 'Money amount detected', points: 5, match: 'currency reference' });
+    extractionScore += 5;
   }
 
-  // --- Check 5: Advance Payment Demand (+25) ---
-  for (const pattern of ADVANCE_PAYMENT_PATTERNS) {
-    const match = allText.match(pattern);
-    if (match) {
-      totalScore += 25;
-      breakdown.push({ rule: 'Advance payment demand', points: 25, match: match[0] });
-      break;
-    }
+  // Structural friction: financial context (NOT a scam pattern — a domain marker)
+  // Any message that touches financial instruments must be evaluated by the LLM.
+  // The LLM decides if it's a scam. We just flag "this is about money."
+  const FINANCIAL_CONTEXT = /\b(upi|payment|pay\b|transaction|refund|account|transfer|credited|debited|neft|imps|rtgs|gpay|phonepe|paytm|bhim|wallet|collect\s*request|amount|approve.*(?:request|payment|transaction))\b/i;
+  const financialMatch = normalizedText.match(FINANCIAL_CONTEXT);
+  if (financialMatch) {
+    breakdown.push({ rule: 'Financial context detected', points: 5, match: financialMatch[0] });
+    extractionScore += 5;
   }
 
-  const THRESHOLD = typeof customThreshold === 'number' && !isNaN(customThreshold) ? customThreshold : 30;
+  // Structural friction: phone numbers
+  const phones = extractedEntities.phones || [];
+  if (phones.length > 0) {
+    breakdown.push({ rule: 'Phone number detected', points: 5, match: phones[0] });
+    identityScore += 5;
+  }
+
+  const totalScore = identityScore + pressureScore + extractionScore;
 
   return {
     totalScore,
+    dimensions: {
+      identity: identityScore,
+      pressure: pressureScore,
+      extraction: extractionScore
+    },
     breakdown,
-    exceedsThreshold: totalScore >= THRESHOLD,
-    threshold: THRESHOLD,
+    // This is the ONLY decision this layer makes:
+    // Does this message have ANY structural friction, or is it pure noise?
+    needsEscalation: totalScore > 0
   };
 }
 
 module.exports = { scoreHeuristics };
-

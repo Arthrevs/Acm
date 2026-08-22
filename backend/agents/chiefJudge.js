@@ -52,7 +52,7 @@ Legitimacy Indicators: ${JSON.stringify(arbiterResult.legitimacy_indicators)}
 Social Pressure Level: ${arbiterResult.social_pressure_level}
 
 ═══ DETERMINISTIC HEURISTIC SCORE (Layer 2) ═══
-Total Score: ${heuristicResult.totalScore} / Threshold: ${heuristicResult.threshold}
+Total Score: ${heuristicResult.totalScore} | Dimensions: Identity=${heuristicResult.dimensions?.identity || 0}, Pressure=${heuristicResult.dimensions?.pressure || 0}, Extraction=${heuristicResult.dimensions?.extraction || 0}
 ${(heuristicResult.breakdown || []).map(b => `• +${b.points} — ${b.rule}: "${b.match}"`).join('\n') || 'No heuristic flags.'}
 
 ═══ DOMAIN VERIFICATION (Layer 4) ═══

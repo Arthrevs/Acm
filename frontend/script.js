@@ -206,10 +206,9 @@ btnScan.addEventListener('click', async () => {
       });
     }
 
-    // Simulate pipeline steps animation
-    setTimeout(() => { steps[0].classList.add('done'); steps[1].classList.add('active'); }, 500);
-    setTimeout(() => { steps[1].classList.add('done'); steps[2].classList.add('active'); }, 1200);
-    setTimeout(() => { steps[2].classList.add('done'); steps[3].classList.add('active'); }, 2500);
+    // Step 1: UI Delay
+    await new Promise(r => setTimeout(r, 400));
+    steps[0].classList.add('done'); steps[1].classList.add('active');
 
     const response = await fetch(url, {
       method: 'POST',
@@ -224,16 +223,23 @@ btnScan.addEventListener('click', async () => {
 
     const data = await response.json();
     
+    // Step 2 & 3: UI Delay for agent consensus
+    if (data.pipeline?.layer3_consensus?.invoked) {
+      await new Promise(r => setTimeout(r, 800));
+      steps[1].classList.add('done'); steps[2].classList.add('active');
+      await new Promise(r => setTimeout(r, 1200));
+      steps[2].classList.add('done'); steps[3].classList.add('active');
+      await new Promise(r => setTimeout(r, 400));
+    }
+
     // Mark all done
     steps.forEach(s => {
       s.classList.remove('active');
       s.classList.add('done');
     });
 
-    setTimeout(() => {
-      resultsLoadingState.classList.add('hidden');
-      renderResults(data);
-    }, 400);
+    resultsLoadingState.classList.add('hidden');
+    renderResults(data);
 
   } catch (err) {
     resultsLoadingState.classList.add('hidden');
@@ -262,7 +268,8 @@ function resetSteps() {
 }
 
 function renderResults(data) {
-  resultsContent.style.display = 'flex';
+  resultsContent.classList.remove('hidden');
+  resultsContent.style.display = '';
 
   const c = data.classification;
   const verdict = (c.verdict || 'SAFE').toUpperCase();
