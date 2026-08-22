@@ -245,8 +245,8 @@ function renderResults(data) {
   // Entities
   const entitiesList = document.getElementById('entitiesList');
   entitiesList.innerHTML = '';
-  const entities = data.extracted_entities || { urls: [], phones: [] };
-  if (entities.urls.length === 0 && entities.phones.length === 0) {
+  const entities = data.extracted_entities || { urls: [], phones: [], upis: [] };
+  if (entities.urls.length === 0 && entities.phones.length === 0 && (entities.upis || []).length === 0) {
     entitiesList.innerHTML = '<span class="no-entities">No entities detected</span>';
   } else {
     if (entities.urls.length > 0) {
@@ -254,6 +254,9 @@ function renderResults(data) {
     }
     if (entities.phones.length > 0) {
       entitiesList.innerHTML += `<div class="entity-group"><div class="entity-label">Phones</div>${entities.phones.map(p => `<span class="entity-item">${p}</span>`).join('')}</div>`;
+    }
+    if ((entities.upis || []).length > 0) {
+      entitiesList.innerHTML += `<div class="entity-group"><div class="entity-label">UPI IDs</div>${entities.upis.map(u => `<span class="entity-item">${u}</span>`).join('')}</div>`;
     }
   }
 
@@ -274,8 +277,100 @@ function renderResults(data) {
     });
   }
 
+  // ═══ I4C Kill-Switch Dossier ═══
+  const dossierCard = document.getElementById('dossierCard');
+  const dossierContent = document.getElementById('dossierContent');
 
-  
+  if (verdict === 'SCAM' || verdict === 'SUSPICIOUS') {
+    const now = new Date();
+    const timestamp = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    
+    let dossier = `═══════════════════════════════════════════════
+  I4C THREAT DOSSIER — VanniGuard Automated Report
+═══════════════════════════════════════════════
+Generated:     ${timestamp}
+Verdict:       ${verdict}
+Risk Score:    ${score}/100
+Threat Type:   ${c.threat_category || 'Unknown'}
+═══════════════════════════════════════════════
+
+SUSPECT IDENTIFIERS
+───────────────────`;
+
+    if ((entities.phones || []).length > 0) {
+      dossier += `\nPhone(s):      ${entities.phones.join(', ')}`;
+    }
+    if ((entities.upis || []).length > 0) {
+      dossier += `\nUPI ID(s):     ${entities.upis.join(', ')}`;
+    }
+    if ((entities.urls || []).length > 0) {
+      dossier += `\nURL(s):        ${entities.urls.join(', ')}`;
+    }
+    if ((entities.phones || []).length === 0 && (entities.upis || []).length === 0 && (entities.urls || []).length === 0) {
+      dossier += `\n(No identifiers extracted)`;
+    }
+
+    dossier += `\n
+RAW MESSAGE
+───────────────────
+${data.normalized_message || rawText || '(not available)'}
+
+THREAT INDICATORS
+───────────────────`;
+    if (spans.length > 0) {
+      spans.forEach(s => {
+        dossier += `\n• "${s.text}" — ${s.reason}`;
+      });
+    } else {
+      dossier += `\n(No specific spans flagged)`;
+    }
+
+    dossier += `\n
+═══════════════════════════════════════════════
+ACTION: File at 1930 or https://cybercrime.gov.in
+═══════════════════════════════════════════════`;
+
+    dossierContent.textContent = dossier;
+    dossierCard.style.display = 'flex';
+    dossierCard.style.flexDirection = 'column';
+
+    // Wire up copy button
+    const btnCopy = document.getElementById('btnCopyDossier');
+    const copyText = document.getElementById('copyBtnText');
+    
+    // Remove old listeners by cloning
+    const newBtn = btnCopy.cloneNode(true);
+    btnCopy.parentNode.replaceChild(newBtn, btnCopy);
+    
+    newBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(dossier);
+        newBtn.classList.add('copied');
+        newBtn.querySelector('span').textContent = 'Copied!';
+        setTimeout(() => {
+          newBtn.classList.remove('copied');
+          newBtn.querySelector('span').textContent = 'Copy Dossier';
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const ta = document.createElement('textarea');
+        ta.value = dossier;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        newBtn.classList.add('copied');
+        newBtn.querySelector('span').textContent = 'Copied!';
+        setTimeout(() => {
+          newBtn.classList.remove('copied');
+          newBtn.querySelector('span').textContent = 'Copy Dossier';
+        }, 2000);
+      }
+    });
+  } else {
+    dossierCard.style.display = 'none';
+  }
+
   // Re-render lucide icons for dynamic content
   lucide.createIcons();
 }

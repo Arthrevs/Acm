@@ -13,7 +13,7 @@
 
 ## <img src="https://api.iconify.design/lucide/crosshair.svg?color=%2360a5fa" width="20" /> &nbsp;What It Is
 
-A next-generation security tool designed to detect **vernacular phishing and smishing attempts** — Hinglish, regional dialects, OLX marketplace scams, KYC fraud. Traditional regex-based scanners fail against transliterated conversational text (e.g., *"paise bhej do"* or *"QR scan karo"*). This project solves that using a **Multi-Agent Consensus Pipeline** powered by Google Gemini AI.
+A next-generation security tool designed to detect **vernacular phishing and smishing attempts** — Hinglish, regional dialects, OLX marketplace scams, KYC fraud. Traditional regex-based scanners fail against transliterated conversational text (e.g., *"paise bhej do"* or *"QR scan karo"*). This project solves that using a **Multi-Agent Consensus Pipeline** powered by Google Gemini AI, and native **Gemini Vision OCR** to directly parse suspicious screenshots.
 
 ---
 
@@ -65,12 +65,11 @@ Cross-references extracted URLs against a domain blacklist and uses Levenshtein 
 This project is pre-configured for instant serverless deployment on Vercel. The included `vercel.json` automatically routes `/api` traffic to the Node.js Express backend and serves the `frontend` statically.
 
 1. **Push to GitHub**: Ensure your latest code is pushed to your GitHub repository.
-2. **Import on Vercel**: Log into [Vercel](https://vercel.com/) and create a new project by importing your GitHub repo.
-3. **Environment Variables**: During the Vercel setup, open the **Environment Variables** tab and add your 3 API keys:
-   - `GEMINI_API_KEY_1`
-   - `GEMINI_API_KEY_2`
-   - `GEMINI_API_KEY_3`
-4. **Deploy**: Click Deploy. Vercel will automatically build the backend as a Serverless Function and host the frontend. No build command is required.
+68. **Import on Vercel**: Log into [Vercel](https://vercel.com/) and create a new project by importing your GitHub repo.
+69. **Environment Variables**: During the Vercel setup, open the **Environment Variables** tab and add your API keys:
+   - `GEMINI_API_KEY_1`, `GEMINI_API_KEY_2`, `GEMINI_API_KEY_3` (For Multi-Agent Consensus)
+   - `GEMINI_VISION_KEY`, `GEMINI_VISION_KEY_2` (For Image OCR Fallbacks)
+70. **Deploy**: Click Deploy. Vercel will automatically build the backend as a Serverless Function and host the frontend. No build command is required.
 
 ---
 
@@ -87,12 +86,18 @@ npm install
 ```
 
 ### <img src="https://api.iconify.design/lucide/key-round.svg?color=white" width="16" /> 2. Configure API Keys
-Create a `.env` file inside `backend/`. The system uses round-robin key rotation across 3 keys to prevent rate-limiting during parallel agent execution:
+Create a `.env` file inside `backend/`. The system uses round-robin key rotation across 3 keys for Agents, and 2 dedicated keys for Vision OCR:
 ```env
 PORT=3000
+
+# Pipeline Agents (Rotated)
 GEMINI_API_KEY_1=your_first_key
 GEMINI_API_KEY_2=your_second_key
 GEMINI_API_KEY_3=your_third_key
+
+# Vision OCR (Primary + Emergency)
+GEMINI_VISION_KEY=your_vision_key
+GEMINI_VISION_KEY_2=your_backup_vision_key
 ```
 
 ### <img src="https://api.iconify.design/lucide/play.svg?color=white" width="16" /> 3. Start the Server
@@ -109,10 +114,11 @@ The Express server serves the frontend automatically. Navigate to:
 
 ## <img src="https://api.iconify.design/lucide/monitor-check.svg?color=%2360a5fa" width="20" /> &nbsp;Frontend Features
 
-- <img src="https://api.iconify.design/lucide/loader.svg?color=white" width="14" /> **5-Step Pipeline Tracker** — Live loading animation showing each agent's progress
-- <img src="https://api.iconify.design/lucide/shield-check.svg?color=white" width="14" /> **Consensus Badge** — "Cleared by Consensus" / "Confirmed by Consensus" / "Split Consensus"
-- <img src="https://api.iconify.design/lucide/test-tubes.svg?color=white" width="14" /> **Sample Chips** — One-click test messages (KYC Scam, Lottery Scam, Safe OLX Chat)
-- <img src="https://api.iconify.design/lucide/layers.svg?color=white" width="14" /> **Pipeline Breakdown** — Full transparency into every layer's decision
+- <img src="https://api.iconify.design/lucide/monitor.svg?color=white" width="14" /> **Premium Glassmorphic UI** — A clean, Vercel-like dashboard eliminating cluttered legacy hardware layouts
+- <img src="https://api.iconify.design/lucide/image.svg?color=white" width="14" /> **Vision OCR Upload Zone** — Drag and drop suspicious screenshots directly into the browser for immediate extraction
+- <img src="https://api.iconify.design/lucide/loader.svg?color=white" width="14" /> **4-Step Pipeline Tracker** — Live loading animation showing each layer's progress
+- <img src="https://api.iconify.design/lucide/test-tubes.svg?color=white" width="14" /> **Text Pill Presets** — One-click test messages (KYC Scam, Lottery Scam, Safe OLX Chat)
+- <img src="https://api.iconify.design/lucide/alert-triangle.svg?color=white" width="14" /> **Threat Highlight Viewer** — View exact span reasons and identified malicious entities
 
 ---
 
