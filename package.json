@@ -1,11 +1,14 @@
 {
-  "name": "vernacular-phishing-classifier",
+  "name": "vanniguard",
   "version": "1.0.0",
-  "description": "AI-Powered Vernacular SMS Phishing Classifier",
+  "description": "VanniGuard — AI-Powered Vernacular Phishing Classifier",
   "main": "backend/index.js",
   "scripts": {
     "start": "node backend/index.js",
     "dev": "node --watch backend/index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
