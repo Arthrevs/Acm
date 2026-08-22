@@ -13,12 +13,12 @@
   --text: #f4f4f6;
   --text-secondary: #a1a1aa;
   --text-dim: #71717a;
-  --coral: #FF6347;
-  --coral-light: rgba(255, 99, 71, 0.15);
+  --coral: #cc5a5a;
+  --coral-light: rgba(204, 90, 90, 0.15);
   --green: #34c759;
   --green-light: rgba(52, 199, 89, 0.15);
-  --red: #ff3b30;
-  --red-light: rgba(255, 59, 48, 0.15);
+  --red: #cc5a5a;
+  --red-light: rgba(204, 90, 90, 0.15);
   --orange: #ff9500;
   --blue: #007aff;
   --radius: 20px;
@@ -56,7 +56,7 @@
 .shader-vignette-overlay {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at 50% 12%, rgba(255, 99, 71, 0.09) 0%, transparent 65%),
+  background: radial-gradient(circle at 50% 12%, rgba(239, 68, 68, 0.08) 0%, transparent 65%),
               radial-gradient(ellipse at center, transparent 30%, var(--bg) 95%);
   pointer-events: none;
 }
@@ -146,8 +146,9 @@ body {
 }
 
 .nav-item.active {
-  background: var(--coral);
+  background: #dc2626;
   color: #ffffff;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
 }
 
 .nav-item i { width: 20px; height: 20px; }
@@ -200,14 +201,14 @@ body {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--coral);
-  box-shadow: 0 0 10px var(--coral);
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
   animation: pulseBeaconMini 2s infinite ease-in-out;
 }
 
 @keyframes pulseBeaconMini {
-  0%, 100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 0 0 rgba(255, 99, 71, 0.4); }
-  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 6px rgba(255, 99, 71, 0); }
+  0%, 100% { transform: scale(1); opacity: 0.85; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
 }
 
 .topbar-center {
@@ -413,35 +414,35 @@ body {
 .uiverse-card {
   width: 100%;
   height: 100%;
-  min-height: 250px;
+  min-height: 220px;
   position: relative;
-  border-radius: 44px;
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(185, 28, 28, 0.05) 100%), #111218;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(185, 28, 28, 0.03) 100%), #111218;
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   transform-style: preserve-3d;
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 32px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.06);
   display: flex;
   flex-direction: column;
-  overflow: visible;
-  padding-bottom: 60px;
+  overflow: hidden;
+  padding-bottom: 52px;
 }
 
 .uiverse-card .glass {
   transform-style: preserve-3d;
   position: absolute;
-  inset: 8px;
-  border-radius: 36px;
-  border-top-right-radius: 90px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  inset: 6px;
+  border-radius: 20px;
+  border-top-right-radius: 60px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
   transform: translate3d(0px, 0px, 25px);
-  border-left: 1.5px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.5s ease-in-out;
   pointer-events: none;
 }
 
 .uiverse-card .content {
-  padding: 28px 26px 16px 26px;
+  padding: 24px 22px 14px 22px;
   transform: translate3d(0, 0, 28px);
   transform-style: preserve-3d;
   position: relative;
@@ -452,21 +453,21 @@ body {
 .uiverse-card .content .title {
   display: block;
   color: #ff4d4f;
-  font-weight: 900;
-  font-size: 1.15rem;
-  letter-spacing: 0.04em;
-  margin-bottom: 6px;
-  text-shadow: 0 0 20px rgba(255, 77, 79, 0.45);
-  max-width: calc(100% - 130px);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+  text-shadow: 0 0 14px rgba(255, 77, 79, 0.3);
+  max-width: calc(100% - 110px);
 }
 
 .uiverse-card .content .text {
   display: block;
   color: #d1d5db;
-  font-size: 0.88rem;
-  line-height: 1.55;
-  margin-bottom: 14px;
-  max-width: calc(100% - 130px);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  max-width: calc(100% - 100px);
 }
 
 /* Floating Concentric Glass Lenses (Top Right - Compact & Non-Overlapping) */
@@ -546,8 +547,8 @@ body {
 
 /* Card 3D Hover Expansion */
 .uiverse-parent:hover .uiverse-card {
-  transform: rotate3d(1, -0.4, 0, 8deg) translateY(-4px);
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 35px rgba(239, 68, 68, 0.22);
+  transform: rotate3d(1, -0.3, 0, 4deg) translateY(-2px);
+  box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.85), 0 0 20px rgba(239, 68, 68, 0.15);
 }
 
 .uiverse-parent:hover .uiverse-card .bottom .social-buttons-container .social-button {
@@ -573,12 +574,12 @@ body {
 
 /* Bottom 3D Action Bar */
 .uiverse-card .bottom {
-  padding: 10px 24px;
+  padding: 8px 20px;
   transform-style: preserve-3d;
   position: absolute;
-  bottom: 14px;
-  left: 14px;
-  right: 14px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -770,22 +771,22 @@ body {
 .upload-zone {
   border: 2px dashed #383b4c;
   border-radius: var(--radius-sm);
-  padding: 22px 16px;
+  padding: 18px 14px;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease;
   background: #0b0c10;
 }
 .upload-zone:hover, .upload-zone.dragover {
-  border-color: #4cc9f0;
-  background: rgba(76, 201, 240, 0.08);
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
 }
 .upload-content { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.upload-icon { width: 28px; height: 28px; color: #94a3b8; }
-.upload-zone:hover .upload-icon { color: #4cc9f0; }
-.upload-content p { color: #e2e8f0; font-size: 0.88rem; font-weight: 600; }
-.upload-content p span { color: #4cc9f0; font-weight: 700; }
-.upload-hint { font-size: 0.75rem !important; color: #94a3b8 !important; font-weight: 500; }
+.upload-icon { width: 24px; height: 24px; color: #94a3b8; }
+.upload-zone:hover .upload-icon { color: #ef4444; }
+.upload-content p { color: #e2e8f0; font-size: 0.84rem; font-weight: 600; }
+.upload-content p span { color: #ef4444; font-weight: 700; }
+.upload-hint { font-size: 0.72rem !important; color: #94a3b8 !important; font-weight: 500; }
 
 .upload-preview { position: relative; display: flex; justify-content: center; height: 100px; }
 .upload-preview img { max-height: 100%; border-radius: 8px; }
@@ -821,7 +822,7 @@ textarea {
   resize: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-textarea:focus { outline: none; border-color: #ecd448; box-shadow: 0 0 16px rgba(236, 212, 72, 0.2); }
+textarea:focus { outline: none; border-color: #ef4444; box-shadow: 0 0 12px rgba(239, 68, 68, 0.15); }
 textarea::placeholder { color: #64748b; }
 
 .char-count {
@@ -833,25 +834,25 @@ textarea::placeholder { color: #64748b; }
    Requested Kinetic Skew-Slash Button Schema (.btn)
    ═════════════════════════════════════════════════ */
 .btn {
-  padding: 1.1em 2em;
+  padding: 0.9em 1.8em;
   background: none;
-  border: 2px solid #ffffff;
-  font-size: 15px;
-  color: #131313;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  color: #ffffff;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   border-radius: 12px;
-  background-color: #ecd448;
-  font-weight: 800;
-  box-shadow: 0 2px 0 2px #000;
+  background-color: #dc2626;
+  font-weight: 700;
+  box-shadow: 0 2px 0 1px rgba(0,0,0,0.5), 0 4px 16px rgba(220, 38, 38, 0.25);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   user-select: none;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
@@ -860,7 +861,7 @@ textarea::placeholder { color: #64748b; }
   position: absolute;
   width: 100px;
   height: 120%;
-  background-color: #ff6700;
+  background-color: #b91c1c;
   top: 50%;
   transform: skewX(30deg) translate(-150%, -50%);
   transition: all 0.5s;
@@ -869,9 +870,9 @@ textarea::placeholder { color: #64748b; }
 }
 
 .btn:hover {
-  background-color: #4cc9f0;
+  background-color: #ef4444;
   color: #ffffff;
-  box-shadow: 0 2px 0 2px #0d3b66;
+  box-shadow: 0 2px 0 1px #7f1d1d, 0 0 20px rgba(239, 68, 68, 0.5);
 }
 
 .btn:hover::before {
@@ -880,48 +881,48 @@ textarea::placeholder { color: #64748b; }
 }
 
 .btn:active {
-  transform: scale(0.9);
+  transform: scale(0.94);
 }
 
 .btn .btn-text {
   position: relative;
   z-index: 2;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 /* Variant: Primary Scan Button */
 .btn-scan-main {
   flex: 1;
-  background-color: #ecd448;
-  color: #131313;
-  border: 2px solid #ffffff;
-  box-shadow: 0 2px 0 2px #000, 0 6px 20px rgba(236, 212, 72, 0.3);
+  background-color: #dc2626;
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 0 1px rgba(0,0,0,0.5), 0 6px 18px rgba(220, 38, 38, 0.35);
 }
 .btn-scan-main:before {
-  background-color: #ff6700;
+  background-color: #991b1b;
 }
 .btn-scan-main:hover {
-  background-color: #4cc9f0;
+  background-color: #ef4444;
   color: #ffffff;
-  box-shadow: 0 2px 0 2px #0d3b66, 0 0 25px rgba(76, 201, 240, 0.6);
+  box-shadow: 0 2px 0 1px #7f1d1d, 0 0 25px rgba(239, 68, 68, 0.6);
 }
 
 /* Variant: Secondary Clear Button */
 .btn-clear-main {
   background-color: #1a1d26;
-  color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 2px 0 2px #000;
-  padding: 1.1em 1.8em;
+  color: #94a3b8;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 0 1px rgba(0,0,0,0.4);
+  padding: 0.9em 1.6em;
 }
 .btn-clear-main:before {
-  background-color: #ef4444;
+  background-color: #374151;
 }
 .btn-clear-main:hover {
-  background-color: #dc2626;
+  background-color: #374151;
   color: #ffffff;
-  box-shadow: 0 2px 0 2px #7f1d1d;
-  border-color: #ffffff;
+  box-shadow: 0 2px 0 1px #1f2937;
+  border-color: rgba(255,255,255,0.3);
 }
 
 /* ═════════════════════════════════════════════════

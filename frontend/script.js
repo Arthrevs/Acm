@@ -129,6 +129,16 @@ imageInput.addEventListener('change', (e) => {
   }
 });
 
+document.addEventListener('paste', (e) => {
+  if (e.clipboardData && e.clipboardData.files && e.clipboardData.files.length > 0) {
+    const file = e.clipboardData.files[0];
+    if (file.type.startsWith('image/')) {
+      handleFile(file);
+      e.preventDefault();
+    }
+  }
+});
+
 function handleFile(file) {
   if (!file.type.startsWith('image/')) {
     alert('Please upload an image file (PNG, JPEG).');
@@ -830,7 +840,6 @@ function initDotDistortionShader() {
   }
 
   wakeUp();
-}
 }
 
 // ═════════════════════════════════════════════════════════════
