@@ -428,8 +428,8 @@ body {
   transform-style: preserve-3d;
   position: absolute;
   inset: 8px;
-  border-radius: 38px;
-  border-top-right-radius: 120px;
+  border-radius: 36px;
+  border-top-right-radius: 90px;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
   transform: translate3d(0px, 0px, 25px);
   border-left: 1.5px solid rgba(255, 255, 255, 0.2);
@@ -439,7 +439,7 @@ body {
 }
 
 .uiverse-card .content {
-  padding: 30px 28px 16px 28px;
+  padding: 28px 26px 16px 26px;
   transform: translate3d(0, 0, 28px);
   transform-style: preserve-3d;
   position: relative;
@@ -451,21 +451,23 @@ body {
   display: block;
   color: #ff4d4f;
   font-weight: 900;
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   letter-spacing: 0.04em;
   margin-bottom: 6px;
   text-shadow: 0 0 20px rgba(255, 77, 79, 0.45);
+  max-width: calc(100% - 130px);
 }
 
 .uiverse-card .content .text {
   display: block;
   color: #d1d5db;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   line-height: 1.55;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  max-width: calc(100% - 130px);
 }
 
-/* Floating Concentric Glass Lenses (Top Right - Red / Crimson Hues) */
+/* Floating Concentric Glass Lenses (Top Right - Compact & Non-Overlapping) */
 .uiverse-card .logo {
   position: absolute;
   right: 0;
@@ -482,7 +484,7 @@ body {
   border-radius: 50%;
   top: 0;
   right: 0;
-  box-shadow: -8px 8px 25px rgba(0, 0, 0, 0.4);
+  box-shadow: -6px 6px 20px rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   background: rgba(239, 68, 68, 0.12);
@@ -491,52 +493,52 @@ body {
 }
 
 .uiverse-card .logo .circle1 {
-  width: 170px;
+  width: 120px;
   transform: translate3d(0, 0, 20px);
-  top: 8px;
-  right: 8px;
+  top: 6px;
+  right: 6px;
 }
 
 .uiverse-card .logo .circle2 {
-  width: 140px;
+  width: 98px;
   transform: translate3d(0, 0, 40px);
   top: 10px;
   right: 10px;
-  transition-delay: 0.1s;
+  transition-delay: 0.08s;
 }
 
 .uiverse-card .logo .circle3 {
-  width: 110px;
+  width: 78px;
   transform: translate3d(0, 0, 60px);
-  top: 17px;
-  right: 17px;
-  transition-delay: 0.2s;
+  top: 15px;
+  right: 15px;
+  transition-delay: 0.15s;
 }
 
 .uiverse-card .logo .circle4 {
-  width: 80px;
+  width: 58px;
   transform: translate3d(0, 0, 80px);
-  top: 23px;
-  right: 23px;
-  transition-delay: 0.3s;
+  top: 20px;
+  right: 20px;
+  transition-delay: 0.22s;
 }
 
 .uiverse-card .logo .circle5 {
-  width: 50px;
+  width: 40px;
   transform: translate3d(0, 0, 100px);
-  top: 30px;
-  right: 30px;
+  top: 26px;
+  right: 26px;
   display: grid;
   place-content: center;
-  transition-delay: 0.4s;
-  background: rgba(239, 68, 68, 0.38);
-  border: 1.5px solid rgba(255, 77, 79, 0.7);
-  box-shadow: 0 0 22px rgba(239, 68, 68, 0.6);
+  transition-delay: 0.3s;
+  background: rgba(239, 68, 68, 0.42);
+  border: 1.5px solid rgba(255, 77, 79, 0.8);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.65);
 }
 
 .uiverse-card .logo .circle5 .svg-icon {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   color: #ffffff;
 }
 
@@ -552,19 +554,19 @@ body {
 }
 
 .uiverse-parent:hover .uiverse-card .logo .circle2 {
-  transform: translate3d(0, 0, 60px);
+  transform: translate3d(0, 0, 35px);
 }
 
 .uiverse-parent:hover .uiverse-card .logo .circle3 {
-  transform: translate3d(0, 0, 80px);
+  transform: translate3d(0, 0, 45px);
 }
 
 .uiverse-parent:hover .uiverse-card .logo .circle4 {
-  transform: translate3d(0, 0, 100px);
+  transform: translate3d(0, 0, 55px);
 }
 
 .uiverse-parent:hover .uiverse-card .logo .circle5 {
-  transform: translate3d(0, 0, 120px);
+  transform: translate3d(0, 0, 65px);
 }
 
 /* Bottom 3D Action Bar */
