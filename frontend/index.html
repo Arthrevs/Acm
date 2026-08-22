@@ -46,7 +46,7 @@
               <p>Drag & drop a screenshot, or <span>browse</span></p>
               <p class="upload-hint">Gemini Vision OCR will extract text automatically</p>
             </div>
-            <div class="upload-preview" id="uploadPreview" style="display: none;">
+            <div class="upload-preview hidden" id="uploadPreview">
               <img id="previewImg" src="" alt="Screenshot Preview">
               <button class="btn-remove-image" id="btnRemoveImage" title="Remove image">
                 <i data-lucide="x"></i>
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Loading State -->
-        <div class="loading-state" id="resultsLoadingState" style="display: none;">
+        <div class="loading-state hidden" id="resultsLoadingState">
           <div class="spinner"></div>
           <div class="pipeline-steps">
             <div class="step" id="step1"><span>1</span> Normalizing context & removing noise...</div>
@@ -111,7 +111,7 @@
         </div>
 
         <!-- Actual Results -->
-        <div class="results-content" id="resultsContent" style="display: none;">
+        <div class="results-content hidden" id="resultsContent">
           
           <!-- Verdict Banner -->
           <div class="verdict-banner" id="verdictBanner">
@@ -131,7 +131,7 @@
           </div>
 
           <!-- OCR Extracted Text (Only shows if image uploaded) -->
-          <div class="result-card" id="extractedTextBox" style="display: none;">
+          <div class="result-card hidden" id="extractedTextBox">
             <div class="card-header">
               <i data-lucide="camera"></i>
               <h3>Gemini Vision OCR</h3>
@@ -176,7 +176,7 @@
           </div>
 
           <!-- I4C Kill-Switch Dossier -->
-          <div class="result-card full-width dossier-card" id="dossierCard" style="display: none;">
+          <div class="result-card full-width dossier-card hidden" id="dossierCard">
             <div class="card-header dossier-header">
               <i data-lucide="file-warning"></i>
               <h3>I4C Threat Dossier</h3>
@@ -189,7 +189,7 @@
               <pre id="dossierContent" class="dossier-text"></pre>
               <p class="dossier-hint">
                 <i data-lucide="phone-call"></i>
-                File this dossier at <strong>1930</strong> (National Cyber Crime Helpline) or <a href="https://cybercrime.gov.in" target="_blank">cybercrime.gov.in</a>
+                File this dossier at <strong>1930</strong> (National Cyber Crime Helpline) or <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a>
               </p>
             </div>
           </div>

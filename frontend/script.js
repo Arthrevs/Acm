@@ -50,9 +50,9 @@ btnClear.addEventListener('click', () => {
   smsInput.value = '';
   charCount.textContent = '0 characters';
   removeUploadedImage();
-  resultsEmptyState.style.display = 'flex';
-  resultsLoadingState.style.display = 'none';
-  resultsContent.style.display = 'none';
+  resultsEmptyState.classList.remove('hidden');
+  resultsLoadingState.classList.add('hidden');
+  resultsContent.classList.add('hidden');
 });
 
 // Image Upload Logic
@@ -94,8 +94,8 @@ function handleFile(file) {
     uploadedImageMimeType = file.type;
 
     previewImg.src = dataUrl;
-    uploadPreview.style.display = 'flex';
-    uploadZoneContent.style.display = 'none';
+    uploadPreview.classList.remove('hidden');
+    uploadZoneContent.classList.add('hidden');
     smsInput.value = ''; // Clear text if image is uploaded
     charCount.textContent = '0 characters';
   };
@@ -111,8 +111,8 @@ function removeUploadedImage() {
   uploadedImageBase64 = null;
   uploadedImageMimeType = null;
   previewImg.src = '';
-  uploadPreview.style.display = 'none';
-  uploadZoneContent.style.display = 'flex';
+  uploadPreview.classList.add('hidden');
+  uploadZoneContent.classList.remove('hidden');
   imageInput.value = '';
 }
 
@@ -128,9 +128,9 @@ btnScan.addEventListener('click', async () => {
   btnScan.disabled = true;
   scanButtonText.textContent = 'Scanning...';
   
-  resultsEmptyState.style.display = 'none';
-  resultsContent.style.display = 'none';
-  resultsLoadingState.style.display = 'flex';
+  resultsEmptyState.classList.add('hidden');
+  resultsContent.classList.add('hidden');
+  resultsLoadingState.classList.remove('hidden');
   
   resetSteps();
 
@@ -171,13 +171,13 @@ btnScan.addEventListener('click', async () => {
     });
 
     setTimeout(() => {
-      resultsLoadingState.style.display = 'none';
+      resultsLoadingState.classList.add('hidden');
       renderResults(data);
     }, 400);
 
   } catch (err) {
-    resultsLoadingState.style.display = 'none';
-    resultsContent.style.display = 'block';
+    resultsLoadingState.classList.add('hidden');
+    resultsContent.classList.remove('hidden');
     
     // Render Error cleanly
     document.getElementById('verdictLabel').textContent = 'ERROR';

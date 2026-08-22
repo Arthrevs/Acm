@@ -27,6 +27,10 @@
   box-sizing: border-box;
 }
 
+.hidden {
+  display: none !important;
+}
+
 body {
   background-color: var(--bg-main);
   background-image: 
@@ -37,7 +41,7 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   padding: 40px 20px;
 }
 
@@ -827,4 +831,203 @@ button {
 
 .dossier-hint a:hover {
   text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════════════ */
+/* ═══ MOBILE RESPONSIVE STYLES ═══ */
+/* ═══════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  body {
+    padding: 16px 12px;
+  }
+
+  .app-container {
+    gap: 16px;
+  }
+
+  .app-header {
+    padding: 0 4px;
+  }
+
+  .header-logo h1 {
+    font-size: 1.1rem;
+  }
+
+  .logo-vg {
+    width: 30px;
+    height: 30px;
+    font-size: 0.9rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .panel {
+    padding: 20px 16px;
+    gap: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .panel-header h2 {
+    font-size: 1rem;
+  }
+
+  .upload-zone {
+    padding: 24px 16px;
+  }
+
+  .upload-content p {
+    font-size: 0.85rem;
+  }
+
+  textarea {
+    font-size: 0.85rem;
+    padding: 12px;
+  }
+
+  .presets-grid {
+    gap: 6px;
+  }
+
+  .btn-preset {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
+  .action-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    padding: 14px;
+    font-size: 0.9rem;
+  }
+
+  .btn-secondary {
+    padding: 12px;
+    text-align: center;
+  }
+
+  /* Results panel */
+  .verdict-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .verdict-info h2 {
+    font-size: 1.4rem;
+  }
+
+  .risk-score {
+    text-align: center;
+    width: 100%;
+  }
+
+  .risk-value {
+    font-size: 1.5rem;
+  }
+
+  .results-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .card-header {
+    padding: 12px;
+  }
+
+  .card-body {
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+
+  .agents-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  /* Pipeline steps */
+  .pipeline-steps {
+    max-width: 100%;
+  }
+
+  .step {
+    font-size: 0.8rem;
+  }
+
+  /* Dossier */
+  .dossier-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .btn-copy-dossier {
+    width: 100%;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .dossier-text {
+    font-size: 0.65rem;
+    padding: 10px;
+    max-height: 200px;
+  }
+
+  .dossier-hint {
+    font-size: 0.7rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Empty State */
+  .empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .empty-state h3 {
+    font-size: 0.95rem;
+  }
+
+  .empty-state p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  body {
+    padding: 10px 8px;
+  }
+
+  .panel {
+    padding: 16px 12px;
+  }
+
+  .header-logo h1 {
+    font-size: 1rem;
+  }
+
+  .presets-grid {
+    flex-direction: column;
+  }
+
+  .btn-preset {
+    width: 100%;
+    text-align: center;
+  }
+
+  .verdict-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .risk-value {
+    font-size: 1.3rem;
+  }
 }
