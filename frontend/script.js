@@ -821,15 +821,15 @@ function initDotDistortionShader() {
       ctx.arc(dot.x, dot.y, r, 0, Math.PI * 2);
 
       if (cursorGlow > 0.08) {
-        ctx.fillStyle = `rgba(255, 77, 79, ${alpha})`;
-        ctx.shadowColor = 'rgba(239, 68, 68, 0.9)';
+        ctx.fillStyle = `rgba(244, 63, 94, ${alpha})`;
+        ctx.shadowColor = 'rgba(244, 63, 94, 0.85)';
         ctx.shadowBlur = 8;
       } else if (wave > 0.75) {
-        ctx.fillStyle = `rgba(239, 68, 68, ${alpha})`;
-        ctx.shadowColor = 'rgba(239, 68, 68, 0.5)';
+        ctx.fillStyle = `rgba(225, 29, 72, ${alpha})`;
+        ctx.shadowColor = 'rgba(225, 29, 72, 0.45)';
         ctx.shadowBlur = 4;
       } else {
-        ctx.fillStyle = `rgba(180, 190, 210, ${alpha * 0.7})`;
+        ctx.fillStyle = `rgba(148, 163, 184, ${alpha * 0.45})`;
         ctx.shadowBlur = 0;
       }
 
