@@ -1,6 +1,6 @@
 <div align="center">
   <img src="https://api.iconify.design/lucide/shield-check.svg?color=%2360a5fa" width="80" alt="Shield Logo" />
-  <h1>VG — VanniGuard</h1>
+  <h1>VG — VaaniGuard</h1>
   <p><strong>Multi-Agent AI Security Pipeline · Hackathon Build</strong></p>
   <br/>
   <img src="https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white" />

@@ -286,7 +286,7 @@ function renderResults(data) {
     const timestamp = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
     
     let dossier = `═══════════════════════════════════════════════
-  I4C THREAT DOSSIER — VanniGuard Automated Report
+  I4C THREAT DOSSIER — VaaniGuard Automated Report
 ═══════════════════════════════════════════════
 Generated:     ${timestamp}
 Verdict:       ${verdict}

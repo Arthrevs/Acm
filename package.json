@@ -1,7 +1,7 @@
 {
-  "name": "vanniguard",
+  "name": "vaaniguard",
   "version": "1.0.0",
-  "description": "VanniGuard — AI-Powered Vernacular Phishing Classifier",
+  "description": "VaaniGuard — AI-Powered Vernacular Phishing Classifier",
   "main": "backend/index.js",
   "scripts": {
     "start": "node backend/index.js",
