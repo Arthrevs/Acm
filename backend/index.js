@@ -66,10 +66,14 @@ app.post('/api/scan-image', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 VanniGuard API running on port ${PORT}`);
-  console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
-  console.log(`   Endpoints: POST /api/scan, POST /api/scan-image`);
-});
+// Start the server (Render/Localhost)
+// Vercel handles the server start automatically via module.exports
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🚀 VanniGuard API running on port ${PORT}`);
+    console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
+    console.log(`   Endpoints: POST /api/scan, POST /api/scan-image`);
+  });
+}
 
 module.exports = app;

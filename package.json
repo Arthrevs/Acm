@@ -7,9 +7,6 @@
     "start": "node backend/index.js",
     "dev": "node --watch backend/index.js"
   },
-  "engines": {
-    "node": ">=18.0.0"
-  },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "cors": "^2.8.5",
