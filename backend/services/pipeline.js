@@ -19,7 +19,7 @@ const { runChiefJudge } = require('../agents/chiefJudge');
 const { normalizeText } = require('../utils/normalizer');
 const { extractEntities } = require('../utils/extractor');
 
-async function runPipeline(rawText) {
+async function runPipeline(rawText, customThreshold = 30) {
   const startTime = Date.now();
   const timestamps = {};
 
@@ -36,7 +36,7 @@ async function runPipeline(rawText) {
   // LAYER 2: Deterministic Heuristic Scoring
   // ──────────────────────────────────────────────
   const l2Start = Date.now();
-  const heuristicResult = scoreHeuristics(contextResult.chunks, entities);
+  const heuristicResult = scoreHeuristics(contextResult.chunks, entities, customThreshold);
   timestamps.layer2 = Date.now() - l2Start;
 
   // ──────────────────────────────────────────────
