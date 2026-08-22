@@ -16,13 +16,7 @@ const FALLBACK_MODELS = [
   'gemini-2.5-flash'
 ];
 
-const VISION_PROMPT = `
-Extract all readable text from this screenshot verbatim.
-Preserve all transliterated Hinglish, misspellings, phone numbers, and links exactly as written.
-If there are timestamps, sender names, or platform UI elements (like "WhatsApp", "OLX"), include them.
-Output ONLY the extracted conversation text without markdown formatting or commentary.
-Do NOT add any analysis, summary, or interpretation.
-`;
+const VISION_PROMPT = `Extract verbatim text from image. Preserve Hinglish, spelling, links, phones, timestamps, UI elements (e.g., WhatsApp, OLX). Output ONLY raw text. NO markdown, NO commentary, NO analysis.`;
 
 /**
  * Extract text from a screenshot using Gemini's native multimodal vision.

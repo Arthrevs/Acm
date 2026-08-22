@@ -298,9 +298,13 @@ function renderResults(data) {
   const entitiesList = document.getElementById('entitiesList');
   entitiesList.innerHTML = '';
   const entities = data.extracted_entities || { urls: [], phones: [], upis: [] };
-  if (entities.urls.length === 0 && entities.phones.length === 0 && (entities.upis || []).length === 0) {
+  const logos = data.logo_detections || [];
+  if (entities.urls.length === 0 && entities.phones.length === 0 && (entities.upis || []).length === 0 && logos.length === 0) {
     entitiesList.innerHTML = '<span class="no-entities">No entities detected</span>';
   } else {
+    if (logos.length > 0) {
+      entitiesList.innerHTML += `<div class="entity-group"><div class="entity-label" style="color: var(--accent-red)">Visual Impersonation</div>${logos.map(l => `<span class="entity-item" style="border-color: var(--accent-red)">${l.brand} Logo (Match: ${l.confidence}%)</span>`).join('')}</div>`;
+    }
     if (entities.urls.length > 0) {
       entitiesList.innerHTML += `<div class="entity-group"><div class="entity-label">URLs</div>${entities.urls.map(u => `<span class="entity-item">${u}</span>`).join('')}</div>`;
     }

@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const { runPipeline } = require('./services/pipeline');
 const { extractTextFromImage } = require('./services/vision');
+const { initLogoHashes, scanForLogos } = require('./services/logoDetector');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -50,14 +51,28 @@ app.post('/api/scan-image', async (req, res) => {
     }
 
     console.log(`Processing image payload (${mime_type}) using OCR...`);
-    const extractedText = await extractTextFromImage(image_base64, mime_type);
+
+    // Run OCR and logo detection in parallel — no wasted time
+    const [extractedText, logoMatches] = await Promise.all([
+      extractTextFromImage(image_base64, mime_type),
+      scanForLogos(image_base64, mime_type)
+    ]);
+
     console.log(`Extracted text: "${extractedText.substring(0, 50)}..."`);
+    if (logoMatches.length > 0) {
+      console.log(`[LogoDetector] Found ${logoMatches.length} brand match(es): ${logoMatches.map(m => m.brand).join(', ')}`);
+    }
     
     // Run the extracted text through the full 4-layer pipeline
     const result = await runPipeline(extractedText, threshold ? parseInt(threshold, 10) : 30);
     
     // Attach the raw extracted text so the frontend can display it
     result.extracted_text = extractedText;
+
+    // Attach logo detection results
+    if (logoMatches.length > 0) {
+      result.logo_detections = logoMatches;
+    }
     
     res.json(result);
   } catch (err) {
@@ -69,10 +84,13 @@ app.post('/api/scan-image', async (req, res) => {
 // Start the server (Render/Localhost)
 // Vercel handles the server start automatically via module.exports
 if (!process.env.VERCEL) {
-  app.listen(PORT, () => {
-    console.log(`🚀 VaaniGuard API running on port ${PORT}`);
-    console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
-    console.log(`   Endpoints: POST /api/scan, POST /api/scan-image`);
+  // Pre-load logo fingerprints before accepting requests
+  initLogoHashes().then(() => {
+    app.listen(PORT, () => {
+      console.log(`🚀 VaaniGuard API running on port ${PORT}`);
+      console.log(`   4-Layer Pipeline: Context → Heuristics → LLM → Verification`);
+      console.log(`   Endpoints: POST /api/scan, POST /api/scan-image`);
+    });
   });
 }
 

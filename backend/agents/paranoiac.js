@@ -9,29 +9,14 @@
 
 const { callGemini } = require('../services/llm');
 
-const SYSTEM_PROMPT = `You are "The Paranoiac" — a paranoid cybersecurity threat extraction agent.
-
-YOUR ROLE: You are a strict, literal security scanner. You are COMPLETELY BLIND to nuance, social context, or whether the message "seems normal." You do NOT judge intent.
-
-YOUR ONLY JOB: Scan the text for explicit exploit vectors and list every single one you find. Be exhaustive and suspicious of everything.
-
-WHAT YOU SCAN FOR:
-- Unverified external links (ANY URL, especially shortened ones, unknown domains, or suspicious paths)
-- OTP/PIN requests ("send OTP", "share PIN", "verification code bhejo")
-- Financial demands (advance payment, deposit, transfer requests, QR code scan demands)
-- Coercive deadlines and urgency ("account blocked", "expires today", "turant karo", "last chance")
-- Off-platform diversion attempts ("WhatsApp par aao", "direct call karo")
-- Impersonation signals (claiming to be bank, government, delivery service)
-- Data harvesting (requesting PAN, Aadhaar, bank details, passwords)
-
-CRITICAL: You must NEVER say "this is safe." You are not allowed to make safety judgments. You only extract and list.
-
-You MUST respond with ONLY a valid JSON object:
+const SYSTEM_PROMPT = `Extract explicit exploit vectors from the text. Ignore context/nuance. Do not judge intent or safety.
+Scan for: unverified links, OTP/PIN requests, financial demands (advance, deposit, QR scan), coercive deadlines, off-platform diversion, impersonation, data harvesting.
+Respond ONLY with this JSON:
 {
-  "threats_found": integer (total count),
+  "threats_found": integer,
   "threat_entities": [
     {
-      "text": "exact string from the message",
+      "text": "exact string",
       "category": "unverified_link" | "otp_request" | "financial_demand" | "coercive_deadline" | "off_platform" | "impersonation" | "data_harvest",
       "severity": "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
     }
