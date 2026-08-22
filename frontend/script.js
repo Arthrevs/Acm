@@ -108,7 +108,27 @@ async function handleScan() {
 
   } catch (err) {
     loadingOverlay.classList.remove('active');
-    alert(`Scan failed: ${err.message}`);
+    
+    // Render error in UI instead of alert
+    resultsSection.style.display = 'block';
+    document.getElementById('finalVerdictBadge').innerHTML = `
+      <div class="verdict SCAM" style="background: rgba(239, 68, 68, 0.1); border-color: #ef4444;">
+        <span>⚠️ API Error: ${err.message}</span>
+      </div>
+    `;
+    document.getElementById('riskScoreBar').style.width = '0%';
+    document.getElementById('riskScoreValue').innerText = 'N/A';
+    document.getElementById('threatCategory').innerText = 'System Failure';
+    document.getElementById('pipelineBlocks').innerHTML = `
+      <div class="pipeline-block L1">
+        <div class="block-header">
+          <span>❌ Error</span>
+        </div>
+        <div class="block-content">
+          The connection to the AI engine failed. If this is a 500 or 429 error, the API rate limit might be fully exhausted.
+        </div>
+      </div>
+    `;
   } finally {
     btnScan.disabled = false;
   }

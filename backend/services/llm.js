@@ -21,19 +21,45 @@ async function callGemini(systemPrompt, userPrompt) {
   // Rotate key
   const apiKey = API_KEYS[currentKeyIndex];
   currentKeyIndex = (currentKeyIndex + 1) % API_KEYS.length;
-
   const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-3.6-flash',
-    generationConfig: {
-      responseMimeType: 'application/json',
-      temperature: 0.1,
-    },
-    systemInstruction: systemPrompt,
-  });
 
-  const result = await model.generateContent(userPrompt);
-  return JSON.parse(result.response.text());
+  // Automatic model degradation fallback
+  const fallbackModels = [
+    'gemini-3.6-flash',
+    'gemini-3.7-flash',
+    'gemini-3.5-flash',
+    'gemini-flash-latest',
+    'gemini-2.5-flash'
+  ];
+
+  let lastError;
+
+  for (const modelName of fallbackModels) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.1,
+        },
+        systemInstruction: systemPrompt,
+      });
+
+      const result = await model.generateContent(userPrompt);
+      return JSON.parse(result.response.text());
+    } catch (err) {
+      lastError = err;
+      // If it's a quota or rate-limiting error, continue to the next model
+      if (err.status === 429 || err.status === 503) {
+        console.warn(`[LLM] Model ${modelName} hit limit. Degrading to next model...`);
+        continue;
+      }
+      // If it's another error (like 404 or auth), throw it
+      throw err;
+    }
+  }
+
+  throw new Error(`All fallback models exhausted due to rate limits. Last error: ${lastError.message}`);
 }
 
 module.exports = { callGemini };
