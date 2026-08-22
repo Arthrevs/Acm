@@ -140,56 +140,37 @@
         <div class="bento-card card-presets">
           <div class="card-label">QUICK TEST PRESETS</div>
           <div class="presets-grid">
-            <button class="btn-preset animated-preset scam" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in">
-              <span class="circle"></span>
-              <span class="text">KYC Scam</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
+            <button class="btn-preset scam" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in">
+              <span>⚠️</span>
+              <span>KYC Scam</span>
             </button>
-            <button class="btn-preset animated-preset scam" data-preset="Electricity" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544">
-              <span class="circle"></span>
-              <span class="text">Electricity Scam</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
+            <button class="btn-preset scam" data-preset="Electricity" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544">
+              <span>⚡</span>
+              <span>Electricity Bill</span>
             </button>
-            <button class="btn-preset animated-preset scam" data-preset="FedEx" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in">
-              <span class="circle"></span>
-              <span class="text">FedEx Police</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
+            <button class="btn-preset scam" data-preset="FedEx" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in">
+              <span>📦</span>
+              <span>FedEx Customs</span>
             </button>
-            <button class="btn-preset animated-preset safe" data-preset="Safe Msg" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna.">
-              <span class="circle"></span>
-              <span class="text">Family Chat</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
+            <button class="btn-preset safe" data-preset="Safe Msg" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna.">
+              <span>💬</span>
+              <span>Family Chat (Safe)</span>
             </button>
-            <button class="btn-preset animated-preset safe" data-preset="OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP.">
-              <span class="circle"></span>
-              <span class="text">Official OTP</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24"><path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path></svg>
+            <button class="btn-preset safe" data-preset="OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP.">
+              <span>🔑</span>
+              <span>Bank/App OTP</span>
             </button>
           </div>
         </div>
 
         <!-- Card: Action -->
         <div class="bento-card card-action">
-          <button class="animated-button btn-clear-secondary" id="btnClear">
-            <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
-              <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-            </svg>
-            <span class="text">CLEAR</span>
-            <span class="circle"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
-              <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-            </svg>
+          <button class="btn btn-clear-main" id="btnClear">
+            <span class="btn-text">CLEAR</span>
           </button>
 
-          <button class="animated-button btn-scan-primary" id="btnScan">
-            <svg xmlns="http://www.w3.org/2000/svg" class="arr-2" viewBox="0 0 24 24">
-              <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-            </svg>
-            <span class="text" id="scanButtonText">SCAN MESSAGE</span>
-            <span class="circle"></span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="arr-1" viewBox="0 0 24 24">
-              <path d="M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z"></path>
-            </svg>
+          <button class="btn btn-scan-main" id="btnScan">
+            <span class="btn-text" id="scanButtonText">SCAN MESSAGE</span>
           </button>
         </div>
 
