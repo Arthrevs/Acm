@@ -3,201 +3,199 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VaaniGuard — Vernacular Phishing Classifier</title>
+  <title>VaaniGuard — AI Phishing Shield</title>
   <meta name="description" content="AI Vernacular SMS Phishing Classifier with Multi-Agent Consensus">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
-  
-  <div class="app-container">
 
-    <!-- Header -->
-    <header class="app-header">
-      <div class="header-left">
-        <span class="header-indicator"></span>
-        <h1>VAANIGUARD</h1>
-        <span class="header-tag">v2.0</span>
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="sidebar-logo">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="8" fill="#FF6347"/>
+            <path d="M8 14L12 18L20 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active" title="Scanner">
+            <i data-lucide="scan-line"></i>
+          </a>
+          <a href="#" class="nav-item" title="History">
+            <i data-lucide="history"></i>
+          </a>
+          <a href="#" class="nav-item" title="Settings">
+            <i data-lucide="settings"></i>
+          </a>
+        </nav>
       </div>
-      <div class="header-right">
-        <a href="https://cybercrime.gov.in" target="_blank" rel="noopener" class="header-link">
+      <div class="sidebar-bottom">
+        <a href="https://cybercrime.gov.in" target="_blank" rel="noopener" class="nav-item" title="Report to 1930">
           <i data-lucide="phone-call"></i>
-          <span>1930 HELPLINE</span>
         </a>
       </div>
-    </header>
+    </aside>
 
-    <main class="dashboard-grid">
-      
-      <!-- LEFT COLUMN: Input -->
-      <section class="panel input-panel">
-        
-        <div class="panel-label">SCAN SUBJECT</div>
+    <!-- Main Content -->
+    <div class="main-content">
 
-        <!-- Image Upload Zone -->
-        <div class="upload-zone" id="uploadZone">
-          <input type="file" id="imageInput" accept="image/*" hidden>
-          <div class="upload-content" id="uploadZoneContent">
-            <i data-lucide="image-plus" class="upload-icon"></i>
-            <p>Drop screenshot or <span>browse</span></p>
-            <p class="upload-hint">Gemini Vision OCR extracts text automatically</p>
+      <!-- Top Bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <h1>VaaniGuard</h1>
+          <span class="topbar-badge">AI Shield</span>
+        </div>
+        <div class="topbar-right">
+          <div class="status-pill">
+            <span class="status-dot"></span>
+            Online
           </div>
-          <div class="upload-preview hidden" id="uploadPreview">
-            <img id="previewImg" src="" alt="Screenshot Preview">
-            <button class="btn-remove-image" id="btnRemoveImage" title="Remove image">
-              <i data-lucide="x"></i>
-            </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Grid -->
+      <div class="bento-grid">
+
+        <!-- Card: Greeting / Hero -->
+        <div class="bento-card card-hero">
+          <div class="hero-text">
+            <h2>Scan any message 🛡️</h2>
+            <p>Paste a suspicious SMS or drop a screenshot. Our multi-agent AI will classify it in seconds.</p>
           </div>
         </div>
 
-        <div class="divider"><span>OR PASTE TEXT</span></div>
+        <!-- Card: Input -->
+        <div class="bento-card card-input">
+          <div class="card-label">ANALYZE MESSAGE</div>
 
-        <!-- Text Area -->
-        <div class="textarea-wrapper">
-          <textarea 
-            id="smsInput" 
-            placeholder="Paste suspicious SMS or chat message here..."
-            rows="5"
-          ></textarea>
-          <div class="char-count" id="charCount">0 characters</div>
+          <!-- Upload -->
+          <div class="upload-zone" id="uploadZone">
+            <input type="file" id="imageInput" accept="image/*" hidden>
+            <div class="upload-content" id="uploadZoneContent">
+              <i data-lucide="image-plus" class="upload-icon"></i>
+              <p>Drop screenshot or <span>browse</span></p>
+              <p class="upload-hint">Gemini Vision OCR</p>
+            </div>
+            <div class="upload-preview hidden" id="uploadPreview">
+              <img id="previewImg" src="" alt="Preview">
+              <button class="btn-remove-image" id="btnRemoveImage"><i data-lucide="x"></i></button>
+            </div>
+          </div>
+
+          <div class="divider"><span>OR</span></div>
+
+          <div class="textarea-wrapper">
+            <textarea id="smsInput" placeholder="Paste suspicious message here..." rows="4"></textarea>
+            <div class="char-count" id="charCount">0 characters</div>
+          </div>
         </div>
 
-        <!-- Presets as Function Keys -->
-        <div class="presets-section">
+        <!-- Card: Presets -->
+        <div class="bento-card card-presets">
+          <div class="card-label">QUICK TEST</div>
           <div class="presets-grid">
-            <button class="btn-preset" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in"><span class="key-label">F1</span> KYC SCAM</button>
-            <button class="btn-preset" data-preset="Electricity Scam" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544"><span class="key-label">F2</span> ELECTRICITY</button>
-            <button class="btn-preset" data-preset="FedEx Scam" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in"><span class="key-label">F3</span> FEDEX</button>
-            <button class="btn-preset" data-preset="Safe Message" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna."><span class="key-label">F4</span> SAFE</button>
-            <button class="btn-preset" data-preset="Safe OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP."><span class="key-label">F5</span> OTP</button>
+            <button class="btn-preset scam" data-preset="KYC Scam" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in">KYC Scam</button>
+            <button class="btn-preset scam" data-preset="Electricity" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544">Electricity</button>
+            <button class="btn-preset scam" data-preset="FedEx" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in">FedEx</button>
+            <button class="btn-preset safe" data-preset="Safe Msg" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna.">Safe</button>
+            <button class="btn-preset safe" data-preset="OTP" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP.">OTP</button>
           </div>
         </div>
 
-        <div class="action-row">
-          <button class="btn-secondary" id="btnClear">CLEAR</button>
+        <!-- Card: Action -->
+        <div class="bento-card card-action">
+          <button class="btn-secondary" id="btnClear">Clear</button>
           <button class="btn-primary" id="btnScan">
             <i data-lucide="scan-line"></i>
-            <span id="scanButtonText">SCAN MESSAGE</span>
+            <span id="scanButtonText">Scan Message</span>
           </button>
         </div>
-      </section>
 
-      <!-- RIGHT COLUMN: Results -->
-      <section class="panel results-panel">
-        
-        <!-- Empty State -->
-        <div class="empty-state" id="resultsEmptyState">
-          <div class="empty-terminal">
-            <span class="terminal-line">$ vaaniguard --scan</span>
-            <span class="terminal-line dim">awaiting input...</span>
-            <span class="terminal-cursor">█</span>
+        <!-- Card: Verdict (spans 2 cols) -->
+        <div class="bento-card card-verdict">
+
+          <!-- Empty -->
+          <div class="empty-state" id="resultsEmptyState">
+            <i data-lucide="shield-question" class="empty-icon"></i>
+            <h3>Awaiting scan</h3>
+            <p>Submit a message to get started</p>
           </div>
-        </div>
 
-        <!-- Loading State -->
-        <div class="loading-state hidden" id="resultsLoadingState">
-          <div class="sweep-line"></div>
-          <div class="pipeline-steps">
-            <div class="step" id="step1"><span>01</span> Normalizing context & removing noise</div>
-            <div class="step" id="step2"><span>02</span> Evaluating heuristic thresholds</div>
-            <div class="step" id="step3"><span>03</span> Multi-agent consensus debate</div>
-            <div class="step" id="step4"><span>04</span> Finalizing risk verdict</div>
-          </div>
-        </div>
-
-        <!-- Actual Results -->
-        <div class="results-content hidden" id="resultsContent">
-          
-          <!-- Verdict Banner -->
-          <div class="verdict-banner" id="verdictBanner">
-            <div class="verdict-info">
-              <h2 id="verdictLabel">SCAM</h2>
-              <p id="verdictCategory">Financial Fraud</p>
+          <!-- Loading -->
+          <div class="loading-state hidden" id="resultsLoadingState">
+            <div class="sweep-bar"></div>
+            <div class="pipeline-steps">
+              <div class="step" id="step1"><span>1</span> Normalizing context</div>
+              <div class="step" id="step2"><span>2</span> Heuristic evaluation</div>
+              <div class="step" id="step3"><span>3</span> Multi-agent debate</div>
+              <div class="step" id="step4"><span>4</span> Final verdict</div>
             </div>
-            <div class="risk-score">
-              <span class="risk-label">RISK SCORE</span>
-              <div class="risk-value">
-                <span id="riskValue">92</span>
+          </div>
+
+          <!-- Results -->
+          <div class="results-content hidden" id="resultsContent">
+            <div class="verdict-banner" id="verdictBanner">
+              <div class="verdict-info">
+                <h2 id="verdictLabel">SCAM</h2>
+                <p id="verdictCategory">Financial Fraud</p>
               </div>
-              <div class="risk-bar-container">
-                <div class="risk-bar-fill" id="riskFill"></div>
+              <div class="risk-score">
+                <span class="risk-label">RISK</span>
+                <div class="risk-value"><span id="riskValue">92</span></div>
+                <div class="risk-bar-container"><div class="risk-bar-fill" id="riskFill"></div></div>
               </div>
             </div>
-          </div>
 
-          <!-- OCR Extracted Text -->
-          <div class="result-card hidden" id="extractedTextBox">
-            <div class="card-header">
-              <i data-lucide="camera"></i>
-              <h3>Gemini Vision OCR</h3>
+            <!-- OCR -->
+            <div class="result-card hidden" id="extractedTextBox">
+              <div class="card-header"><i data-lucide="camera"></i><h3>Gemini Vision OCR</h3></div>
+              <div class="card-body"><p id="extractedTextContent" class="mono-text"></p></div>
             </div>
-            <div class="card-body">
-              <p id="extractedTextContent" class="mono-text"></p>
-            </div>
-          </div>
 
-          <div class="results-grid">
-            <div class="result-card">
-              <div class="card-header">
-                <i data-lucide="file-text"></i>
-                <h3>Normalized Text</h3>
+            <div class="results-grid">
+              <div class="result-card">
+                <div class="card-header"><i data-lucide="file-text"></i><h3>Normalized Text</h3></div>
+                <div class="card-body"><p id="normalizedText" class="mono-text"></p></div>
+              </div>
+              <div class="result-card">
+                <div class="card-header"><i data-lucide="link"></i><h3>Extracted Entities</h3></div>
+                <div class="card-body" id="entitiesList"></div>
+              </div>
+            </div>
+
+            <div class="result-card full-width">
+              <div class="card-header"><i data-lucide="alert-triangle"></i><h3>Threat Highlights</h3></div>
+              <div class="card-body"><div id="spansList" class="spans-container"></div></div>
+            </div>
+
+            <!-- Dossier -->
+            <div class="result-card full-width dossier-card hidden" id="dossierCard">
+              <div class="card-header dossier-header">
+                <i data-lucide="file-warning"></i><h3>I4C Threat Dossier</h3>
+                <button class="btn-copy-dossier" id="btnCopyDossier"><i data-lucide="clipboard-copy"></i><span id="copyBtnText">Copy</span></button>
               </div>
               <div class="card-body">
-                <p id="normalizedText" class="mono-text"></p>
+                <pre id="dossierContent" class="dossier-text"></pre>
+                <p class="dossier-hint"><i data-lucide="phone-call"></i> File at <strong>1930</strong> or <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a></p>
               </div>
-            </div>
-
-            <div class="result-card">
-              <div class="card-header">
-                <i data-lucide="link"></i>
-                <h3>Extracted Entities</h3>
-              </div>
-              <div class="card-body" id="entitiesList"></div>
-            </div>
-          </div>
-
-          <div class="result-card full-width">
-            <div class="card-header">
-              <i data-lucide="alert-triangle"></i>
-              <h3>Threat Highlights</h3>
-            </div>
-            <div class="card-body">
-              <div id="spansList" class="spans-container"></div>
-            </div>
-          </div>
-
-          <!-- I4C Kill-Switch Dossier -->
-          <div class="result-card full-width dossier-card hidden" id="dossierCard">
-            <div class="card-header dossier-header">
-              <i data-lucide="file-warning"></i>
-              <h3>I4C Threat Dossier</h3>
-              <button class="btn-copy-dossier" id="btnCopyDossier" title="Copy to clipboard">
-                <i data-lucide="clipboard-copy"></i>
-                <span id="copyBtnText">Copy Dossier</span>
-              </button>
-            </div>
-            <div class="card-body">
-              <pre id="dossierContent" class="dossier-text"></pre>
-              <p class="dossier-hint">
-                <i data-lucide="phone-call"></i>
-                File this dossier at <strong>1930</strong> (National Cyber Crime Helpline) or <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a>
-              </p>
             </div>
           </div>
 
         </div>
 
-      </section>
+      </div>
 
-    </main>
+    </div>
   </div>
 
-  <script>
-    lucide.createIcons();
-  </script>
+  <script>lucide.createIcons();</script>
   <script src="script.js"></script>
 </body>
 </html>
