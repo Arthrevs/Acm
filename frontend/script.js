@@ -670,169 +670,282 @@ function initTopActionDeck() {
 }
 
 // ═════════════════════════════════════════════════════════════
-// Aceternity-Style Interactive Dot Distortion Shader Engine
+// Hyper-Optimized Interactive Dot Distortion Shader Engine
 // ═════════════════════════════════════════════════════════════
 function initDotDistortionShader() {
   const canvas = document.getElementById('dotDistortionCanvas');
   if (!canvas) return;
 
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
 
   let width = 0;
   let height = 0;
-  let dpr = 1;
   let dots = [];
-  const GAP = 26; // Dot matrix spacing
+  const GAP = 46; // Optimized spacing: ~75% fewer particles for high performance
 
   const mouse = {
     x: -1000,
     y: -1000,
     targetX: -1000,
     targetY: -1000,
-    radius: 140, // Cursor influence radius
-    strength: 38  // Push force
+    radius: 120,
+    strength: 32,
+    active: false
   };
 
+  let animFrameId = null;
+  let isRunning = false;
+
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
     width = window.innerWidth;
     height = window.innerHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.scale(dpr, dpr);
-
+    canvas.width = width;
+    canvas.height = height;
     createDots();
+    wakeUp();
   }
 
   function createDots() {
     dots = [];
-    const cols = Math.ceil(width / GAP) + 2;
-    const rows = Math.ceil(height / GAP) + 2;
+    const cols = Math.ceil(width / GAP) + 1;
+    const rows = Math.ceil(height / GAP) + 1;
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        const ox = (c - 0.5) * GAP;
-        const oy = (r - 0.5) * GAP;
+        const ox = c * GAP;
+        const oy = r * GAP;
         dots.push({
-          originX: ox,
-          originY: oy,
+          ox: ox,
+          oy: oy,
           x: ox,
           y: oy,
           vx: 0,
           vy: 0,
-          baseRadius: 1.15,
-          radius: 1.15,
-          baseAlpha: 0.18 + Math.random() * 0.16,
-          alpha: 0.2,
-          pulseSpeed: 0.02 + Math.random() * 0.03,
-          phase: Math.random() * Math.PI * 2
+          radius: 1.25,
+          alpha: 0.22,
+          phase: (ox + oy) * 0.005
         });
       }
     }
   }
 
-  window.addEventListener('resize', resize);
+  window.addEventListener('resize', resize, { passive: true });
   resize();
+
+  function wakeUp() {
+    if (!isRunning && !document.hidden) {
+      isRunning = true;
+      animFrameId = requestAnimationFrame(renderShader);
+    }
+  }
 
   // Mouse & Touch Tracking
   window.addEventListener('mousemove', (e) => {
     mouse.targetX = e.clientX;
     mouse.targetY = e.clientY;
-  });
+    mouse.active = true;
+    wakeUp();
+  }, { passive: true });
 
   window.addEventListener('mouseleave', () => {
     mouse.targetX = -1000;
     mouse.targetY = -1000;
-  });
+    mouse.active = false;
+  }, { passive: true });
 
   window.addEventListener('touchmove', (e) => {
     if (e.touches.length > 0) {
       mouse.targetX = e.touches[0].clientX;
       mouse.targetY = e.touches[0].clientY;
+      mouse.active = true;
+      wakeUp();
     }
   }, { passive: true });
 
   window.addEventListener('touchend', () => {
     mouse.targetX = -1000;
     mouse.targetY = -1000;
+    mouse.active = false;
+  }, { passive: true });
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      isRunning = false;
+      if (animFrameId) cancelAnimationFrame(animFrameId);
+    } else {
+      wakeUp();
+    }
   });
 
   let time = 0;
 
   function renderShader() {
-    time += 0.025;
+    time += 0.02;
 
     // Smooth mouse lerp
-    mouse.x += (mouse.targetX - mouse.x) * 0.15;
-    mouse.y += (mouse.targetY - mouse.y) * 0.15;
+    mouse.x += (mouse.targetX - mouse.x) * 0.18;
+    mouse.y += (mouse.targetY - mouse.y) * 0.18;
 
     ctx.clearRect(0, 0, width, height);
 
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    let maxVelocity = 0;
 
     for (let i = 0; i < dots.length; i++) {
       const dot = dots[i];
 
-      // Multi-frequency wave ambient motion
-      const waveX = Math.sin(dot.originY * 0.01 + time * 1.2) * 3.5;
-      const waveY = Math.cos(dot.originX * 0.01 + time * 0.9) * 3.5;
-      const targetX = dot.originX + waveX;
-      const targetY = dot.originY + waveY;
+      // Lightweight wave motion
+      const waveX = Math.sin(time + dot.phase) * 2;
+      const waveY = Math.cos(time + dot.phase * 0.8) * 2;
+      const targetX = dot.ox + waveX;
+      const targetY = dot.oy + waveY;
 
-      // Mouse interactive distortion
+      // Spatial check: only compute repulsion for dots near cursor
       const dx = mouse.x - dot.x;
       const dy = mouse.y - dot.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
 
-      if (dist < mouse.radius && dist > 0) {
-        const factor = Math.pow(1 - dist / mouse.radius, 1.5);
-        const force = factor * mouse.strength;
-        dot.vx -= (dx / dist) * force;
-        dot.vy -= (dy / dist) * force;
-        dot.radius = dot.baseRadius + factor * 2.2;
-        dot.alpha = Math.min(0.95, dot.baseAlpha + factor * 0.7);
+      if (Math.abs(dx) < mouse.radius && Math.abs(dy) < mouse.radius) {
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouse.radius && dist > 0) {
+          const factor = (1 - dist / mouse.radius);
+          const force = factor * mouse.strength;
+          dot.vx -= (dx / dist) * force;
+          dot.vy -= (dy / dist) * force;
+          dot.radius = 1.25 + factor * 1.8;
+          dot.alpha = Math.min(0.9, 0.22 + factor * 0.65);
+        }
       } else {
-        dot.radius += (dot.baseRadius - dot.radius) * 0.1;
-        // Twinkling breathing pulse
-        const pulse = Math.sin(time * 2 + dot.phase) * 0.08;
-        dot.alpha += (Math.max(0.1, dot.baseAlpha + pulse) - dot.alpha) * 0.08;
+        dot.radius += (1.25 - dot.radius) * 0.1;
+        dot.alpha += (0.22 - dot.alpha) * 0.08;
       }
 
-      // Spring physics back to target
+      // Spring physics
       dot.vx += (targetX - dot.x) * 0.08;
       dot.vy += (targetY - dot.y) * 0.08;
-      dot.vx *= 0.86;
-      dot.vy *= 0.86;
+      dot.vx *= 0.85;
+      dot.vy *= 0.85;
       dot.x += dot.vx;
       dot.y += dot.vy;
 
-      // Render dot with glow
+      const vel = Math.abs(dot.vx) + Math.abs(dot.vy);
+      if (vel > maxVelocity) maxVelocity = vel;
+
+      // Render dot
       ctx.beginPath();
       ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
 
-      if (isDark) {
-        // Cyan / Electric Blue / Coral glow near mouse
-        if (dist < mouse.radius) {
-          ctx.fillStyle = `rgba(0, 229, 255, ${dot.alpha})`;
-        } else {
-          ctx.fillStyle = `rgba(140, 180, 255, ${dot.alpha})`;
-        }
+      if (dot.alpha > 0.4) {
+        ctx.fillStyle = `rgba(0, 229, 255, ${dot.alpha})`;
       } else {
-        if (dist < mouse.radius) {
-          ctx.fillStyle = `rgba(255, 99, 71, ${dot.alpha})`;
-        } else {
-          ctx.fillStyle = `rgba(30, 41, 59, ${dot.alpha})`;
-        }
+        ctx.fillStyle = `rgba(130, 160, 220, ${dot.alpha})`;
       }
 
       ctx.fill();
     }
 
-    requestAnimationFrame(renderShader);
+    // Auto-sleep if idle to save 100% CPU/GPU
+    if (!mouse.active && maxVelocity < 0.04) {
+      isRunning = false;
+      return;
+    }
+
+    animFrameId = requestAnimationFrame(renderShader);
   }
 
-  requestAnimationFrame(renderShader);
+  wakeUp();
+}
+
+// ═════════════════════════════════════════════════════════════
+// Magnetic Parallax on Main Scan Button & Quick Test Preset Pills
+// ═════════════════════════════════════════════════════════════
+function initInteractiveParallaxElements() {
+  const bentoGrid = document.querySelector('.bento-grid');
+  const scanBtn = document.getElementById('btnScan');
+  const clearBtn = document.getElementById('btnClear');
+  const presetButtons = document.querySelectorAll('.btn-preset');
+  const cards = document.querySelectorAll('.bento-card');
+
+  if (!bentoGrid) return;
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let targetX = 0;
+  let targetY = 0;
+  let isHovering = false;
+
+  window.addEventListener('mousemove', (e) => {
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    targetX = (e.clientX - cx) / cx; // -1 to 1
+    targetY = (e.clientY - cy) / cy; // -1 to 1
+    isHovering = true;
+  }, { passive: true });
+
+  window.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+    isHovering = false;
+  }, { passive: true });
+
+  // Direct magnetic hover on Scan & Clear Buttons
+  if (scanBtn) {
+    scanBtn.addEventListener('mousemove', (e) => {
+      const rect = scanBtn.getBoundingClientRect();
+      const bx = (e.clientX - rect.left - rect.width / 2) * 0.22;
+      const by = (e.clientY - rect.top - rect.height / 2) * 0.22;
+      scanBtn.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0) scale(1.02)`;
+    });
+
+    scanBtn.addEventListener('mouseleave', () => {
+      scanBtn.style.transform = '';
+    });
+  }
+
+  if (clearBtn) {
+    clearBtn.addEventListener('mousemove', (e) => {
+      const rect = clearBtn.getBoundingClientRect();
+      const bx = (e.clientX - rect.left - rect.width / 2) * 0.18;
+      const by = (e.clientY - rect.top - rect.height / 2) * 0.18;
+      clearBtn.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0)`;
+    });
+
+    clearBtn.addEventListener('mouseleave', () => {
+      clearBtn.style.transform = '';
+    });
+  }
+
+  // Direct magnetic hover on Preset Pills
+  presetButtons.forEach((pill) => {
+    pill.addEventListener('mousemove', (e) => {
+      const rect = pill.getBoundingClientRect();
+      const bx = (e.clientX - rect.left - rect.width / 2) * 0.25;
+      const by = (e.clientY - rect.top - rect.height / 2) * 0.25;
+      pill.style.transform = `translate3d(${bx.toFixed(1)}px, ${by.toFixed(1)}px, 0) scale(1.06)`;
+    });
+
+    pill.addEventListener('mouseleave', () => {
+      pill.style.transform = '';
+    });
+  });
+
+  // Global subtle 3D card tilt
+  function renderParallaxElements() {
+    mouseX += (targetX - mouseX) * 0.08;
+    mouseY += (targetY - mouseY) * 0.08;
+
+    if (isHovering && Math.abs(mouseX) > 0.01) {
+      cards.forEach((card, i) => {
+        const depth = (i % 2 === 0) ? 4 : 6;
+        const tiltX = (mouseY * -depth).toFixed(2);
+        const tiltY = (mouseX * depth).toFixed(2);
+        card.style.transform = `perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+      });
+    }
+
+    requestAnimationFrame(renderParallaxElements);
+  }
+
+  requestAnimationFrame(renderParallaxElements);
 }
 
 // Initialize on DOM ready
@@ -840,6 +953,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCascadingCarousel();
   initTopActionDeck();
   initDotDistortionShader();
+  initInteractiveParallaxElements();
   lucide.createIcons();
 });
 
@@ -849,6 +963,7 @@ if (document.readyState === 'complete' || document.readyState === 'interactive')
     initCascadingCarousel();
     initTopActionDeck();
     initDotDistortionShader();
+    initInteractiveParallaxElements();
     lucide.createIcons();
   }, 100);
 }
