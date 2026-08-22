@@ -969,6 +969,25 @@ function initUiverseCardActions() {
       window.open('https://cybercrime.gov.in', '_blank', 'noopener');
     });
   }
+
+  const toggleSentinel = document.getElementById('toggleSentinelMode');
+  const statusPill = document.querySelector('.status-pill');
+
+  if (toggleSentinel && statusPill) {
+    toggleSentinel.addEventListener('change', () => {
+      if (toggleSentinel.checked) {
+        statusPill.innerHTML = '<span class="status-dot"></span> Online · v2.4';
+        statusPill.style.color = '#ff7875';
+        statusPill.style.borderColor = 'rgba(255, 77, 79, 0.3)';
+        statusPill.style.background = 'rgba(255, 77, 79, 0.12)';
+      } else {
+        statusPill.innerHTML = '<span class="status-dot" style="background: #94a3b8; box-shadow: none;"></span> Standby · Manual';
+        statusPill.style.color = '#94a3b8';
+        statusPill.style.borderColor = 'rgba(148, 163, 184, 0.2)';
+        statusPill.style.background = 'rgba(148, 163, 184, 0.08)';
+      }
+    });
+  }
 }
 
 // Initialize on DOM ready
