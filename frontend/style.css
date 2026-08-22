@@ -470,80 +470,6 @@ body {
   max-width: calc(100% - 100px);
 }
 
-/* Floating Concentric Glass Lenses (Top Right - Compact & Non-Overlapping) */
-.uiverse-card .logo {
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform-style: preserve-3d;
-  pointer-events: none;
-  z-index: 5;
-}
-
-.uiverse-card .logo .circle {
-  display: block;
-  position: absolute;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  top: 0;
-  right: 0;
-  box-shadow: -6px 6px 20px rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  background: rgba(239, 68, 68, 0.12);
-  border: 1px solid rgba(239, 68, 68, 0.28);
-  transition: all 0.5s ease-in-out;
-}
-
-.uiverse-card .logo .circle1 {
-  width: 120px;
-  transform: translate3d(0, 0, 20px);
-  top: 6px;
-  right: 6px;
-}
-
-.uiverse-card .logo .circle2 {
-  width: 98px;
-  transform: translate3d(0, 0, 40px);
-  top: 10px;
-  right: 10px;
-  transition-delay: 0.08s;
-}
-
-.uiverse-card .logo .circle3 {
-  width: 78px;
-  transform: translate3d(0, 0, 60px);
-  top: 15px;
-  right: 15px;
-  transition-delay: 0.15s;
-}
-
-.uiverse-card .logo .circle4 {
-  width: 58px;
-  transform: translate3d(0, 0, 80px);
-  top: 20px;
-  right: 20px;
-  transition-delay: 0.22s;
-}
-
-.uiverse-card .logo .circle5 {
-  width: 40px;
-  transform: translate3d(0, 0, 100px);
-  top: 26px;
-  right: 26px;
-  display: grid;
-  place-content: center;
-  transition-delay: 0.3s;
-  background: rgba(239, 68, 68, 0.42);
-  border: 1.5px solid rgba(255, 77, 79, 0.8);
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.65);
-}
-
-.uiverse-card .logo .circle5 .svg-icon {
-  width: 18px;
-  height: 18px;
-  color: #ffffff;
-}
 
 /* Card 3D Hover Expansion */
 .uiverse-parent:hover .uiverse-card {
@@ -556,21 +482,6 @@ body {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
 }
 
-.uiverse-parent:hover .uiverse-card .logo .circle2 {
-  transform: translate3d(0, 0, 35px);
-}
-
-.uiverse-parent:hover .uiverse-card .logo .circle3 {
-  transform: translate3d(0, 0, 45px);
-}
-
-.uiverse-parent:hover .uiverse-card .logo .circle4 {
-  transform: translate3d(0, 0, 55px);
-}
-
-.uiverse-parent:hover .uiverse-card .logo .circle5 {
-  transform: translate3d(0, 0, 65px);
-}
 
 /* Bottom 3D Action Bar */
 .uiverse-card .bottom {
@@ -670,15 +581,7 @@ body {
   color: #fb923c;
   text-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
 }
-.logo-amber .circle {
-  background: rgba(239, 68, 68, 0.12);
-  border-color: rgba(239, 68, 68, 0.28);
-}
-.logo-amber .circle5 {
-  background: rgba(239, 68, 68, 0.38);
-  border-color: rgba(255, 107, 107, 0.7);
-  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
-}
+
 .card-presets-3d .bottom .view-more .view-more-button,
 .card-presets-3d .bottom .view-more .svg-arrow {
   color: #fb923c;
@@ -692,15 +595,7 @@ body {
   color: #f43f5e;
   text-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
 }
-.logo-cyan .circle {
-  background: rgba(225, 29, 72, 0.12);
-  border-color: rgba(225, 29, 72, 0.28);
-}
-.logo-cyan .circle5 {
-  background: rgba(225, 29, 72, 0.38);
-  border-color: rgba(244, 63, 94, 0.7);
-  box-shadow: 0 0 20px rgba(225, 29, 72, 0.6);
-}
+
 
 /* Deep Crimson Theme (Verdict Card) */
 .card-verdict-3d {
@@ -710,15 +605,7 @@ body {
   color: #ff6b6b;
   text-shadow: 0 0 20px rgba(255, 107, 107, 0.45);
 }
-.logo-purple .circle {
-  background: rgba(220, 38, 38, 0.14);
-  border-color: rgba(220, 38, 38, 0.28);
-}
-.logo-purple .circle5 {
-  background: rgba(220, 38, 38, 0.38);
-  border-color: rgba(255, 107, 107, 0.7);
-  box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
-}
+
 .card-verdict-3d .bottom .view-more .view-more-button,
 .card-verdict-3d .bottom .view-more .svg-arrow {
   color: #ff6b6b;
