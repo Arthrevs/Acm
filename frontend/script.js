@@ -444,3 +444,194 @@ ACTION: File at 1930 or https://cybercrime.gov.in
   // Re-render lucide icons for dynamic content
   lucide.createIcons();
 }
+
+// ═════════════════════════════════════════════════════════════
+// 3D Cascading Coverflow Carousel Engine (Indian Context Intel)
+// ═════════════════════════════════════════════════════════════
+function initCascadingCarousel() {
+  const viewport = document.getElementById('skewedViewport');
+  const track = document.getElementById('skewedTrack');
+  const prevBtn = document.getElementById('carouselPrev');
+  const nextBtn = document.getElementById('carouselNext');
+  const filterBtns = document.querySelectorAll('.carousel-filter-btn');
+
+  if (!viewport || !track) return;
+
+  // Duplicate cards for seamless infinite marquee loop
+  const originalCards = Array.from(track.children);
+  originalCards.forEach(c => {
+    const clone = c.cloneNode(true);
+    track.appendChild(clone);
+  });
+
+  let allCards = Array.from(track.querySelectorAll('.skewed-card'));
+  let scrollPos = 0;
+  let isHovered = false;
+  let isDragging = false;
+  let lastX = 0;
+  let velocity = 0;
+  let singleSetWidth = 0;
+  let activeFilter = 'all';
+
+  function calculateSetWidth() {
+    let width = 0;
+    const visibleOriginals = originalCards.filter(c => {
+      if (activeFilter === 'all') return true;
+      return c.dataset.category === activeFilter;
+    });
+    visibleOriginals.forEach(c => {
+      width += (c.offsetWidth || 350) + 24;
+    });
+    singleSetWidth = width || 3740;
+  }
+
+  calculateSetWidth();
+  window.addEventListener('resize', calculateSetWidth);
+
+  // Category Filtering
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+
+      allCards.forEach(card => {
+        if (activeFilter === 'all' || card.dataset.category === activeFilter) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      calculateSetWidth();
+      scrollPos = 0;
+      lucide.createIcons();
+    });
+  });
+
+  // Hover detection
+  viewport.addEventListener('mouseenter', () => { isHovered = true; });
+  viewport.addEventListener('mouseleave', () => { isHovered = false; isDragging = false; });
+
+  // Mouse Drag / Touch Drag with momentum
+  viewport.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    lastX = e.pageX;
+    velocity = 0;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const delta = e.pageX - lastX;
+    scrollPos -= delta;
+    velocity = delta;
+    lastX = e.pageX;
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  // Touch support
+  viewport.addEventListener('touchstart', (e) => {
+    isDragging = true;
+    lastX = e.touches[0].pageX;
+    velocity = 0;
+  }, { passive: true });
+
+  viewport.addEventListener('touchmove', (e) => {
+    if (!isDragging) return;
+    const delta = e.touches[0].pageX - lastX;
+    scrollPos -= delta;
+    velocity = delta;
+    lastX = e.touches[0].pageX;
+  }, { passive: true });
+
+  viewport.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+
+  // Prev / Next Navigation
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      scrollPos -= 374;
+      if (scrollPos < 0) scrollPos += singleSetWidth;
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      scrollPos += 374;
+    });
+  }
+
+  // Animation Loop (rAF)
+  function renderFrame() {
+    if (!isHovered && !isDragging) {
+      scrollPos += 0.75; // Smooth auto-scroll speed
+    } else if (isDragging) {
+      // Direct drag
+    } else if (Math.abs(velocity) > 0.1) {
+      // Momentum decay
+      scrollPos -= velocity;
+      velocity *= 0.92;
+    }
+
+    // Wrap around for infinite loop
+    if (singleSetWidth > 0) {
+      if (scrollPos >= singleSetWidth) {
+        scrollPos -= singleSetWidth;
+      } else if (scrollPos < 0) {
+        scrollPos += singleSetWidth;
+      }
+    }
+
+    track.style.transform = `translateX(${-scrollPos}px)`;
+
+    // Calculate 3D Cascading perspective per card
+    const vpRect = viewport.getBoundingClientRect();
+    const vpCenter = vpRect.left + vpRect.width / 2;
+    const halfVp = vpRect.width / 2 || 400;
+
+    const visibleCards = allCards.filter(c => c.style.display !== 'none');
+
+    visibleCards.forEach((card) => {
+      const cardRect = card.getBoundingClientRect();
+      const cardCenter = cardRect.left + cardRect.width / 2;
+      
+      // Normalized distance from center (-1 left, 0 center, +1 right)
+      const dist = (cardCenter - vpCenter) / halfVp;
+      const clampedDist = Math.max(-2, Math.min(2, dist));
+      const absDist = Math.abs(clampedDist);
+
+      // Cascading 3D transforms
+      const rotY = clampedDist * -28; // Cards on left angle right, cards on right angle left
+      const scale = 1.05 - Math.min(0.24, absDist * 0.14);
+      const transZ = (1 - Math.min(1, absDist)) * 32;
+      const opacity = 1 - Math.min(0.45, absDist * 0.22);
+      const zIndex = Math.round(100 - absDist * 25);
+
+      card.style.transform = `rotateY(${rotY}deg) scale(${scale}) translateZ(${transZ}px)`;
+      card.style.opacity = opacity.toFixed(2);
+      card.style.zIndex = zIndex;
+    });
+
+    requestAnimationFrame(renderFrame);
+  }
+
+  requestAnimationFrame(renderFrame);
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+  initCascadingCarousel();
+  lucide.createIcons();
+});
+
+// Fallback init in case DOMContentLoaded already fired
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+  setTimeout(() => {
+    initCascadingCarousel();
+    lucide.createIcons();
+  }, 100);
+}
+
