@@ -1672,23 +1672,283 @@ textarea::placeholder { color: #64748b; }
   letter-spacing: 0.05em;
 }
 
-/* ═══ MOBILE ═══ */
-@media (max-width: 900px) {
-  .sidebar { display: none; }
-  .main-content { padding: 16px; }
-  .bento-grid { grid-template-columns: 1fr; }
-  .card-input { grid-row: auto; }
-  .card-verdict { min-height: 160px; }
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Tablet (≤1024px)
+   ═══════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .main-content {
+    padding: 20px;
+  }
 
-  .verdict-banner { flex-direction: column; text-align: center; gap: 12px; }
-  .verdict-info h2 { font-size: 2.2rem; }
-  .risk-score { text-align: center; width: 100%; }
-  .risk-value { font-size: 1.8rem; }
-  .results-grid { grid-template-columns: 1fr; }
-  .card-action { flex-direction: column; }
-  .btn-secondary { padding: 12px; text-align: center; }
+  .bento-grid {
+    gap: 16px;
+  }
 
-  .skewed-card { width: 300px; }
-  .skewed-viewport { padding: 24px 0 32px 0; }
-  .carousel-filter-group { overflow-x: auto; max-width: 100%; }
+  .uiverse-card .content {
+    padding: 20px 18px 12px 18px;
+  }
+
+  .uiverse-card .content .text {
+    max-width: 100%;
+  }
 }
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Mobile (≤768px)
+   ═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ─── Hide sidebar, full-width layout ─── */
+  .sidebar {
+    display: none;
+  }
+
+  .main-content {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+
+  /* ─── Topbar compact ─── */
+  .topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .brand-title {
+    font-size: 1.1rem !important;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .topbar-right {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ─── Bento grid → single column stack ─── */
+  .bento-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .card-presets-parent,
+  .card-input-parent,
+  .card-verdict-parent {
+    grid-column: 1;
+  }
+
+  /* ─── Cards shrink gracefully ─── */
+  .uiverse-card {
+    min-height: auto;
+    padding-bottom: 40px;
+    border-radius: 16px;
+  }
+
+  .uiverse-card .content {
+    padding: 16px 14px 10px 14px;
+  }
+
+  .uiverse-card .content .title {
+    font-size: 0.9rem;
+  }
+
+  .uiverse-card .content .text {
+    font-size: 0.78rem;
+    max-width: 100%;
+  }
+
+  /* Disable 3D on mobile for performance + touch */
+  .uiverse-parent {
+    perspective: none;
+  }
+
+  .uiverse-card {
+    transform-style: flat;
+  }
+
+  .uiverse-card .glass {
+    display: none;
+  }
+
+  .uiverse-parent:hover .uiverse-card {
+    transform: none;
+  }
+
+  /* ─── Concentric lens decorations: hide on mobile ─── */
+  .logo {
+    display: none;
+  }
+
+  /* ─── Preset pills: scroll horizontally ─── */
+  .presets-grid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .presets-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .btn-preset {
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    padding: 8px 14px;
+  }
+
+  /* ─── Buttons: full width, touch-friendly ─── */
+  .card-action-btns {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .card-action-btns .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+  }
+
+  /* ─── Upload zone ─── */
+  .upload-zone {
+    min-height: 100px;
+  }
+
+  /* ─── Textarea ─── */
+  .textarea-wrapper textarea {
+    font-size: 0.85rem;
+    rows: 3;
+  }
+
+  /* ─── Verdict banner ─── */
+  .verdict-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .verdict-info h2 {
+    font-size: 1.8rem;
+  }
+
+  .risk-score {
+    text-align: center;
+    width: 100%;
+  }
+
+  .risk-value {
+    font-size: 1.5rem;
+  }
+
+  /* ─── Results grid → single column ─── */
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ─── Dossier ─── */
+  .dossier-text {
+    font-size: 0.75rem;
+    max-height: 200px;
+  }
+
+  .dossier-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ─── Bottom 3D action bar ─── */
+  .uiverse-card .bottom {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    padding: 10px 14px;
+    transform: none;
+  }
+
+  /* ─── Kinetic button schema: tone down for mobile ─── */
+  .btn::before {
+    display: none;
+  }
+
+  /* ─── Status pill ─── */
+  .status-pill {
+    font-size: 0.65rem;
+    padding: 5px 10px;
+  }
+
+  /* ─── Command deck / button-box: simplify ─── */
+  .button-box {
+    transform: scale(0.75);
+  }
+
+  /* ─── I4C Threat Dossier cards ─── */
+  .skewed-viewport {
+    padding: 16px 0 20px 0;
+  }
+
+  .skewed-card {
+    width: 260px;
+  }
+
+  .carousel-filter-group {
+    overflow-x: auto;
+    max-width: 100%;
+    flex-wrap: nowrap;
+    scrollbar-width: none;
+  }
+
+  .carousel-filter-group::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ─── Highlighted spans (threat markers) ─── */
+  .threat-highlight {
+    font-size: 0.8rem;
+  }
+
+  /* ─── Pipeline steps ─── */
+  .pipeline-steps {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .step {
+    font-size: 0.75rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE — Small phone (≤400px)
+   ═══════════════════════════════════════════════ */
+@media (max-width: 400px) {
+  .main-content {
+    padding: 10px 8px;
+  }
+
+  .uiverse-card .content {
+    padding: 12px 10px 8px 10px;
+  }
+
+  .brand-title {
+    font-size: 0.95rem !important;
+  }
+
+  .verdict-info h2 {
+    font-size: 1.5rem;
+  }
+
+  .btn-preset {
+    font-size: 0.72rem;
+    padding: 7px 12px;
+  }
+
+  .skewed-card {
+    width: 220px;
+  }
+}
+
