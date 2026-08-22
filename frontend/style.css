@@ -4,45 +4,29 @@
    Inspired by modern dashboard UI patterns
    ═══════════════════════════════════════════════ */
 
-:root {
-  --bg: #f5f5f7;
-  --bg-white: #ffffff;
-  --bg-dark: #1c1c1e;
-  --border: #e5e5ea;
-  --text: #1c1c1e;
-  --text-secondary: #636366;
-  --text-dim: #aeaeb2;
+:root,
+[data-theme="dark"] {
+  --bg: #090a0e;
+  --bg-white: #13141a;
+  --bg-dark: #000000;
+  --border: #23242c;
+  --text: #f4f4f6;
+  --text-secondary: #a1a1aa;
+  --text-dim: #71717a;
   --coral: #FF6347;
-  --coral-light: #fff0ed;
+  --coral-light: rgba(255, 99, 71, 0.15);
   --green: #34c759;
-  --green-light: #eafaf0;
+  --green-light: rgba(52, 199, 89, 0.15);
   --red: #ff3b30;
-  --red-light: #fff0ef;
+  --red-light: rgba(255, 59, 48, 0.15);
   --orange: #ff9500;
   --blue: #007aff;
   --radius: 20px;
   --radius-sm: 12px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
   --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --bg-input: #fafafa;
-  --bg-warn: #fff8ec;
-  --grid-color: rgba(0, 0, 0, 0.04);
-}
-
-[data-theme="dark"] {
-  --bg: #0c0d10;
-  --bg-white: #16171b;
-  --bg-dark: #000000;
-  --border: #232429;
-  --text: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-dim: #52525b;
-  --coral-light: rgba(255,99,71,0.15);
-  --green-light: rgba(52,199,89,0.15);
-  --red-light: rgba(255,59,48,0.15);
-  --bg-input: #121215;
-  --bg-warn: rgba(255,149,0,0.1);
-  --shadow: 0 8px 24px rgba(0,0,0,0.5);
+  --bg-input: #101116;
+  --bg-warn: rgba(255, 149, 0, 0.12);
   --grid-color: rgba(255, 255, 255, 0.045);
 }
 
