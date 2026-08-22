@@ -49,6 +49,8 @@
   width: 100%;
   height: 100%;
   display: block;
+  mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 85%);
+  -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 85%);
 }
 
 .shader-vignette-overlay {

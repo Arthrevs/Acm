@@ -4,6 +4,7 @@ import { Volume2, VolumeX, Shield, AlertTriangle, CheckCircle2, ChevronRight, Co
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import SkewedCarousel from './components/SkewedCarousel';
+import { DottedGlowBackground } from './components/ui/dotted-glow-background';
 
 export function cn(...inputs) {
   return twMerge(clsx(inputs));
@@ -122,12 +123,25 @@ export default function App() {
   const riskScore = scanResult?.classification?.risk_score || 0;
 
   return (
-    <main className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 font-mono text-zinc-300 relative overflow-hidden">
+    <main className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 font-mono text-zinc-300 relative overflow-hidden bg-[#090a0f]">
       
+      {/* Aceternity Dotted Glow Background */}
+      <DottedGlowBackground
+        className="pointer-events-none"
+        opacity={1}
+        gap={22}
+        radius={1.6}
+        speedMin={0.3}
+        speedMax={1.6}
+        speedScale={1}
+        dotColor="rgba(255, 77, 79, 0.16)"
+        glowColor={isScam ? "rgba(239, 68, 68, 0.9)" : scanResult ? "rgba(16, 185, 129, 0.9)" : "rgba(239, 68, 68, 0.75)"}
+      />
+
       {/* Background Glow */}
       <div className={cn(
         "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20 pointer-events-none transition-colors duration-1000",
-        isScam ? "bg-red-500" : scanResult ? "bg-emerald-500" : "bg-zinc-800"
+        isScam ? "bg-red-500" : scanResult ? "bg-emerald-500" : "bg-red-900/30"
       )} />
 
       <motion.div 

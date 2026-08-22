@@ -682,15 +682,17 @@ function initDotDistortionShader() {
   let width = 0;
   let height = 0;
   let dots = [];
-  const GAP = 46; // Optimized spacing: ~75% fewer particles for high performance
+  const GAP = 22; // Aceternity DottedGlow Matrix spacing
+  const RADIUS = 1.6;
+  const SPEED_MIN = 0.3;
+  const SPEED_MAX = 1.6;
 
   const mouse = {
     x: -1000,
     y: -1000,
     targetX: -1000,
     targetY: -1000,
-    radius: 120,
-    strength: 32,
+    radius: 140,
     active: false
   };
 
@@ -713,18 +715,13 @@ function initDotDistortionShader() {
 
     for (let r = 0; r < rows; r++) {
       for (let c = 0; c < cols; c++) {
-        const ox = c * GAP;
-        const oy = r * GAP;
+        const speed = (SPEED_MIN + Math.random() * (SPEED_MAX - SPEED_MIN)) * 0.025;
         dots.push({
-          ox: ox,
-          oy: oy,
-          x: ox,
-          y: oy,
-          vx: 0,
-          vy: 0,
-          radius: 1.25,
-          alpha: 0.22,
-          phase: (ox + oy) * 0.005
+          x: c * GAP,
+          y: r * GAP,
+          baseRadius: RADIUS,
+          phase: Math.random() * Math.PI * 2,
+          speed: speed,
         });
       }
     }
@@ -736,11 +733,11 @@ function initDotDistortionShader() {
   function wakeUp() {
     if (!isRunning && !document.hidden) {
       isRunning = true;
-      animFrameId = requestAnimationFrame(renderShader);
+      animFrameId = requestAnimationFrame(renderDottedGlow);
     }
   }
 
-  // Mouse & Touch Tracking
+  // Mouse Tracking
   window.addEventListener('mousemove', (e) => {
     mouse.targetX = e.clientX;
     mouse.targetY = e.clientY;
@@ -780,7 +777,7 @@ function initDotDistortionShader() {
 
   let time = 0;
 
-  function renderShader() {
+  function renderDottedGlow() {
     time += 0.02;
 
     // Smooth mouse lerp
@@ -789,70 +786,51 @@ function initDotDistortionShader() {
 
     ctx.clearRect(0, 0, width, height);
 
-    let maxVelocity = 0;
-
     for (let i = 0; i < dots.length; i++) {
       const dot = dots[i];
 
-      // Lightweight wave motion
-      const waveX = Math.sin(time + dot.phase) * 2;
-      const waveY = Math.cos(time + dot.phase * 0.8) * 2;
-      const targetX = dot.ox + waveX;
-      const targetY = dot.oy + waveY;
+      // Aceternity shimmering breathing wave pulse
+      const wave = (Math.sin(time * dot.speed * 40 + dot.phase) + 1) / 2;
 
-      // Spatial check: only compute repulsion for dots near cursor
+      // Mouse proximity radiant glow
       const dx = mouse.x - dot.x;
       const dy = mouse.y - dot.y;
+      let cursorGlow = 0;
 
       if (Math.abs(dx) < mouse.radius && Math.abs(dy) < mouse.radius) {
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < mouse.radius && dist > 0) {
-          const factor = (1 - dist / mouse.radius);
-          const force = factor * mouse.strength;
-          dot.vx -= (dx / dist) * force;
-          dot.vy -= (dy / dist) * force;
-          dot.radius = 1.25 + factor * 1.8;
-          dot.alpha = Math.min(0.9, 0.22 + factor * 0.65);
+        if (dist < mouse.radius) {
+          cursorGlow = Math.pow(1 - dist / mouse.radius, 2);
         }
-      } else {
-        dot.radius += (1.25 - dot.radius) * 0.1;
-        dot.alpha += (0.22 - dot.alpha) * 0.08;
       }
 
-      // Spring physics
-      dot.vx += (targetX - dot.x) * 0.08;
-      dot.vy += (targetY - dot.y) * 0.08;
-      dot.vx *= 0.85;
-      dot.vy *= 0.85;
-      dot.x += dot.vx;
-      dot.y += dot.vy;
+      const alpha = Math.min(1, 0.12 + wave * 0.28 + cursorGlow * 0.8);
+      const r = dot.baseRadius + cursorGlow * 1.5;
 
-      const vel = Math.abs(dot.vx) + Math.abs(dot.vy);
-      if (vel > maxVelocity) maxVelocity = vel;
-
-      // Render dot
       ctx.beginPath();
-      ctx.arc(dot.x, dot.y, dot.radius, 0, Math.PI * 2);
+      ctx.arc(dot.x, dot.y, r, 0, Math.PI * 2);
 
-      if (dot.alpha > 0.4) {
-        ctx.fillStyle = `rgba(0, 229, 255, ${dot.alpha})`;
+      if (cursorGlow > 0.08) {
+        ctx.fillStyle = `rgba(255, 77, 79, ${alpha})`;
+        ctx.shadowColor = 'rgba(239, 68, 68, 0.9)';
+        ctx.shadowBlur = 8;
+      } else if (wave > 0.75) {
+        ctx.fillStyle = `rgba(239, 68, 68, ${alpha})`;
+        ctx.shadowColor = 'rgba(239, 68, 68, 0.5)';
+        ctx.shadowBlur = 4;
       } else {
-        ctx.fillStyle = `rgba(130, 160, 220, ${dot.alpha})`;
+        ctx.fillStyle = `rgba(180, 190, 210, ${alpha * 0.7})`;
+        ctx.shadowBlur = 0;
       }
 
       ctx.fill();
     }
 
-    // Auto-sleep if idle to save 100% CPU/GPU
-    if (!mouse.active && maxVelocity < 0.04) {
-      isRunning = false;
-      return;
-    }
-
-    animFrameId = requestAnimationFrame(renderShader);
+    animFrameId = requestAnimationFrame(renderDottedGlow);
   }
 
   wakeUp();
+}
 }
 
 // ═════════════════════════════════════════════════════════════
