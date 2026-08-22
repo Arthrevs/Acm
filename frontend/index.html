@@ -66,11 +66,11 @@
           <div class="screen-toolbar">
             <div class="preset-group">
               <span class="preset-label">PRESETS:</span>
-              <button class="color-dot dot-orange" data-preset="KYC SCAM" data-msg="Dear customer, aapka baink acount blck ho jayega agar aap turant kycc update nahi karte. Click here: http://secure-bnk.co/verify" title="KYC Scam [Key 1]"></button>
-              <button class="color-dot dot-blue" data-preset="LOTTERY SCAM" data-msg="Congrats! Aapne 50000 rs ka lottry jeeta hai. Apna prize claim karne ke liye call karein: +919876543210 ya visit karein: www.prize-claim.xyz" title="Lottery Scam [Key 2]"></button>
-              <button class="color-dot dot-cyan" data-preset="UTILITY SCAM" data-msg="Aapka bijli ka bill overdue hai. Aaj raat blck ho jayega. Imdtly pay karein: http://pay-bijli.fake/now" title="Utility Scam [Key 3]"></button>
-              <button class="color-dot dot-green" data-preset="SAFE CHAT" data-msg="Hi, meeting kal 3 baje hai office mein. Please time pe aa jana." title="Safe Message [Key 4]"></button>
-              <button class="color-dot dot-pink" data-preset="OLX PAYMENT (SAFE)" data-msg="Hi bhai, ye phone available hai?&#10;Haanji available hai&#10;Kitne ka hai?&#10;12000 final price&#10;Ok bhai, UPI se payment kar deta hu. GPay pe bhej do amount&#10;Haanji, 12000 bhej do is number pe" title="OLX Marketplace Chat [Key 5]"></button>
+              <button class="color-dot dot-orange" data-preset="KYC SCAM" data-msg="Dear SBI User, your netbanking will be BLOCKED today. Please update PAN immediately on: http://sbi-kyc-update.co.in" title="KYC Scam [Key 1]"></button>
+              <button class="color-dot dot-blue" data-preset="ELECTRICITY SCAM" data-msg="Dear customer, your electricity power will be disconnected at 9.30 PM today due to unpaid bill. Call our officer urgently: +91-8877665544" title="Electricity Scam [Key 2]"></button>
+              <button class="color-dot dot-cyan" data-preset="FEDEX SCAM" data-msg="FedEx: Your parcel #893475 is detained by customs due to illegal items. Press 1 to speak with Narcotics Bureau or click http://fedex-customs-india.in" title="FedEx/Customs Scam [Key 3]"></button>
+              <button class="color-dot dot-green" data-preset="SAFE CHAT" data-msg="Maa, main ghar pahunch gaya. Khana kha liya hai. Chinta mat karna." title="Safe Message [Key 4]"></button>
+              <button class="color-dot dot-pink" data-preset="OTP (SAFE)" data-msg="Your Swiggy OTP for login is 549210. Do not share this with anyone. Swiggy employees will never ask for your OTP." title="Safe OTP [Key 5]"></button>
               <span class="preset-active-tag" id="presetLabel">SELECT PRESET</span>
             </div>
             
@@ -246,18 +246,19 @@
 
         </div>
 
-        <!-- Threat Risk Fader & Sensitivity Control -->
+        <!-- Threat Risk Indicator -->
         <div class="fader-row">
           <div class="fader-label">
             <span class="fader-pad-id" id="faderPadId">P4</span>
-            <span class="fader-name">RISK SCORE</span>
+            <span class="fader-name">RISK METER</span>
           </div>
           <div class="fader-track-container">
-            <input type="range" min="0" max="100" value="0" class="hardware-fader" id="riskSlider" title="Drag to test risk score sensitivity">
+            <div class="risk-progress-bar">
+              <div class="risk-progress-fill" id="riskProgressBar" style="width: 0%;"></div>
+            </div>
           </div>
           <div class="fader-value-box">
             <span id="sliderValueText">0%</span>
-            <button class="btn-fader-del" id="btnResetSlider" title="Reset score fader">RST</button>
           </div>
         </div>
 

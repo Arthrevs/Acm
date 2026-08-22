@@ -54,10 +54,9 @@ const pad6Led = document.getElementById('pad6Led');
 const pad7Led = document.getElementById('pad7Led');
 const pad8Led = document.getElementById('pad8Led');
 
-// Slider & Transport
-const riskSlider = document.getElementById('riskSlider');
+// Progress Bar & Transport
+const riskProgressBar = document.getElementById('riskProgressBar');
 const sliderValueText = document.getElementById('sliderValueText');
-const btnResetSlider = document.getElementById('btnResetSlider');
 const btnPlay = document.getElementById('btnPlay');
 const btnInspectToggle = document.getElementById('btnInspectToggle');
 const ledSequencer = document.getElementById('ledSequencer');
@@ -186,27 +185,7 @@ btnClear.addEventListener('click', () => {
   resetConsole();
 });
 
-// Fader Reset Button
-btnResetSlider.addEventListener('click', () => {
-  playSynthTone(350, 'sine', 0.05);
-  riskSlider.value = 0;
-  sliderValueText.textContent = '0%';
-  riskSlider.className = 'hardware-fader';
-});
 
-// Risk Slider Drag interaction
-riskSlider.addEventListener('input', (e) => {
-  const val = e.target.value;
-  sliderValueText.textContent = `${val}%`;
-  playSynthTone(200 + val * 5, 'sine', 0.02, 0.02);
-  if (val >= 60) {
-    riskSlider.className = 'hardware-fader scam';
-  } else if (val >= 30) {
-    riskSlider.className = 'hardware-fader';
-  } else {
-    riskSlider.className = 'hardware-fader safe';
-  }
-});
 
 // Threshold Stepper (- / +)
 btnThresholdMinus.addEventListener('click', () => {
@@ -457,9 +436,9 @@ function renderHardwareResults(data) {
   pad4Led.textContent = '■ VERDICT';
   pad4Name.textContent = `${score}% RISK`;
 
-  // 4. Update Hardware Risk Fader
-  riskSlider.className = 'hardware-fader ' + (isScam ? 'scam' : 'safe');
-  riskSlider.value = score;
+  // 4. Update Hardware Risk Meter
+  riskProgressBar.className = 'risk-progress-fill ' + (isScam ? 'scam' : 'safe');
+  riskProgressBar.style.width = score + '%';
   sliderValueText.textContent = `${score}%`;
 
   // 5. Update 16 Security Check Vector LEDs
@@ -562,8 +541,8 @@ function resetConsole() {
   pad4Led.textContent = '■ P4';
   pad4Name.textContent = 'VERDICT';
 
-  riskSlider.className = 'hardware-fader';
-  riskSlider.value = 0;
+  riskProgressBar.className = 'risk-progress-fill';
+  riskProgressBar.style.width = '0%';
   sliderValueText.textContent = '0%';
 
   valP1.textContent = '0 FILTERED';
