@@ -358,18 +358,21 @@ body {
   align-items: center;
   gap: 6px;
   font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--green);
-  background: var(--green-light);
+  font-weight: 700;
+  color: #ff7875;
+  background: rgba(255, 77, 79, 0.12);
+  border: 1px solid rgba(255, 77, 79, 0.3);
   padding: 6px 14px;
   border-radius: 99px;
+  box-shadow: 0 0 12px rgba(255, 77, 79, 0.2);
 }
 
 .status-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--green);
+  background: #ff4d4f;
+  box-shadow: 0 0 8px #ff4d4f;
 }
 
 /* ═════════════════════════════════════════════════
@@ -411,7 +414,7 @@ body {
   min-height: 250px;
   position: relative;
   border-radius: 44px;
-  background: linear-gradient(135deg, rgba(0, 255, 214, 0.1) 0%, rgba(8, 226, 96, 0.05) 100%), #111218;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(185, 28, 28, 0.05) 100%), #111218;
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   transform-style: preserve-3d;
   box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
@@ -446,12 +449,12 @@ body {
 
 .uiverse-card .content .title {
   display: block;
-  color: #00ffd6;
+  color: #ff4d4f;
   font-weight: 900;
   font-size: 1.2rem;
   letter-spacing: 0.04em;
   margin-bottom: 6px;
-  text-shadow: 0 0 20px rgba(0, 255, 214, 0.35);
+  text-shadow: 0 0 20px rgba(255, 77, 79, 0.45);
 }
 
 .uiverse-card .content .text {
@@ -462,7 +465,7 @@ body {
   margin-bottom: 12px;
 }
 
-/* Floating Concentric Glass Lenses (Top Right) */
+/* Floating Concentric Glass Lenses (Top Right - Red / Crimson Hues) */
 .uiverse-card .logo {
   position: absolute;
   right: 0;
@@ -482,8 +485,8 @@ body {
   box-shadow: -8px 8px 25px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  background: rgba(0, 249, 203, 0.12);
-  border: 1px solid rgba(0, 249, 203, 0.25);
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.28);
   transition: all 0.5s ease-in-out;
 }
 
@@ -526,9 +529,9 @@ body {
   display: grid;
   place-content: center;
   transition-delay: 0.4s;
-  background: rgba(0, 249, 203, 0.35);
-  border: 1.5px solid rgba(0, 249, 203, 0.6);
-  box-shadow: 0 0 20px rgba(0, 249, 203, 0.5);
+  background: rgba(239, 68, 68, 0.38);
+  border: 1.5px solid rgba(255, 77, 79, 0.7);
+  box-shadow: 0 0 22px rgba(239, 68, 68, 0.6);
 }
 
 .uiverse-card .logo .circle5 .svg-icon {
@@ -540,7 +543,7 @@ body {
 /* Card 3D Hover Expansion */
 .uiverse-parent:hover .uiverse-card {
   transform: rotate3d(1, -0.4, 0, 8deg) translateY(-4px);
-  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 255, 214, 0.15);
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.9), 0 0 35px rgba(239, 68, 68, 0.22);
 }
 
 .uiverse-parent:hover .uiverse-card .bottom .social-buttons-container .social-button {
@@ -595,7 +598,7 @@ body {
 .uiverse-card .bottom .view-more .view-more-button {
   background: none;
   border: none;
-  color: #00c37b;
+  color: #ff4d4f;
   font-weight: 800;
   font-size: 0.8rem;
   letter-spacing: 0.04em;
@@ -606,7 +609,7 @@ body {
 .uiverse-card .bottom .view-more .svg-arrow {
   width: 14px;
   height: 14px;
-  color: #00c37b;
+  color: #ff4d4f;
   stroke-width: 2.5px;
 }
 
@@ -634,103 +637,103 @@ body {
 .uiverse-card .bottom .social-buttons-container .social-button .social-icon {
   width: 15px;
   height: 15px;
-  color: #00ffd6;
+  color: #ff7875;
   transition: color 0.25s ease;
 }
 
 .uiverse-card .bottom .social-buttons-container .social-button:hover {
-  background: #00ffd6;
-  border-color: #00ffd6;
-  box-shadow: 0 0 16px rgba(0, 255, 214, 0.6);
+  background: #ff4d4f;
+  border-color: #ff4d4f;
+  box-shadow: 0 0 16px rgba(255, 77, 79, 0.6);
 }
 
 .uiverse-card .bottom .social-buttons-container .social-button:hover .social-icon {
-  color: #111218;
+  color: #ffffff;
 }
 
 .uiverse-card .bottom .social-buttons-container .social-button:active {
   transform: scale(0.9);
 }
 
-/* ════ Color Variations ════ */
+/* ════ Color Variations (Red / Crimson / Scarlet Palette) ════ */
 
-/* Amber Theme (Presets Card) */
+/* Amber-Red Theme (Presets Card) */
 .card-presets-3d {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(239, 68, 68, 0.06) 100%), #111218;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(245, 158, 11, 0.06) 100%), #111218;
 }
 .card-presets-3d .content .title {
-  color: #fbbf24;
-  text-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
+  color: #fb923c;
+  text-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
 }
 .logo-amber .circle {
-  background: rgba(245, 158, 11, 0.12);
-  border-color: rgba(245, 158, 11, 0.25);
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.28);
 }
 .logo-amber .circle5 {
-  background: rgba(245, 158, 11, 0.35);
-  border-color: rgba(245, 158, 11, 0.6);
-  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  background: rgba(239, 68, 68, 0.38);
+  border-color: rgba(255, 107, 107, 0.7);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
 }
 .card-presets-3d .bottom .view-more .view-more-button,
 .card-presets-3d .bottom .view-more .svg-arrow {
-  color: #fbbf24;
+  color: #fb923c;
 }
 
-/* Cyan / Azure Theme (Input Card) */
+/* Ruby / Rose Red Theme (Input Card) */
 .card-input-3d {
-  background: linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.06) 100%), #111218;
+  background: linear-gradient(135deg, rgba(225, 29, 72, 0.12) 0%, rgba(190, 18, 60, 0.06) 100%), #111218;
 }
 .card-input-3d .content .title {
-  color: #38bdf8;
-  text-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+  color: #f43f5e;
+  text-shadow: 0 0 20px rgba(244, 63, 94, 0.4);
 }
 .logo-cyan .circle {
-  background: rgba(6, 182, 212, 0.12);
-  border-color: rgba(6, 182, 212, 0.25);
+  background: rgba(225, 29, 72, 0.12);
+  border-color: rgba(225, 29, 72, 0.28);
 }
 .logo-cyan .circle5 {
-  background: rgba(6, 182, 212, 0.35);
-  border-color: rgba(6, 182, 212, 0.6);
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.5);
+  background: rgba(225, 29, 72, 0.38);
+  border-color: rgba(244, 63, 94, 0.7);
+  box-shadow: 0 0 20px rgba(225, 29, 72, 0.6);
 }
 
-/* Purple Theme (Verdict Card) */
+/* Deep Crimson Theme (Verdict Card) */
 .card-verdict-3d {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, rgba(236, 72, 153, 0.06) 100%), #111218;
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.14) 0%, rgba(153, 27, 27, 0.07) 100%), #111218;
 }
 .card-verdict-3d .content .title {
-  color: #c084fc;
-  text-shadow: 0 0 20px rgba(192, 132, 252, 0.35);
+  color: #ff6b6b;
+  text-shadow: 0 0 20px rgba(255, 107, 107, 0.45);
 }
 .logo-purple .circle {
-  background: rgba(168, 85, 247, 0.12);
-  border-color: rgba(168, 85, 247, 0.25);
+  background: rgba(220, 38, 38, 0.14);
+  border-color: rgba(220, 38, 38, 0.28);
 }
 .logo-purple .circle5 {
-  background: rgba(168, 85, 247, 0.35);
-  border-color: rgba(168, 85, 247, 0.6);
-  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+  background: rgba(220, 38, 38, 0.38);
+  border-color: rgba(255, 107, 107, 0.7);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
 }
 .card-verdict-3d .bottom .view-more .view-more-button,
 .card-verdict-3d .bottom .view-more .svg-arrow {
-  color: #c084fc;
+  color: #ff6b6b;
 }
 
 .btn-copy-dossier-3d {
   padding: 0.7em 1.4em;
   font-size: 13px;
-  background-color: #06b6d4;
-  color: #111218;
+  background-color: #ef4444;
+  color: #ffffff;
   border: 1.5px solid #ffffff;
   box-shadow: 0 2px 0 1.5px #000;
 }
 .btn-copy-dossier-3d:before {
-  background-color: #a855f7;
+  background-color: #dc2626;
 }
 .btn-copy-dossier-3d:hover {
-  background-color: #3b82f6;
+  background-color: #b91c1c;
   color: #ffffff;
-  box-shadow: 0 2px 0 1.5px #1e3a8a, 0 0 18px rgba(59, 130, 246, 0.5);
+  box-shadow: 0 2px 0 1.5px #450a0a, 0 0 18px rgba(239, 68, 68, 0.5);
 }
 
 .card-action-btns {
