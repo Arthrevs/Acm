@@ -396,6 +396,7 @@ ACTION: File at 1930 or https://cybercrime.gov.in
 ═══════════════════════════════════════════════`;
 
     dossierContent.textContent = dossier;
+    dossierCard.classList.remove('hidden');
     dossierCard.style.display = 'flex';
     dossierCard.style.flexDirection = 'column';
 
@@ -433,6 +434,7 @@ ACTION: File at 1930 or https://cybercrime.gov.in
       }
     });
   } else {
+    dossierCard.classList.add('hidden');
     dossierCard.style.display = 'none';
   }
 

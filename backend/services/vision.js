@@ -13,7 +13,9 @@ const FALLBACK_MODELS = [
   'gemini-3.7-flash',
   'gemini-3.5-flash',
   'gemini-flash-latest',
-  'gemini-2.5-flash'
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash'
 ];
 
 const VISION_PROMPT = `Extract verbatim text from image. Preserve Hinglish, spelling, links, phones, timestamps, UI elements (e.g., WhatsApp, OLX). Output ONLY raw text. NO markdown, NO commentary, NO analysis.`;
