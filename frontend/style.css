@@ -644,6 +644,24 @@ button {
 .mono-text {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+/* Inline Threat Highlights */
+.threat-highlight {
+  background: rgba(239, 68, 68, 0.15);
+  color: #fca5a5;
+  border-bottom: 2px solid var(--accent-red);
+  border-radius: 3px;
+  padding: 1px 4px;
+  cursor: help;
+  position: relative;
+  transition: background 0.2s, color 0.2s;
+}
+
+.threat-highlight:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fff;
 }
 
 /* Entities */

@@ -1,6 +1,51 @@
 const API_URL = '/api/scan';
 const API_URL_IMAGE = '/api/scan-image';
 
+/**
+ * Highlights threat spans inline within the message text.
+ * Matches span.text (case-insensitive) and wraps it in a <mark> with a tooltip.
+ */
+function highlightSpans(message, spans) {
+  if (!spans || spans.length === 0) return escapeHtml(message);
+
+  // Build a list of { start, end, reason } by finding each span.text in the message
+  const regions = [];
+  for (const span of spans) {
+    if (!span.text) continue;
+    const idx = message.toLowerCase().indexOf(span.text.toLowerCase());
+    if (idx !== -1) {
+      regions.push({ start: idx, end: idx + span.text.length, reason: span.reason || '' });
+    }
+  }
+
+  // Sort by start position, remove overlaps (keep earliest)
+  regions.sort((a, b) => a.start - b.start);
+  const merged = [];
+  for (const r of regions) {
+    if (merged.length === 0 || r.start >= merged[merged.length - 1].end) {
+      merged.push(r);
+    }
+  }
+
+  // Build the HTML string
+  let html = '';
+  let cursor = 0;
+  for (const r of merged) {
+    html += escapeHtml(message.slice(cursor, r.start));
+    const highlightedText = escapeHtml(message.slice(r.start, r.end));
+    html += `<mark class="threat-highlight" title="${escapeHtml(r.reason)}">${highlightedText}</mark>`;
+    cursor = r.end;
+  }
+  html += escapeHtml(message.slice(cursor));
+  return html;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 // Elements
 const smsInput = document.getElementById('smsInput');
 const charCount = document.getElementById('charCount');
@@ -233,14 +278,21 @@ function renderResults(data) {
   const extractedTextContent = document.getElementById('extractedTextContent');
   if (data.extracted_text) {
     extractedTextContent.textContent = data.extracted_text;
-    extractedTextBox.style.display = 'flex';
-    extractedTextBox.style.flexDirection = 'column';
+    extractedTextBox.classList.remove('hidden');
   } else {
-    extractedTextBox.style.display = 'none';
+    extractedTextBox.classList.add('hidden');
   }
 
-  // Normalized Text
-  document.getElementById('normalizedText').textContent = data.normalized_message || '';
+  // Normalized Text — with inline threat highlighting
+  const normalizedEl = document.getElementById('normalizedText');
+  const rawMsg = data.normalized_message || '';
+  const spans = c.highlighted_spans || [];
+  
+  if (spans.length > 0 && rawMsg) {
+    normalizedEl.innerHTML = highlightSpans(rawMsg, spans);
+  } else {
+    normalizedEl.textContent = rawMsg;
+  }
 
   // Entities
   const entitiesList = document.getElementById('entitiesList');
@@ -260,10 +312,9 @@ function renderResults(data) {
     }
   }
 
-  // Spans
+  // Spans (reuse spans from above)
   const spansList = document.getElementById('spansList');
   spansList.innerHTML = '';
-  const spans = c.highlighted_spans || [];
   if (spans.length === 0) {
     spansList.innerHTML = '<span class="no-entities">No threat spans detected</span>';
   } else {
